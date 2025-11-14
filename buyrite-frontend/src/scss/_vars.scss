@@ -1,0 +1,34 @@
+// Vars
+
+:root {
+  // base
+  --base-txt-color: #1C3322;
+  --heading-color: #1C3322;
+  --base-font-family: 'Work Sans', sans-serif;
+  --body-bg: #FAFAF8;
+  
+  // colors  
+  $brand-color: #B9825C;
+  --brand-color: #{$brand-color};
+  --link-color: --brand-color;
+  
+  // app header
+  --app-header-height: 60px;
+  --app-header-txt-color: #FAFAF8;
+  --app-header-title-font-size: 1.6em;
+
+  // shoelace tokens
+  // full list here:
+  // https://github.com/shoelace-style/shoelace/blob/current/src/styles/base.scss
+  --sl-color-primary-50: #FAFAF8;
+  --sl-color-primary-100: #{lighten($brand-color, 40%)};
+  --sl-color-primary-200: #{lighten($brand-color, 30%)};
+  --sl-color-primary-300: #{lighten($brand-color, 20%)};
+  --sl-color-primary-400: #{lighten($brand-color, 10%)};
+  --sl-color-primary-500: #{$brand-color};
+  --sl-color-primary-600: #{darken($brand-color, 10%)};
+  --sl-color-primary-700: #{darken($brand-color, 20%)};
+  --sl-color-primary-800: #{darken($brand-color, 30%)};
+  --sl-color-primary-900: #{darken($brand-color, 40%)};
+  --sl-focus-ring-color-primary: #{rgba($brand-color, 0.1)};
+}
