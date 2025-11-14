@@ -14027,7 +14027,97 @@ class VendorHomeView {
 var _default = new VendorHomeView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js"}],"views/pages/vendorListings.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js"}],"ProductAPI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _App = _interopRequireDefault(require("./App"));
+
+var _Auth = _interopRequireDefault(require("./Auth"));
+
+var _Toast = _interopRequireDefault(require("./Toast"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class ProductAPI {
+  get authHeader() {
+    return {
+      Authorization: "Bearer ".concat(localStorage.accessToken)
+    };
+  }
+
+  async getVendorListings() {
+    const response = await fetch("".concat(_App.default.apiBase, "/product/vendor"), {
+      method: "GET",
+      headers: this.authHeader
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      if (err) console.error(err);
+      throw new Error("Problem fetching vendor listings");
+    }
+
+    return await response.json();
+  }
+
+  async createListing(formData) {
+    const response = await fetch("".concat(_App.default.apiBase, "/product"), {
+      method: "POST",
+      headers: this.authHeader,
+      body: formData
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      if (err) console.error(err);
+      throw new Error("Problem creating listing");
+    }
+
+    return await response.json();
+  }
+
+  async updateListing(id, formData) {
+    const response = await fetch("".concat(_App.default.apiBase, "/product/").concat(id), {
+      method: "PUT",
+      headers: this.authHeader,
+      body: formData
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      if (err) console.error(err);
+      throw new Error("Problem updating listing");
+    }
+
+    return await response.json();
+  }
+
+  async deleteListing(id) {
+    const response = await fetch("".concat(_App.default.apiBase, "/product/").concat(id), {
+      method: "DELETE",
+      headers: this.authHeader
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      if (err) console.error(err);
+      throw new Error("Problem deleting listing");
+    }
+
+    return await response.json();
+  }
+
+}
+
+var _default = new ProductAPI();
+
+exports.default = _default;
+},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/vendorListings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14047,10 +14137,22 @@ var _Utils = _interopRequireDefault(require("./../../Utils"));
 
 var _Toast = _interopRequireDefault(require("./../../Toast"));
 
+var _ProductAPI = _interopRequireDefault(require("./../../ProductAPI"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _templateObject6() {
+  const data = _taggedTemplateLiteral(["\n                                <img\n                                  slot=\"image\"\n                                  src=\"", "/images/", "\"\n                                  alt=\"", "\"\n                                />\n                              "]);
+
+  _templateObject6 = function _templateObject6() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n                        <sl-card class=\"listing-card\">\n                          <h3 slot=\"header\">", "</h3>\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">", "</span>\n                            <span class=\"price\">$", "</span>\n                          </div>\n                          <p>\n                            ", "\n                          </p>\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "], ["\n                        <sl-card class=\"listing-card\">\n                          <h3 slot=\"header\">", "</h3>\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">", "</span>\n                            <span class=\"price\">\\$", "</span>\n                          </div>\n                          <p>\n                            ", "\n                          </p>\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "]);
+  const data = _taggedTemplateLiteral(["\n                        <sl-card class=\"listing-card\">\n                          ", "\n                          <h3 slot=\"header\">", "</h3>\n\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">\n                              ", "\n                            </span>\n                            <span class=\"price\">\n                              $", "\n                            </span>\n                          </div>\n\n                          <p>\n                            ", "\n                          </p>\n\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "], ["\n                        <sl-card class=\"listing-card\">\n                          ", "\n                          <h3 slot=\"header\">", "</h3>\n\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">\n                              ", "\n                            </span>\n                            <span class=\"price\">\n                              \\$", "\n                            </span>\n                          </div>\n\n                          <p>\n                            ", "\n                          </p>\n\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -14090,7 +14192,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Briefly describe the product, ethical credentials, materials, etc.\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p style=\"font-size: 0.8em; color: #666; margin-top: 0.25em;\">\n                  Image upload will be wired to the API next \u2013 for now this is a\n                  placeholder field.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button type=\"primary\" submit>\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n\n      <style>\n        .vendor-layout {\n          display: grid;\n          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);\n          gap: 2rem;\n        }\n\n        .vendor-form,\n        .vendor-listings {\n          background: #fff;\n          border-radius: 12px;\n          padding: 1.5rem;\n          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n        }\n\n        .vendor-form h2,\n        .vendor-listings h2 {\n          margin-top: 0;\n          margin-bottom: 1rem;\n        }\n\n        .input-group {\n          margin-bottom: 1rem;\n        }\n\n        .button-row sl-button + sl-button {\n          margin-left: 0.5rem;\n        }\n\n        .listing-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n          gap: 1rem;\n        }\n\n        .listing-card {\n          height: 100%;\n        }\n\n        .listing-meta {\n          display: flex;\n          justify-content: space-between;\n          align-items: center;\n          margin-bottom: 0.5rem;\n        }\n\n        .chip {\n          display: inline-block;\n          padding: 0.1rem 0.6rem;\n          border-radius: 999px;\n          background: #eef2f3;\n          font-size: 0.75rem;\n          text-transform: uppercase;\n          letter-spacing: 0.05em;\n        }\n\n        .price {\n          font-weight: bold;\n        }\n\n        .listing-actions {\n          display: flex;\n          justify-content: flex-end;\n          gap: 0.5rem;\n        }\n\n        @media (max-width: 900px) {\n          .vendor-layout {\n            grid-template-columns: 1fr;\n          }\n        }\n      </style>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Describe the product & its ethical credentials\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p\n                  style=\"font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;\"\n                >\n                  Upload a clear product image (JPG/PNG). Existing images will be\n                  kept unless you upload a new one when editing.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button\n                  type=\"primary\"\n                  submit\n                  class=\"listing-submit-btn\"\n                >\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n\n      <style>\n        .vendor-layout {\n          display: grid;\n          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);\n          gap: 2rem;\n        }\n\n        .vendor-form,\n        .vendor-listings {\n          background: #fff;\n          border-radius: 12px;\n          padding: 1.5rem;\n          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n        }\n\n        .vendor-form h2,\n        .vendor-listings h2 {\n          margin-top: 0;\n          margin-bottom: 1rem;\n        }\n\n        .input-group {\n          margin-bottom: 1rem;\n        }\n\n        .button-row sl-button + sl-button {\n          margin-left: 0.5rem;\n        }\n\n        .listing-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n          gap: 1rem;\n        }\n\n        .listing-card {\n          height: 100%;\n        }\n\n        .listing-meta {\n          display: flex;\n          justify-content: space-between;\n          align-items: center;\n          margin-bottom: 0.5rem;\n        }\n\n        .chip {\n          display: inline-block;\n          padding: 0.1rem 0.6rem;\n          border-radius: 999px;\n          background: #eef2f3;\n          font-size: 0.75rem;\n          text-transform: uppercase;\n          letter-spacing: 0.05em;\n        }\n\n        .price {\n          font-weight: bold;\n        }\n\n        .listing-actions {\n          display: flex;\n          justify-content: flex-end;\n          gap: 0.5rem;\n        }\n\n        @media (max-width: 900px) {\n          .vendor-layout {\n            grid-template-columns: 1fr;\n          }\n        }\n      </style>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14101,78 +14203,70 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 class VendorListingsView {
   init() {
     console.log("VendorListingsView.init");
-    document.title = "Manage Listings"; // vendor guard
+    document.title = "Manage Listings"; // Vendor guard
 
     if (!_Auth.default.currentUser || Number(_Auth.default.currentUser.accessLevel) !== 2) {
       (0, _Router.gotoRoute)("/");
       return;
-    } // in-memory placeholder listings until we wire API
-
+    }
 
     this.listings = [];
-    this.editingListing = null; // will hold listing being edited
+    this.editingListing = null; // listing being edited, or null
 
     this.render();
 
-    _Utils.default.pageIntroAnim();
-  } // TODO: in next step, replace with ProductAPI.getVendorListings()
+    _Utils.default.pageIntroAnim(); // fetch listings from API
 
+
+    this.getListings();
+  }
 
   async getListings() {
     try {
-      // placeholder: empty for now
-      this.listings = [];
+      this.listings = await _ProductAPI.default.getVendorListings();
       this.render();
     } catch (err) {
       console.error(err);
 
-      _Toast.default.show("Problem fetching listings", "error");
+      _Toast.default.show(err.message || "Problem fetching listings", "error");
     }
   }
 
-  handleListingSubmit(e) {
+  async handleListingSubmit(e) {
     e.preventDefault();
-    const formData = e.detail.formData; // For now we just build a plain object; later we'll send formData
+    const formData = e.detail.formData; // Shoelace gives us FormData already
 
-    const listing = {
-      _id: this.editingListing ? this.editingListing._id : Date.now().toString(),
-      title: formData.get("title"),
-      category: formData.get("category"),
-      price: formData.get("price"),
-      description: formData.get("description") // image: formData.get("image") // file object – will be used with FormData & API
+    const submitBtn = document.querySelector(".listing-submit-btn");
+    if (submitBtn) submitBtn.setAttribute("loading", "");
 
-    }; // basic validation (we'll rely on sl-form required attributes too)
+    try {
+      let product;
 
-    if (!listing.title || !listing.price) {
-      _Toast.default.show("Please enter at least a title and price", "warning");
+      if (this.editingListing) {
+        // UPDATE existing listing
+        product = await _ProductAPI.default.updateListing(this.editingListing._id, formData);
 
-      return;
+        _Toast.default.show("Listing updated");
+      } else {
+        // CREATE new listing
+        product = await _ProductAPI.default.createListing(formData);
+
+        _Toast.default.show("Listing created");
+      } // Reset edit state & reload from API
+
+
+      this.editingListing = null;
+      await this.getListings();
+    } catch (err) {
+      console.error(err);
+
+      _Toast.default.show(err.message || "Problem saving listing", "error");
+    } finally {
+      if (submitBtn) submitBtn.removeAttribute("loading");
     }
-
-    if (this.editingListing) {
-      // update existing in placeholder array
-      this.listings = this.listings.map(l => l._id === listing._id ? _objectSpread(_objectSpread({}, l), listing) : l);
-
-      _Toast.default.show("Listing updated (local only – API coming next)");
-    } else {
-      // add new listing
-      this.listings = [...this.listings, listing];
-
-      _Toast.default.show("Listing created (local only – API coming next)");
-    } // reset editing state & re-render
-
-
-    this.editingListing = null;
-    this.render();
   }
 
   handleEditClick(listing) {
@@ -14185,18 +14279,24 @@ class VendorListingsView {
     this.render();
   }
 
-  handleDeleteClick(listingId) {
-    // placeholder delete – next step will call API
-    this.listings = this.listings.filter(l => l._id !== listingId);
+  async handleDeleteClick(listingId) {
+    try {
+      await _ProductAPI.default.deleteListing(listingId);
 
-    _Toast.default.show("Listing removed (local only – API coming next)");
+      _Toast.default.show("Listing deleted");
 
-    this.render();
+      await this.getListings();
+    } catch (err) {
+      console.error(err);
+
+      _Toast.default.show(err.message || "Problem deleting listing", "error");
+    }
   }
 
   render() {
     const listing = this.editingListing;
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), listing ? "Edit Listing" : "Create New Listing", this.handleListingSubmit.bind(this), listing ? listing.title : "", listing ? listing.category : "", listing ? listing.price : "", listing ? listing.description || "" : "", listing ? "Save Changes" : "Create Listing", listing ? (0, _litHtml.html)(_templateObject2(), this.handleCancelEdit.bind(this)) : "", this.listings.length === 0 ? (0, _litHtml.html)(_templateObject3()) : (0, _litHtml.html)(_templateObject4(), this.listings.map(l => (0, _litHtml.html)(_templateObject5(), l.title, l.category, Number(l.price).toFixed(2), l.description || "No description provided. Add one to help shoppers understand your product and its ethical credentials.", () => this.handleEditClick(l), () => this.handleDeleteClick(l._id)))));
+    const listings = this.listings || [];
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), listing ? "Edit Listing" : "Create New Listing", this.handleListingSubmit.bind(this), listing ? listing.title : "", listing ? listing.category : "", listing ? listing.price : "", listing ? listing.description || "" : "", listing ? "Save Changes" : "Create Listing", listing ? (0, _litHtml.html)(_templateObject2(), this.handleCancelEdit.bind(this)) : "", listings.length === 0 ? (0, _litHtml.html)(_templateObject3()) : (0, _litHtml.html)(_templateObject4(), listings.map(l => (0, _litHtml.html)(_templateObject5(), l.image ? (0, _litHtml.html)(_templateObject6(), _App.default.apiBase, l.image, l.title) : "", l.title, (l.category || "uncategorised").toUpperCase(), Number(l.price || 0).toFixed(2), l.description || "No description provided. Add one to help shoppers understand your product and its ethical credentials.", () => this.handleEditClick(l), () => this.handleDeleteClick(l._id)))));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14205,7 +14305,7 @@ class VendorListingsView {
 var _default = new VendorListingsView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js"}],"Router.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../ProductAPI":"ProductAPI.js"}],"Router.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -18,20 +18,21 @@ router.post('/signin', (req, res) => {
      // account doesn't exist
      if(user == null) return res.status(400).json({message: 'No account found'})     
      // user exists, now check password
-     if( Utils.verifyHash(req.body.password, user.password) ){
-        // credentials match - create JWT token
-        let payload = {
-          _id: user._id          
-        }
-        let accessToken = Utils.generateAccessToken(payload)        
-        // strip the password from our user object        
-        user.password = undefined
-        // send back response
-        return res.json({
-          accessToken: accessToken,
-          user: user
-        })
-     }else{
+     if (Utils.verifyHash(req.body.password, user.password)) {
+  // credentials match - create JWT token
+  let payload = {
+    _id: user._id,
+    accessLevel: user.accessLevel   // 👈 add this
+  }
+  let accessToken = Utils.generateAccessToken(payload)
+  // strip the password from our user object        
+  user.password = undefined
+  return res.json({
+    accessToken: accessToken,
+    user: user
+  })
+}
+else{
         // Password didn't match!
         return res.status(400).json({
            message: "Password / Email incorrect"
@@ -79,6 +80,7 @@ router.get('/validate', (req, res) => {
       })
   })
 })
+
 
   
 module.exports = router

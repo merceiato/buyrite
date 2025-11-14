@@ -4,73 +4,68 @@ import { gotoRoute } from "./../../Router";
 import Auth from "./../../Auth";
 import Utils from "./../../Utils";
 import Toast from "./../../Toast";
+import ProductAPI from "./../../ProductAPI";
 
 class VendorListingsView {
   init() {
     console.log("VendorListingsView.init");
     document.title = "Manage Listings";
 
-    // vendor guard
+    // Vendor guard
     if (!Auth.currentUser || Number(Auth.currentUser.accessLevel) !== 2) {
       gotoRoute("/");
       return;
     }
 
-    // in-memory placeholder listings until we wire API
     this.listings = [];
-    this.editingListing = null; // will hold listing being edited
+    this.editingListing = null; // listing being edited, or null
 
     this.render();
     Utils.pageIntroAnim();
+
+    // fetch listings from API
+    this.getListings();
   }
 
-  // TODO: in next step, replace with ProductAPI.getVendorListings()
   async getListings() {
     try {
-      // placeholder: empty for now
-      this.listings = [];
+      this.listings = await ProductAPI.getVendorListings();
       this.render();
     } catch (err) {
       console.error(err);
-      Toast.show("Problem fetching listings", "error");
+      Toast.show(err.message || "Problem fetching listings", "error");
     }
   }
 
-  handleListingSubmit(e) {
+  async handleListingSubmit(e) {
     e.preventDefault();
-    const formData = e.detail.formData;
+    const formData = e.detail.formData; // Shoelace gives us FormData already
 
-    // For now we just build a plain object; later we'll send formData
-    const listing = {
-      _id: this.editingListing ? this.editingListing._id : Date.now().toString(),
-      title: formData.get("title"),
-      category: formData.get("category"),
-      price: formData.get("price"),
-      description: formData.get("description"),
-      // image: formData.get("image") // file object – will be used with FormData & API
-    };
+    const submitBtn = document.querySelector(".listing-submit-btn");
+    if (submitBtn) submitBtn.setAttribute("loading", "");
 
-    // basic validation (we'll rely on sl-form required attributes too)
-    if (!listing.title || !listing.price) {
-      Toast.show("Please enter at least a title and price", "warning");
-      return;
+    try {
+      let product;
+
+      if (this.editingListing) {
+        // UPDATE existing listing
+        product = await ProductAPI.updateListing(this.editingListing._id, formData);
+        Toast.show("Listing updated");
+      } else {
+        // CREATE new listing
+        product = await ProductAPI.createListing(formData);
+        Toast.show("Listing created");
+      }
+
+      // Reset edit state & reload from API
+      this.editingListing = null;
+      await this.getListings();
+    } catch (err) {
+      console.error(err);
+      Toast.show(err.message || "Problem saving listing", "error");
+    } finally {
+      if (submitBtn) submitBtn.removeAttribute("loading");
     }
-
-    if (this.editingListing) {
-      // update existing in placeholder array
-      this.listings = this.listings.map((l) =>
-        l._id === listing._id ? { ...l, ...listing } : l
-      );
-      Toast.show("Listing updated (local only – API coming next)");
-    } else {
-      // add new listing
-      this.listings = [...this.listings, listing];
-      Toast.show("Listing created (local only – API coming next)");
-    }
-
-    // reset editing state & re-render
-    this.editingListing = null;
-    this.render();
   }
 
   handleEditClick(listing) {
@@ -83,15 +78,20 @@ class VendorListingsView {
     this.render();
   }
 
-  handleDeleteClick(listingId) {
-    // placeholder delete – next step will call API
-    this.listings = this.listings.filter((l) => l._id !== listingId);
-    Toast.show("Listing removed (local only – API coming next)");
-    this.render();
+  async handleDeleteClick(listingId) {
+    try {
+      await ProductAPI.deleteListing(listingId);
+      Toast.show("Listing deleted");
+      await this.getListings();
+    } catch (err) {
+      console.error(err);
+      Toast.show(err.message || "Problem deleting listing", "error");
+    }
   }
 
   render() {
     const listing = this.editingListing;
+    const listings = this.listings || [];
 
     const template = html`
       <va-app-header
@@ -152,7 +152,7 @@ class VendorListingsView {
                   name="description"
                   rows="4"
                   label="Description"
-                  placeholder="Briefly describe the product, ethical credentials, materials, etc."
+                  placeholder="Describe the product & its ethical credentials"
                   >${listing ? listing.description || "" : ""}</sl-textarea
                 >
               </div>
@@ -160,14 +160,20 @@ class VendorListingsView {
               <div class="input-group">
                 <label>Primary Image</label><br />
                 <input type="file" name="image" accept="image/*" />
-                <p style="font-size: 0.8em; color: #666; margin-top: 0.25em;">
-                  Image upload will be wired to the API next – for now this is a
-                  placeholder field.
+                <p
+                  style="font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;"
+                >
+                  Upload a clear product image (JPG/PNG). Existing images will be
+                  kept unless you upload a new one when editing.
                 </p>
               </div>
 
               <div class="button-row">
-                <sl-button type="primary" submit>
+                <sl-button
+                  type="primary"
+                  submit
+                  class="listing-submit-btn"
+                >
                   ${listing ? "Save Changes" : "Create Listing"}
                 </sl-button>
                 ${listing
@@ -187,24 +193,38 @@ class VendorListingsView {
           <section class="vendor-listings">
             <h2>Your Listings</h2>
 
-            ${this.listings.length === 0
+            ${listings.length === 0
               ? html`<p>You don’t have any listings yet.</p>`
               : html`
                   <div class="listing-grid">
-                    ${this.listings.map(
+                    ${listings.map(
                       (l) => html`
                         <sl-card class="listing-card">
+                          ${l.image
+                            ? html`
+                                <img
+                                  slot="image"
+                                  src="${App.apiBase}/images/${l.image}"
+                                  alt="${l.title}"
+                                />
+                              `
+                            : ""}
                           <h3 slot="header">${l.title}</h3>
+
                           <div class="listing-meta">
-                            <span class="chip">${l.category}</span>
-                            <span class="price">\$${Number(l.price).toFixed(
-                              2
-                            )}</span>
+                            <span class="chip">
+                              ${(l.category || "uncategorised").toUpperCase()}
+                            </span>
+                            <span class="price">
+                              \$${Number(l.price || 0).toFixed(2)}
+                            </span>
                           </div>
+
                           <p>
                             ${l.description ||
                             "No description provided. Add one to help shoppers understand your product and its ethical credentials."}
                           </p>
+
                           <div slot="footer" class="listing-actions">
                             <sl-button
                               size="small"
@@ -214,8 +234,7 @@ class VendorListingsView {
                             <sl-button
                               size="small"
                               variant="danger"
-                              @click=${() =>
-                                this.handleDeleteClick(l._id)}
+                              @click=${() => this.handleDeleteClick(l._id)}
                               >Delete</sl-button
                             >
                           </div>

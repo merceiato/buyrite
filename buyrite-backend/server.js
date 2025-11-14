@@ -37,6 +37,11 @@ app.use('/auth', authRouter)
 const userRouter = require('./routes/user')
 app.use('/user', userRouter)
 
+// product
+const productRouter = require('./routes/product')
+app.use('/product', productRouter)
+
+
 
 // run app listen on port --------------------
 app.listen(port, () => {
