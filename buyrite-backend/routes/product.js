@@ -6,14 +6,35 @@ const Utils = require('./../utils')
 const Product = require('./../models/Product')
 const User = require('./../models/User')
 
-// helper: must be vendor
+// helper: must be vendor (check against DB for safety)
 function requireVendor(req, res, next) {
-  if (!req.user || Number(req.user.accessLevel) !== 2) {
-    return res.status(403).json({ message: 'Vendor access required' })
+  if (!req.user || !req.user._id) {
+    return res.status(401).json({ message: 'Not authenticated' })
   }
-  next()
-}
 
+  // Look up the user in Mongo to confirm accessLevel
+  User.findById(req.user._id)
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({ message: 'User not found' })
+      }
+
+      // console.log('requireVendor user:', user.accessLevel) // <- optional debug
+
+      // Force numeric comparison
+      if (Number(user.accessLevel) !== 2) {
+        return res.status(403).json({ message: 'Vendor access required' })
+      }
+
+      // Keep accessLevel in req.user for later if needed
+      req.user.accessLevel = user.accessLevel
+      next()
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ message: 'Error checking vendor access', error: err })
+    })
+}
 
 // GET /product/vendor - products for the logged-in vendor
 router.get('/vendor', Utils.authenticateToken, requireVendor, (req, res) => {
