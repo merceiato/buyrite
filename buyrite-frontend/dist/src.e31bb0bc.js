@@ -7489,81 +7489,105 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class Auth {
   constructor() {
     this.currentUser = {};
-  }
+  } // -----------------------------
+  // SIGN UP
+  // -----------------------------
+
 
   async signUp(userData) {
     let fail = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    // userData from <sl-form> will be FormData (good for /user with multer)
     const response = await fetch("".concat(_App.default.apiBase, "/user"), {
       method: 'POST',
       body: userData
-    }); // if response not ok
+    });
 
     if (!response.ok) {
-      // console log error
-      const err = await response.json();
-      if (err) console.log(err); // show error      
+      let err = null;
 
-      _Toast.default.show("Problem getting user: ".concat(response.status)); // run fail() functon if set
+      try {
+        err = await response.json();
+      } catch (e) {// ignore JSON parse errors
+      }
+
+      if (err) console.log(err);
+
+      _Toast.default.show(err && err.message || "Problem creating account: ".concat(response.status), 'error');
+
+      if (typeof fail === 'function') fail();
+      return;
+    } // sign up success
 
 
-      if (typeof fail == 'function') fail();
-    } /// sign up success - show toast and redirect to sign in page
-
-
-    _Toast.default.show('Account created, please sign in'); // redirect to signin
-
+    _Toast.default.show('Account created, please sign in');
 
     (0, _Router.gotoRoute)('/signin');
-  }
+  } // -----------------------------
+  // SIGN IN
+  // -----------------------------
+
 
   async signIn(userData) {
     let fail = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    // userData from <sl-form> is likely FormData → convert to plain object
+    let payload;
+
+    if (userData instanceof FormData) {
+      payload = Object.fromEntries(userData.entries());
+    } else {
+      payload = userData || {};
+    }
+
     const response = await fetch("".concat(_App.default.apiBase, "/auth/signin"), {
       method: 'POST',
-      body: userData
-    }); // if response not ok
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }); // Read the body ONCE
+
+    let data = null;
+
+    try {
+      data = await response.json();
+    } catch (e) {
+      data = null;
+    }
 
     if (!response.ok) {
-      // console log error
-      const err = await response.json();
-      if (err) console.log(err); // show error      
+      const msg = data && data.message || "Problem signing in: ".concat(response.status);
 
-      _Toast.default.show("Problem signing in: ".concat(err.message), 'error'); // run fail() functon if set
+      _Toast.default.show(msg, 'error');
 
-
-      if (typeof fail == 'function') fail();
+      if (typeof fail === 'function') fail();
+      return;
     } // sign in success
 
-
-    const data = await response.json();
 
     _Toast.default.show("Welcome  ".concat(data.user.firstName)); // save access token (jwt) to local storage
 
 
     localStorage.setItem('accessToken', data.accessToken); // set current user
 
-    this.currentUser = data.user; // console.log(this.currentUser)           
-    // redirect to home
-
-    _Router.default.init();
+    this.currentUser = data.user; // NO LONGER re-initialise Router here – avoids duplicate init + logs
+    // redirect according to newUser flag
 
     if (data.user.newUser == true) {
-      //new user to guide
-      (0, _Router.gotoRoute)("/guide");
+      (0, _Router.gotoRoute)('/guide');
     } else {
-      //existing user to home
-      (0, _Router.gotoRoute)("/");
+      (0, _Router.gotoRoute)('/vendor');
     }
-  }
+  } // -----------------------------
+  // CHECK TOKEN
+  // -----------------------------
+
 
   async check(success) {
     // show splash screen while loading ...   
     (0, _litHtml.render)(_splash.default, _App.default.rootEl); // check local token is there
 
     if (!localStorage.accessToken) {
-      // no local token!
-      _Toast.default.show("Please sign in"); // redirect to sign in page      
-
+      _Toast.default.show("Please sign in");
 
       (0, _Router.gotoRoute)('/signin');
       return;
@@ -7578,27 +7602,33 @@ class Auth {
     }); // if response not ok
 
     if (!response.ok) {
-      // console log error
-      const err = await response.json();
+      let err = null;
+
+      try {
+        err = await response.json();
+      } catch (e) {// ignore
+      }
+
       if (err) console.log(err); // delete local token
 
       localStorage.removeItem('accessToken');
 
-      _Toast.default.show("session expired, please sign in"); // redirect to sign in      
-
+      _Toast.default.show("session expired, please sign in");
 
       (0, _Router.gotoRoute)('/signin');
       return;
     } // token is valid!
 
 
-    const data = await response.json(); // console.log(data)
-    // set currentUser obj
+    const data = await response.json(); // set currentUser obj
 
-    this.currentUser = data.user; // run success
+    this.currentUser = data.user; // run success callback
 
     success();
-  }
+  } // -----------------------------
+  // SIGN OUT
+  // -----------------------------
+
 
   signOut() {
     _Toast.default.show("You are signed out"); // delete local token
@@ -13871,6 +13901,8 @@ var _Utils = _interopRequireDefault(require("./../../Utils"));
 
 var _UserAPI = _interopRequireDefault(require("../../UserAPI"));
 
+var _Toast = _interopRequireDefault(require("../../Toast"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
@@ -13903,7 +13935,7 @@ class GuideView {
       console.log("user updated");
       console.log(updatedUser);
     } catch (err) {
-      Toast.show(err, "error");
+      _Toast.default.show(err, "error");
     }
   }
 
@@ -13917,7 +13949,7 @@ class GuideView {
 var _default = new GuideView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","../../UserAPI":"UserAPI.js"}],"views/pages/buyrite.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","../../UserAPI":"UserAPI.js","../../Toast":"Toast.js"}],"views/pages/buyrite.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14380,7 +14412,7 @@ function _templateObject7() {
 }
 
 function _templateObject6() {
-  const data = _taggedTemplateLiteral(["\n                      <li\n                        class=\"preview-list-item ", "\"\n                        @click=", "\n                      >\n                        <div class=\"preview-list-thumb\">\n                          ", "\n                        </div>\n\n                        <div class=\"preview-list-text\">\n                          <div class=\"preview-list-title\">\n                            ", "\n                          </div>\n                          <div class=\"preview-list-meta\">\n                            <span class=\"preview-list-category\">\n                              ", "\n                            </span>\n                            <span class=\"preview-list-price\">\n                              $", "\n                            </span>\n                          </div>\n                        </div>\n\n                        <div class=\"preview-list-actions\">\n                          <sl-icon-button\n                            name=\"pencil-square\"\n                            label=\"Edit listing\"\n                            @click=", "\n                          ></sl-icon-button>\n                        </div>\n                      </li>\n                    "]);
+  const data = _taggedTemplateLiteral(["\n                      <li\n                        class=\"preview-list-item ", "\"\n                        @click=", "\n                      >\n                        <div class=\"preview-list-thumb\">\n                          ", "\n                        </div>\n\n                        <div class=\"preview-list-text\">\n                          <div class=\"preview-list-title\">\n                            ", "\n                          </div>\n                          <div class=\"preview-list-meta\">\n                            <span class=\"preview-list-category\">\n                              ", "\n                            </span>\n                            <span class=\"preview-list-price\">\n                              $", "\n                            </span>\n                          </div>\n                        </div>\n\n                        <div class=\"preview-list-actions\">\n                          <!-- changed pencil-square -> pencil -->\n                          <sl-icon-button\n                            name=\"pencil\"\n                            label=\"Edit listing\"\n                            @click=", "\n                          ></sl-icon-button>\n                        </div>\n                      </li>\n                    "]);
 
   _templateObject6 = function _templateObject6() {
     return data;
@@ -14390,7 +14422,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n              <!-- LEFT: list of items -->\n              <section class=\"preview-list-panel\">\n                <header class=\"preview-list-header\">\n                  <h2>Your items</h2>\n                  <sl-icon-button\n                    name=\"plus-lg\"\n                    label=\"Create listing\"\n                    @click=", "\n                  ></sl-icon-button>\n                </header>\n\n                <ul class=\"preview-list\">\n                  ", "\n                </ul>\n              </section>\n\n              <!-- RIGHT: full preview of selected item -->\n              <section class=\"preview-detail-panel\">\n                <h2>Customer view</h2>\n\n                ", "\n              </section>\n            "]);
+  const data = _taggedTemplateLiteral(["\n              <!-- LEFT: list of items -->\n              <section class=\"preview-list-panel\">\n                <header class=\"preview-list-header\">\n                  <h2>Your items</h2>\n                  <!-- changed plus-lg -> plus -->\n                  <sl-icon-button\n                    name=\"plus\"\n                    label=\"Create listing\"\n                    @click=", "\n                  ></sl-icon-button>\n                </header>\n\n                <ul class=\"preview-list\">\n                  ", "\n                </ul>\n              </section>\n\n              <!-- RIGHT: full preview of selected item -->\n              <section class=\"preview-detail-panel\">\n                <h2>Customer view</h2>\n\n                ", "\n              </section>\n            "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -14471,7 +14503,7 @@ class vendorPreviewItemsView {
 
   async getItems() {
     try {
-      // ✅ reuse the same API call your manage/edit page uses
+      // reuse the same API call your manage/edit page uses
       this.items = await _ProductAPI.default.getvendorManageListings();
       this.isLoading = false; // auto-select first item if any
 
@@ -14580,32 +14612,49 @@ const routes = {
 class Router {
   constructor() {
     this.routes = routes;
+    this.currentView = null;
+    this.initialised = false;
+    this.handlePopstate = this.handlePopstate.bind(this);
   }
 
   init() {
-    // initial call
+    // prevent multiple initialisation and duplicate listeners
+    if (this.initialised) return;
+    this.initialised = true; // initial call
+
     this.route(window.location.pathname); // on back/forward
 
-    window.addEventListener("popstate", () => {
-      this.route(window.location.pathname);
-    });
+    window.addEventListener("popstate", this.handlePopstate);
+  }
+
+  handlePopstate() {
+    this.route(window.location.pathname);
   }
 
   route(fullPathname) {
     // extract path without params
     const pathname = fullPathname.split("?")[0];
-    const route = this.routes[pathname];
+    const view = this.routes[pathname];
 
-    if (route) {
-      // if route exists, run init() of the view
-      this.routes[window.location.pathname].init();
+    if (view && typeof view.init === "function") {
+      // optional destroy hook on previous view
+      if (this.currentView && typeof this.currentView.destroy === "function") {
+        this.currentView.destroy();
+      }
+
+      this.currentView = view;
+      view.init();
     } else {
-      // show 404 view instead
-      this.routes["404"].init();
+      const fourOFour = this.routes[404];
+
+      if (fourOFour && typeof fourOFour.init === "function") {
+        fourOFour.init();
+      }
     }
   }
 
   gotoRoute(pathname) {
+    // push new history state and render the route
     window.history.pushState({}, pathname, window.location.origin + pathname);
     this.route(pathname);
   }
@@ -14625,7 +14674,9 @@ function gotoRoute(pathname) {
 
 function anchorRoute(e) {
   e.preventDefault();
-  const pathname = e.target.closest("a").pathname;
+  const anchor = e.target.closest("a");
+  if (!anchor) return;
+  const pathname = anchor.pathname;
   AppRouter.gotoRoute(pathname);
 }
 },{"./views/pages/home":"views/pages/home.js","./views/pages/404":"views/pages/404.js","./views/pages/signin":"views/pages/signin.js","./views/pages/signup":"views/pages/signup.js","./views/pages/profile":"views/pages/profile.js","./views/pages/editProfile":"views/pages/editProfile.js","./views/pages/guide":"views/pages/guide.js","./views/pages/buyrite":"views/pages/buyrite.js","./views/pages/vendorHome":"views/pages/vendorHome.js","./views/pages/vendorManageListings":"views/pages/vendorManageListings.js","./views/pages/vendorPreviewItems":"views/pages/vendorPreviewItems.js"}],"App.js":[function(require,module,exports) {
@@ -16514,7 +16565,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n        <style>\n          * {\n            box-sizing: border-box;\n          }\n\n          .app-header {\n            background: var(--brand-color);\n            position: fixed;\n            top: 0;\n            right: 0;\n            left: 0;\n            height: var(--app-header-height);\n            color: #fff;\n            display: flex;\n            z-index: 9;\n            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);\n            align-items: center;\n          }\n\n          .app-header-main {\n            flex-grow: 1;\n            display: flex;\n            align-items: center;\n          }\n\n          .app-logo img {\n            width: 90px;\n          }\n\n          .hamburger-btn::part(base) {\n            color: #fff;\n          }\n\n          .app-top-nav {\n            display: flex;\n            height: 100%;\n            align-items: center;\n          }\n\n          .app-top-nav a {\n            display: inline-block;\n            padding: 0.8em;\n            text-decoration: none;\n            color: #fff;\n          }\n\n          .app-side-menu-items {\n            padding-top: 150px;\n          }\n\n          .app-side-menu-items a {\n            display: block;\n            padding: 0.8em;\n            text-decoration: none;\n            font-size: 1.3em;\n            color: #333;\n          }\n\n          .app-side-menu-items a + a {\n            margin-top: 0.3em;\n          }\n\n          .app-side-menu-logo {\n            width: 120px;\n            margin-bottom: 1em;\n            position: absolute;\n            top: 2em;\n            left: 1.5em;\n          }\n\n          .page-title {\n            color: var(--app-header-txt-color);\n            margin-right: 0.5em;\n            font-size: var(--app-header-title-font-size);\n          }\n\n          .app-top-nav a.active,\n          .app-side-menu-items a.active {\n            font-weight: bold;\n          }\n\n          @media all and (max-width: 768px) {\n            .app-top-nav {\n              display: none;\n            }\n          }\n        </style>\n\n        <header class=\"app-header\">\n          <sl-icon-button\n            class=\"hamburger-btn\"\n            name=\"list\"\n            @click=\"", "\"\n            style=\"font-size: 1.5em;\"\n          ></sl-icon-button>\n\n          <div class=\"app-header-main\">\n            ", "\n            <slot></slot>\n          </div>\n\n          <nav class=\"app-top-nav\">\n            <a href=\"/\" @click=\"", "\">Home</a>\n\n            ", "\n          </nav>\n        </header>\n\n        <sl-drawer class=\"app-side-menu\" placement=\"left\">\n          <img class=\"app-side-menu-logo\" src=\"/images/logo.svg\" />\n          <nav class=\"app-side-menu-items\">\n            ", "\n            ", "\n          </nav>\n        </sl-drawer>\n      "]);
+  const data = _taggedTemplateLiteral(["\n        <style>\n          * {\n            box-sizing: border-box;\n          }\n\n          .app-header {\n            background: var(--brand-color);\n            position: fixed;\n            top: 0;\n            right: 0;\n            left: 0;\n            height: var(--app-header-height);\n            color: #fff;\n            display: flex;\n            z-index: 9;\n            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);\n            align-items: center;\n          }\n\n          .app-header:focus {\n            outline: none;\n          }\n\n          .app-header-main {\n            flex-grow: 1;\n            display: flex;\n            align-items: center;\n          }\n\n          .app-logo img {\n            width: 90px;\n          }\n\n          .hamburger-btn::part(base) {\n            color: #fff;\n          }\n\n          .app-top-nav {\n            display: flex;\n            height: 100%;\n            align-items: center;\n          }\n\n          .app-top-nav a {\n            display: inline-block;\n            padding: 0.8em;\n            text-decoration: none;\n            color: #fff;\n          }\n\n          .app-side-menu-items {\n            padding-top: 150px;\n          }\n\n          .app-side-menu-items a {\n            display: block;\n            padding: 0.8em;\n            text-decoration: none;\n            font-size: 1.3em;\n            color: #333;\n          }\n\n          .app-side-menu-items a + a {\n            margin-top: 0.3em;\n          }\n\n          .app-side-menu-logo {\n            width: 120px;\n            margin-bottom: 1em;\n            position: absolute;\n            top: 2em;\n            left: 1.5em;\n          }\n\n          .page-title {\n            color: var(--app-header-txt-color);\n            margin-right: 0.5em;\n            font-size: var(--app-header-title-font-size);\n          }\n\n          .app-top-nav a.active,\n          .app-side-menu-items a.active {\n            font-weight: bold;\n          }\n\n          @media all and (max-width: 768px) {\n            .app-top-nav {\n              display: none;\n            }\n          }\n        </style>\n\n        <!-- tabindex makes header focusable so we can move focus out of the drawer -->\n        <header class=\"app-header\" tabindex=\"-1\">\n          <sl-icon-button\n            class=\"hamburger-btn\"\n            name=\"list\"\n            @click=\"", "\"\n            style=\"font-size: 1.5em;\"\n          ></sl-icon-button>\n\n          <div class=\"app-header-main\">\n            ", "\n            <slot></slot>\n          </div>\n\n          <nav class=\"app-top-nav\">\n            <a href=\"/\" @click=\"", "\">Home</a>\n\n            ", "\n          </nav>\n        </header>\n\n        <sl-drawer class=\"app-side-menu\" placement=\"left\">\n          <img class=\"app-side-menu-logo\" src=\"/images/logo.svg\" />\n          <nav class=\"app-side-menu-items\">\n            ", "\n            ", "\n          </nav>\n        </sl-drawer>\n      "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -16569,17 +16620,26 @@ customElements.define("va-app-header", class AppHeader extends _litElement.LitEl
     const anchor = e.target.closest("a");
     if (!anchor) return;
     const pathname = anchor.pathname;
-    const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
+    const appSideMenu = this.shadowRoot.querySelector(".app-side-menu"); // If no drawer present, just navigate
 
     if (!appSideMenu) {
       (0, _Router.gotoRoute)(pathname);
       return;
-    }
+    } // Hide the drawer first, then move focus and navigate
 
-    appSideMenu.hide();
-    appSideMenu.addEventListener("sl-after-hide", () => (0, _Router.gotoRoute)(pathname), {
+
+    const onAfterHide = () => {
+      // move focus back to header (outside aria-hidden area)
+      const header = this.shadowRoot.querySelector(".app-header");
+      if (header) header.focus();
+      (0, _Router.gotoRoute)(pathname);
+      appSideMenu.removeEventListener("sl-after-hide", onAfterHide);
+    };
+
+    appSideMenu.addEventListener("sl-after-hide", onAfterHide, {
       once: true
     });
+    appSideMenu.hide();
   }
 
   render() {
@@ -16708,7 +16768,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34689" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38119" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

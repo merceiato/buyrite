@@ -30,33 +30,50 @@ const routes = {
 class Router {
   constructor() {
     this.routes = routes;
+    this.currentView = null;
+    this.initialised = false;
+    this.handlePopstate = this.handlePopstate.bind(this);
   }
 
   init() {
+    // prevent multiple initialisation and duplicate listeners
+    if (this.initialised) return;
+    this.initialised = true;
+
     // initial call
     this.route(window.location.pathname);
 
     // on back/forward
-    window.addEventListener("popstate", () => {
-      this.route(window.location.pathname);
-    });
+    window.addEventListener("popstate", this.handlePopstate);
+  }
+
+  handlePopstate() {
+    this.route(window.location.pathname);
   }
 
   route(fullPathname) {
     // extract path without params
     const pathname = fullPathname.split("?")[0];
-    const route = this.routes[pathname];
+    const view = this.routes[pathname];
 
-    if (route) {
-      // if route exists, run init() of the view
-      this.routes[window.location.pathname].init();
+    if (view && typeof view.init === "function") {
+      // optional destroy hook on previous view
+      if (this.currentView && typeof this.currentView.destroy === "function") {
+        this.currentView.destroy();
+      }
+
+      this.currentView = view;
+      view.init();
     } else {
-      // show 404 view instead
-      this.routes["404"].init();
+      const fourOFour = this.routes[404];
+      if (fourOFour && typeof fourOFour.init === "function") {
+        fourOFour.init();
+      }
     }
   }
 
   gotoRoute(pathname) {
+    // push new history state and render the route
     window.history.pushState({}, pathname, window.location.origin + pathname);
     this.route(pathname);
   }
@@ -74,6 +91,8 @@ export function gotoRoute(pathname) {
 // allows anchor <a> links to load routes
 export function anchorRoute(e) {
   e.preventDefault();
-  const pathname = e.target.closest("a").pathname;
+  const anchor = e.target.closest("a");
+  if (!anchor) return;
+  const pathname = anchor.pathname;
   AppRouter.gotoRoute(pathname);
 }

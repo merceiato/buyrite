@@ -37,7 +37,7 @@ class vendorPreviewItemsView {
 
   async getItems() {
     try {
-      // ✅ reuse the same API call your manage/edit page uses
+      // reuse the same API call your manage/edit page uses
       this.items = await ProductAPI.getvendorManageListings();
       this.isLoading = false;
 
@@ -118,8 +118,9 @@ class vendorPreviewItemsView {
               <section class="preview-list-panel">
                 <header class="preview-list-header">
                   <h2>Your items</h2>
+                  <!-- changed plus-lg -> plus -->
                   <sl-icon-button
-                    name="plus-lg"
+                    name="plus"
                     label="Create listing"
                     @click=${this.gotoCreateListing}
                   ></sl-icon-button>
@@ -163,8 +164,9 @@ class vendorPreviewItemsView {
                         </div>
 
                         <div class="preview-list-actions">
+                          <!-- changed pencil-square -> pencil -->
                           <sl-icon-button
-                            name="pencil-square"
+                            name="pencil"
                             label="Edit listing"
                             @click=${(e) => this.gotoEditListing(e, l)}
                           ></sl-icon-button>

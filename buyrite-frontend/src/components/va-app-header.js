@@ -44,16 +44,32 @@ customElements.define(
       e.preventDefault();
       const anchor = e.target.closest("a");
       if (!anchor) return;
+
       const pathname = anchor.pathname;
       const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
+
+      // If no drawer present, just navigate
       if (!appSideMenu) {
         gotoRoute(pathname);
         return;
       }
-      appSideMenu.hide();
-      appSideMenu.addEventListener("sl-after-hide", () => gotoRoute(pathname), {
+
+      // Hide the drawer first, then move focus and navigate
+      const onAfterHide = () => {
+        // move focus back to header (outside aria-hidden area)
+        const header = this.shadowRoot.querySelector(".app-header");
+        if (header) header.focus();
+
+        gotoRoute(pathname);
+
+        appSideMenu.removeEventListener("sl-after-hide", onAfterHide);
+      };
+
+      appSideMenu.addEventListener("sl-after-hide", onAfterHide, {
         once: true,
       });
+
+      appSideMenu.hide();
     }
 
     render() {
@@ -80,6 +96,10 @@ customElements.define(
             z-index: 9;
             box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
             align-items: center;
+          }
+
+          .app-header:focus {
+            outline: none;
           }
 
           .app-header-main {
@@ -151,7 +171,8 @@ customElements.define(
           }
         </style>
 
-        <header class="app-header">
+        <!-- tabindex makes header focusable so we can move focus out of the drawer -->
+        <header class="app-header" tabindex="-1">
           <sl-icon-button
             class="hamburger-btn"
             name="list"

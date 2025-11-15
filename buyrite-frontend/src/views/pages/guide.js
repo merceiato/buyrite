@@ -4,6 +4,8 @@ import { gotoRoute, anchorRoute } from "./../../Router";
 import Auth from "./../../Auth";
 import Utils from "./../../Utils";
 import UserAPI from "../../UserAPI";
+import Toast from "../../Toast";
+
 
 class GuideView {
   init() {

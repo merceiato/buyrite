@@ -1,122 +1,159 @@
 import App from './App'
 import Router, { gotoRoute } from './Router'
 import splash from './views/partials/splash'
-import {html, render } from 'lit-html'
+import { html, render } from 'lit-html'
 import Toast from './Toast'
 
 class Auth {
-
-  constructor(){
+  constructor() {
     this.currentUser = {}
   }
-  
-  async signUp(userData, fail = false){  
+
+  // -----------------------------
+  // SIGN UP
+  // -----------------------------
+  async signUp(userData, fail = false) {
+    // userData from <sl-form> will be FormData (good for /user with multer)
     const response = await fetch(`${App.apiBase}/user`, {
-      method: 'POST',      
+      method: 'POST',
       body: userData
     })
 
-    // if response not ok
-    if(!response.ok){      
-      // console log error
-      const err = await response.json()
-      if(err) console.log(err)
-      // show error      
-      Toast.show(`Problem getting user: ${response.status}`)   
-      // run fail() functon if set
-      if(typeof fail == 'function') fail()
+    if (!response.ok) {
+      let err = null
+      try {
+        err = await response.json()
+      } catch (e) {
+        // ignore JSON parse errors
+      }
+      if (err) console.log(err)
+
+      Toast.show(
+        (err && err.message) ||
+          `Problem creating account: ${response.status}`,
+        'error'
+      )
+
+      if (typeof fail === 'function') fail()
+      return
     }
-    /// sign up success - show toast and redirect to sign in page
-    Toast.show('Account created, please sign in')        
-    // redirect to signin
+
+    // sign up success
+    Toast.show('Account created, please sign in')
     gotoRoute('/signin')
   }
 
+  // -----------------------------
+  // SIGN IN
+  // -----------------------------
+  async signIn(userData, fail = false) {
+    // userData from <sl-form> is likely FormData → convert to plain object
+    let payload
+    if (userData instanceof FormData) {
+      payload = Object.fromEntries(userData.entries())
+    } else {
+      payload = userData || {}
+    }
 
-  async signIn(userData, fail = false){
     const response = await fetch(`${App.apiBase}/auth/signin`, {
-      method: 'POST',      
-      body: userData
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     })
 
-    // if response not ok
-    if(!response.ok){
-      // console log error
-      const err = await response.json()
-      if(err) console.log(err)
-      // show error      
-      Toast.show(`Problem signing in: ${err.message}`, 'error')   
-      // run fail() functon if set
-      if(typeof fail == 'function') fail()
+    // Read the body ONCE
+    let data = null
+    try {
+      data = await response.json()
+    } catch (e) {
+      data = null
+    }
+
+    if (!response.ok) {
+      const msg =
+        (data && data.message) ||
+        `Problem signing in: ${response.status}`
+      Toast.show(msg, 'error')
+
+      if (typeof fail === 'function') fail()
+      return
     }
 
     // sign in success
-    const data = await response.json()
     Toast.show(`Welcome  ${data.user.firstName}`)
+
     // save access token (jwt) to local storage
     localStorage.setItem('accessToken', data.accessToken)
+
     // set current user
-    this.currentUser = data.user      
-    // console.log(this.currentUser)           
-    // redirect to home
-    Router.init()
+    this.currentUser = data.user
+
+    // NO LONGER re-initialise Router here – avoids duplicate init + logs
+
+    // redirect according to newUser flag
     if (data.user.newUser == true) {
-      //new user to guide
-      gotoRoute("/guide");
+      gotoRoute('/guide')
     } else {
-      //existing user to home
-      gotoRoute("/");
+      gotoRoute('/vendor')
     }
   }
 
-
-  async check(success){
+  // -----------------------------
+  // CHECK TOKEN
+  // -----------------------------
+  async check(success) {
     // show splash screen while loading ...   
     render(splash, App.rootEl)
-    
+
     // check local token is there
-    if(!localStorage.accessToken){
-      // no local token!
-      Toast.show("Please sign in")    
-      // redirect to sign in page      
+    if (!localStorage.accessToken) {
+      Toast.show("Please sign in")
       gotoRoute('/signin')
       return
     }
-    
+
     // token must exist - validate token via the backend
     const response = await fetch(`${App.apiBase}/auth/validate`, {
       method: 'GET',
-      headers: {        
+      headers: {
         "Authorization": `Bearer ${localStorage.accessToken}`
       }
     })
-    
+
     // if response not ok
-    if(!response.ok){             
-      // console log error
-      const err = await response.json()
-      if(err) console.log(err)
+    if (!response.ok) {
+      let err = null
+      try {
+        err = await response.json()
+      } catch (e) {
+        // ignore
+      }
+      if (err) console.log(err)
+
       // delete local token
       localStorage.removeItem('accessToken')
       Toast.show("session expired, please sign in")
-      // redirect to sign in      
       gotoRoute('/signin')
       return
     }
-    
+
     // token is valid!
     const data = await response.json()
-    // console.log(data)
     // set currentUser obj
     this.currentUser = data.user
-    // run success
+    // run success callback
     success()
   }
 
-  signOut(){
+  // -----------------------------
+  // SIGN OUT
+  // -----------------------------
+  signOut() {
     Toast.show("You are signed out")
     // delete local token
-    localStorage.removeItem('accessToken')       
+    localStorage.removeItem('accessToken')
     // redirect to sign in    
     gotoRoute('/signin')
     // unset currentUser
