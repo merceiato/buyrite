@@ -70,6 +70,22 @@ class ProductAPI {
 
     return await response.json();
   }
+
+    async getPublicProducts() {
+    const response = await fetch(`${App.apiBase}/product`, {
+      method: "GET"
+      // public endpoint – no auth header required
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      if (err) console.error(err);
+      throw new Error("Problem fetching products");
+    }
+
+    return await response.json();
+  }
+
 }
 
 export default new ProductAPI();

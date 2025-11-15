@@ -13,7 +13,7 @@ customElements.define(
     static get properties() {
       return {
         title: { type: String },
-        user: { type: Object }, // unused now but kept for compatibility
+        user: { type: Object },
       };
     }
 
@@ -48,32 +48,25 @@ customElements.define(
       const pathname = anchor.pathname;
       const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
 
-      // If no drawer present, just navigate
       if (!appSideMenu) {
         gotoRoute(pathname);
         return;
       }
 
-      // Hide the drawer first, then move focus and navigate
       const onAfterHide = () => {
-        // move focus back to header (outside aria-hidden area)
         const header = this.shadowRoot.querySelector(".app-header");
         if (header) header.focus();
 
         gotoRoute(pathname);
-
         appSideMenu.removeEventListener("sl-after-hide", onAfterHide);
       };
 
-      appSideMenu.addEventListener("sl-after-hide", onAfterHide, {
-        once: true,
-      });
+      appSideMenu.addEventListener("sl-after-hide", onAfterHide, { once: true });
 
       appSideMenu.hide();
     }
 
     render() {
-      // Use global Auth.currentUser for consistent behaviour
       const currentUser = Auth.currentUser || null;
       const isLoggedIn = !!currentUser;
       const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
@@ -93,13 +86,28 @@ customElements.define(
             height: var(--app-header-height);
             color: #fff;
             display: flex;
+            align-items: center;
             z-index: 9;
             box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
-            align-items: center;
           }
 
           .app-header:focus {
             outline: none;
+          }
+
+          /* ★ Centered logo */
+          .app-header-logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none; /* allow clicks to nav behind it */
+          }
+
+          .app-header-logo img {
+            height: 15vh;
+            width: auto;
+            display: block;
           }
 
           .app-header-main {
@@ -171,7 +179,6 @@ customElements.define(
           }
         </style>
 
-        <!-- tabindex makes header focusable so we can move focus out of the drawer -->
         <header class="app-header" tabindex="-1">
           <sl-icon-button
             class="hamburger-btn"
@@ -179,6 +186,11 @@ customElements.define(
             @click="${this.hamburgerClick}"
             style="font-size: 1.5em;"
           ></sl-icon-button>
+
+          <!-- ★ centered logo -->
+          <div class="app-header-logo">
+            <img src="/images/logo.svg" alt="BuyRight" />
+          </div>
 
           <div class="app-header-main">
             ${this.title ? html`<h1 class="page-title">${this.title}</h1>` : ``}
@@ -236,13 +248,11 @@ customElements.define(
           <nav class="app-side-menu-items">
             ${!isLoggedIn
               ? html`
-                  <!-- Logged-out menu -->
                   <a href="/signin" @click="${this.menuClick}">Sign In</a>
                   <a href="/signup" @click="${this.menuClick}">Sign Up</a>
                 `
               : isVendor
               ? html`
-                  <!-- VENDOR MENU: based on vendor flow in proposal -->
                   <a href="/vendor" @click="${this.menuClick}">
                     Vendor Dashboard
                   </a>
@@ -257,7 +267,6 @@ customElements.define(
                   </a>
                 `
               : html`
-                  <!-- SHOPPER MENU: based on consumer flow in proposal -->
                   <a href="/" @click="${this.menuClick}">Home</a>
                   <a href="/buyrite" @click="${this.menuClick}">
                     Consumer Interface
@@ -273,9 +282,7 @@ customElements.define(
                   </a>
                 `}
             ${isLoggedIn
-              ? html`
-                  <a href="#" @click="${() => Auth.signOut()}">Sign Out</a>
-                `
+              ? html` <a href="#" @click="${() => Auth.signOut()}">Sign Out</a> `
               : ""}
           </nav>
         </sl-drawer>
