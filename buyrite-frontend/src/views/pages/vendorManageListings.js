@@ -39,24 +39,19 @@ class vendorManageListingsView {
 
   async handleListingSubmit(e) {
     e.preventDefault();
-    const formData = e.detail.formData; // Shoelace gives us FormData already
+    const formData = e.detail.formData; // Shoelace <sl-form> gives FormData
 
     const submitBtn = document.querySelector(".listing-submit-btn");
     if (submitBtn) submitBtn.setAttribute("loading", "");
 
     try {
-      let product;
-
       if (this.editingListing) {
         // UPDATE existing listing
-        product = await ProductAPI.updateListing(
-          this.editingListing._id,
-          formData
-        );
+        await ProductAPI.updateListing(this.editingListing._id, formData);
         Toast.show("Listing updated");
       } else {
         // CREATE new listing
-        product = await ProductAPI.createListing(formData);
+        await ProductAPI.createListing(formData);
         Toast.show("Listing created");
       }
 
@@ -95,12 +90,14 @@ class vendorManageListingsView {
   render() {
     const listing = this.editingListing;
     const listings = this.listings || [];
+    const ethical =
+      listing && listing.ethicalRatings ? listing.ethicalRatings : {};
 
     const template = html`
-      <va-app-header
+      <br-app-header
         title="Manage Listings"
         user=${JSON.stringify(Auth.currentUser)}
-      ></va-app-header>
+      ></br-app-header>
 
       <div class="page-content">
         <div class="vendor-layout">
@@ -162,12 +159,92 @@ class vendorManageListingsView {
                 >
               </div>
 
+              <!-- Ethical profile inputs -->
+              <div class="input-group">
+                <h3>Ethical profile</h3>
+                <p class="ethical-help">
+                  Rate this product on key ethical dimensions from 0–5. These
+                  scores will be used to match your products to shopper
+                  preferences.
+                </p>
+              </div>
+
+              <div class="input-group">
+                <sl-select
+                  name="eth_animalWelfare"
+                  label="Animal welfare"
+                  required
+                  value=${ethical.animalWelfare !== undefined
+                    ? String(ethical.animalWelfare)
+                    : "3"}
+                >
+                  <sl-menu-item value="0">0 – Not applicable / unknown</sl-menu-item>
+                  <sl-menu-item value="1">1 – Very poor</sl-menu-item>
+                  <sl-menu-item value="2">2 – Below average</sl-menu-item>
+                  <sl-menu-item value="3">3 – Acceptable baseline</sl-menu-item>
+                  <sl-menu-item value="4">4 – Strong</sl-menu-item>
+                  <sl-menu-item value="5">5 – Outstanding</sl-menu-item>
+                </sl-select>
+              </div>
+
+              <div class="input-group">
+                <sl-select
+                  name="eth_humanitarian"
+                  label="Humanitarian / labour"
+                  required
+                  value=${ethical.humanitarian !== undefined
+                    ? String(ethical.humanitarian)
+                    : "3"}
+                >
+                  <sl-menu-item value="0">0 – Not applicable / unknown</sl-menu-item>
+                  <sl-menu-item value="1">1 – Very poor</sl-menu-item>
+                  <sl-menu-item value="2">2 – Below average</sl-menu-item>
+                  <sl-menu-item value="3">3 – Acceptable baseline</sl-menu-item>
+                  <sl-menu-item value="4">4 – Strong</sl-menu-item>
+                  <sl-menu-item value="5">5 – Outstanding</sl-menu-item>
+                </sl-select>
+              </div>
+
+              <div class="input-group">
+                <sl-select
+                  name="eth_sustainability"
+                  label="Sustainability (materials & lifecycle)"
+                  required
+                  value=${ethical.sustainability !== undefined
+                    ? String(ethical.sustainability)
+                    : "3"}
+                >
+                  <sl-menu-item value="0">0 – Not applicable / unknown</sl-menu-item>
+                  <sl-menu-item value="1">1 – Very poor</sl-menu-item>
+                  <sl-menu-item value="2">2 – Below average</sl-menu-item>
+                  <sl-menu-item value="3">3 – Acceptable baseline</sl-menu-item>
+                  <sl-menu-item value="4">4 – Strong</sl-menu-item>
+                  <sl-menu-item value="5">5 – Outstanding</sl-menu-item>
+                </sl-select>
+              </div>
+
+              <div class="input-group">
+                <sl-select
+                  name="eth_environmentalism"
+                  label="Environmental impact (carbon, pollution, land use)"
+                  required
+                  value=${ethical.environmentalism !== undefined
+                    ? String(ethical.environmentalism)
+                    : "3"}
+                >
+                  <sl-menu-item value="0">0 – Not applicable / unknown</sl-menu-item>
+                  <sl-menu-item value="1">1 – Very poor</sl-menu-item>
+                  <sl-menu-item value="2">2 – Below average</sl-menu-item>
+                  <sl-menu-item value="3">3 – Acceptable baseline</sl-menu-item>
+                  <sl-menu-item value="4">4 – Strong</sl-menu-item>
+                  <sl-menu-item value="5">5 – Outstanding</sl-menu-item>
+                </sl-select>
+              </div>
+
               <div class="input-group">
                 <label>Primary Image</label><br />
                 <input type="file" name="image" accept="image/*" />
-                <p
-                  style="font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;"
-                >
+                <p class="image-help">
                   Upload a clear product image (JPG/PNG). Existing images will
                   be kept unless you upload a new one when editing.
                 </p>
@@ -247,79 +324,6 @@ class vendorManageListingsView {
           </section>
         </div>
       </div>
-
-      <style>
-        .vendor-layout {
-          display: grid;
-          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);
-          gap: 2rem;
-        }
-
-        .vendor-form,
-        .vendor-listings {
-          background: #fff;
-          border-radius: 12px;
-          padding: 1.5rem;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .vendor-form h2,
-        .vendor-listings h2 {
-          margin-top: 0;
-          margin-bottom: 1rem;
-        }
-
-        .input-group {
-          margin-bottom: 1rem;
-        }
-
-        .button-row sl-button + sl-button {
-          margin-left: 0.5rem;
-        }
-
-        .listing-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 1rem;
-        }
-
-        .listing-card {
-          height: 100%;
-        }
-
-        .listing-meta {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 0.5rem;
-        }
-
-        .chip {
-          display: inline-block;
-          padding: 0.1rem 0.6rem;
-          border-radius: 999px;
-          background: #eef2f3;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .price {
-          font-weight: bold;
-        }
-
-        .listing-actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
-        }
-
-        @media (max-width: 900px) {
-          .vendor-layout {
-            grid-template-columns: 1fr;
-          }
-        }
-      </style>
     `;
 
     render(template, App.rootEl);

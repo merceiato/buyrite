@@ -6,7 +6,6 @@ import Utils from "./../../Utils";
 import UserAPI from "../../UserAPI";
 import Toast from "../../Toast";
 
-
 class GuideView {
   init() {
     document.title = "Guide";
@@ -31,10 +30,10 @@ class GuideView {
 
   render() {
     const guide = html`
-      <va-app-header
+      <br-app-header
         title="Guide"
         user="${JSON.stringify(Auth.currentUser)}"
-      ></va-app-header>
+      ></br-app-header>
       <div class="page-content calign">
         <h3 class="brand-color">Welcome ${Auth.currentUser.firstName}!</h3>
         <p>

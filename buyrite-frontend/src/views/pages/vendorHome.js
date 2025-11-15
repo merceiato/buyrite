@@ -23,10 +23,10 @@ class VendorHomeView {
 
   render() {
     const template = html`
-      <va-app-header
+      <br-app-header
         title="Vendor Dashboard"
         user=${JSON.stringify(Auth.currentUser)}
-      ></va-app-header>
+      ></br-app-header>
 
       <div class="page-content">
         <h2>Welcome, ${Auth.currentUser.firstName}</h2>

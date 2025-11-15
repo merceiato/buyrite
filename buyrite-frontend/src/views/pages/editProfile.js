@@ -49,10 +49,10 @@ class EditProfileView {
 
   render() {
     const template = html`
-      <va-app-header
+      <br-app-header
         title="Edit Profile"
         user=${JSON.stringify(Auth.currentUser)}
-      ></va-app-header>
+      ></br-app-header>
       <div class="page-content">
         ${this.user == null
           ? html` <sl-spinner></sl-spinner> `

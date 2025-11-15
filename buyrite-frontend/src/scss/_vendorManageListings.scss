@@ -1,0 +1,89 @@
+/* ================================
+   VENDOR MANAGE LISTINGS PAGE
+   ================================ */
+
+.vendor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.vendor-form,
+.vendor-listings {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.vendor-form h2,
+.vendor-listings h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.ethical-help {
+  font-size: 0.85rem;
+  color: #666;
+  max-width: 40rem;
+  margin-top: 0.25rem;
+}
+
+.image-help {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  max-width: 36rem;
+}
+
+.button-row sl-button + sl-button {
+  margin-left: 0.5rem;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.listing-card {
+  height: 100%;
+}
+
+.listing-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2f3;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.listing-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .vendor-layout {
+    grid-template-columns: 1fr;
+  }
+}

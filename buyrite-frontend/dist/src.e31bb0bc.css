@@ -194,129 +194,96 @@ sl-dialog::part(title) {
    Two columns: left (list) + right (preview)
    ================================ */
 .preview-layout {
-  display: flex;
-  gap: 1.5rem;
-  align-items: stretch;
-  min-height: calc(100vh - 140px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
+  gap: 2rem;
 }
 
 /* ================================
-   LEFT COLUMN (LIST)
+   PANELS
    ================================ */
-.preview-list-panel {
-  flex: 0 0 360px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #eee;
-  padding-right: 0.75rem;
+.preview-list-panel,
+.preview-detail-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .preview-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
+/* ================================
+   LEFT COLUMN (LIST)
+   ================================ */
 .preview-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1 1 auto;
-  overflow-y: auto;
 }
 
-/* ================================
-   LIST ITEM STYLING
-   ================================ */
 .preview-list-item {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
   gap: 0.75rem;
-  padding: 0.6rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid transparent;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.preview-list-item + .preview-list-item {
-  margin-top: 0.4rem;
-}
-
-.preview-list-item:hover {
-  background: #faf7f2;
+  align-items: center;
 }
 
 .preview-list-item.is-active {
-  border-color: #d0c0a0;
-  background: #fffaf2;
+  background: #f5f7fa;
 }
 
-/* Thumbnail LEFT side */
-.preview-list-thumb {
-  flex: 0 0 56px;
-  height: 56px;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.preview-list-item + .preview-list-item {
+  margin-top: 0.25rem;
 }
 
 .preview-list-thumb img {
-  width: 100%;
-  height: 100%;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .preview-list-thumb--placeholder {
-  font-size: 0.7rem;
-  color: #777;
-}
-
-/* Text RIGHT side */
-.preview-list-text {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.preview-list-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.preview-list-meta {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #eef2f3;
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  font-size: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
   color: #666;
 }
 
-/* Edit button inside list item */
+.preview-list-title {
+  font-weight: 600;
+}
+
+.preview-list-meta {
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+
 .preview-list-actions {
-  flex: 0 0 auto;
-  margin-left: 0.25rem;
+  display: flex;
+  align-items: center;
 }
 
 /* ================================
-   RIGHT COLUMN (DETAIL PREVIEW)
+   RIGHT COLUMN (DETAIL)
    ================================ */
-.preview-detail-panel {
-  flex: 1 1 auto;
-  padding-left: 0.75rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .preview-detail-card {
-  height: 100%;
+  width: 100%;
 }
 
 .preview-detail-header {
@@ -326,36 +293,135 @@ sl-dialog::part(title) {
   gap: 1rem;
 }
 
+.preview-detail-tags {
+  margin-top: 0.25rem;
+}
+
 .preview-detail-price {
+  font-size: 1.4rem;
   font-weight: 700;
-  white-space: nowrap;
+}
+
+/* Re-use chip style; if you want one source of truth,
+   you can remove this and keep it only in one partial. */
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2f3;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.ethics-chips {
+  margin-top: 0.35rem;
 }
 
 /* ================================
-   MOBILE LAYOUT
+   STATES
    ================================ */
-@media (max-width: 800px) {
+.preview-loading,
+.preview-empty {
+  text-align: center;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 900px) {
   .preview-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
+}
+/* ================================
+   VENDOR MANAGE LISTINGS PAGE
+   ================================ */
+.vendor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
 
-  .preview-list-panel {
-    flex: 0 0 auto;
-    max-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #eee;
-    padding-right: 0;
-    padding-bottom: 0.75rem;
-  }
+.vendor-form,
+.vendor-listings {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
 
-  .preview-list {
-    max-height: 260px;
-    overflow-y: auto;
-  }
+.vendor-form h2,
+.vendor-listings h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
 
-  .preview-detail-panel {
-    padding-left: 0;
-    padding-top: 0.75rem;
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.ethical-help {
+  font-size: 0.85rem;
+  color: #666;
+  max-width: 40rem;
+  margin-top: 0.25rem;
+}
+
+.image-help {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  max-width: 36rem;
+}
+
+.button-row sl-button + sl-button {
+  margin-left: 0.5rem;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.listing-card {
+  height: 100%;
+}
+
+.listing-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2f3;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.listing-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .vendor-layout {
+    grid-template-columns: 1fr;
   }
 }
 

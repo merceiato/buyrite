@@ -15,10 +15,10 @@ class ProfileView {
 
   render() {
     const template = html`
-      <va-app-header
+      <br-app-header
         title="Profile"
         user="${JSON.stringify(Auth.currentUser)}"
-      ></va-app-header>
+      ></br-app-header>
       <div class="page-content calign">
         ${Auth.currentUser && Auth.currentUser.avatar
           ? html`

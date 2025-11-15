@@ -7710,7 +7710,7 @@ var _Utils = _interopRequireDefault(require("./../../Utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Home\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", "\n          >View Profile</sl-button\n        >\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Home\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", "\n          >View Profile</sl-button\n        >\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13644,7 +13644,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Profile\"\n        user=\"", "\"\n      ></va-app-header>\n      <div class=\"page-content calign\">\n        ", "\n        <h2>", " ", "</h2>\n        <p>", "</p>\n        <p>\n          Role: ", "\n        </p>\n\n        <p>\n          Updated:\n          ", "\n        </p>\n\n        ", "\n\n        <sl-button @click=", "\n          >Edit Profile</sl-button\n        >\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Profile\"\n        user=\"", "\"\n      ></br-app-header>\n      <div class=\"page-content calign\">\n        ", "\n        <h2>", " ", "</h2>\n        <p>", "</p>\n        <p>\n          Role: ", "\n        </p>\n\n        <p>\n          Updated:\n          ", "\n        </p>\n\n        ", "\n\n        <sl-button @click=", "\n          >Edit Profile</sl-button\n        >\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13818,7 +13818,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Edit Profile\"\n        user=", "\n      ></va-app-header>\n      <div class=\"page-content\">\n        ", "\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Edit Profile\"\n        user=", "\n      ></br-app-header>\n      <div class=\"page-content\">\n        ", "\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13906,7 +13906,7 @@ var _Toast = _interopRequireDefault(require("../../Toast"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Guide\"\n        user=\"", "\"\n      ></va-app-header>\n      <div class=\"page-content calign\">\n        <h3 class=\"brand-color\">Welcome ", "!</h3>\n        <p>\n          This is a quick tour to teach you the basics of using Haircuts ...\n        </p>\n\n        <div class=\"guide-step\">\n          <h4>Search Hairdressers</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <div class=\"guide-step\">\n          <h4>Find a haircut</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <div class=\"guide-step\">\n          <h4>Save haircuts to favourites</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <sl-button type=\"primary\" @click=", "\n          >Okay got it!</sl-button\n        >\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Guide\"\n        user=\"", "\"\n      ></br-app-header>\n      <div class=\"page-content calign\">\n        <h3 class=\"brand-color\">Welcome ", "!</h3>\n        <p>\n          This is a quick tour to teach you the basics of using Haircuts ...\n        </p>\n\n        <div class=\"guide-step\">\n          <h4>Search Hairdressers</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <div class=\"guide-step\">\n          <h4>Find a haircut</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <div class=\"guide-step\">\n          <h4>Save haircuts to favourites</h4>\n          <img\n            src=\"https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=IMAGE\"\n          />\n        </div>\n\n        <sl-button type=\"primary\" @click=", "\n          >Okay got it!</sl-button\n        >\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13970,7 +13970,7 @@ var _Utils = _interopRequireDefault(require("../../Utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Profile\"\n        user=\"", "\"\n      ></va-app-header>\n      <div class=\"page-content\">\n        <h1>Haircuts</h1>\n        <p>Page content ...</p>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Profile\"\n        user=\"", "\"\n      ></br-app-header>\n      <div class=\"page-content\">\n        <h1>Haircuts</h1>\n        <p>Page content ...</p>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14022,7 +14022,7 @@ var _moment = _interopRequireDefault(require("moment"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Vendor Dashboard\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <h2>Welcome, ", "</h2>\n        <p>Role: Vendor</p>\n        <p>\n          Last updated:\n          ", "\n        </p>\n\n        <div class=\"vendor-grid\">\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Manage Products</h3>\n            <p>\n              Add, edit and organise the products you make available to\n              shoppers.\n            </p>\n            <sl-button\n              @click=", "\n              variant=\"primary\"\n            >\n              Go to Products\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Brand Profile</h3>\n            <p>Tell shoppers about your brand, values and certifications.</p>\n            <sl-button @click=", " variant=\"default\">\n              Edit Brand Profile\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Insights (placeholder)</h3>\n            <p>\n              In the future this area can show engagement and performance data.\n            </p>\n          </sl-card>\n        </div>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Vendor Dashboard\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content\">\n        <h2>Welcome, ", "</h2>\n        <p>Role: Vendor</p>\n        <p>\n          Last updated:\n          ", "\n        </p>\n\n        <div class=\"vendor-grid\">\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Manage Products</h3>\n            <p>\n              Add, edit and organise the products you make available to\n              shoppers.\n            </p>\n            <sl-button\n              @click=", "\n              variant=\"primary\"\n            >\n              Go to Products\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Brand Profile</h3>\n            <p>Tell shoppers about your brand, values and certifications.</p>\n            <sl-button @click=", " variant=\"default\">\n              Edit Brand Profile\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Insights (placeholder)</h3>\n            <p>\n              In the future this area can show engagement and performance data.\n            </p>\n          </sl-card>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14224,7 +14224,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\"\n                    >Personal Care</sl-menu-item\n                  >\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Describe the product & its ethical credentials\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p\n                  style=\"font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;\"\n                >\n                  Upload a clear product image (JPG/PNG). Existing images will\n                  be kept unless you upload a new one when editing.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button type=\"primary\" submit class=\"listing-submit-btn\">\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n\n      <style>\n        .vendor-layout {\n          display: grid;\n          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);\n          gap: 2rem;\n        }\n\n        .vendor-form,\n        .vendor-listings {\n          background: #fff;\n          border-radius: 12px;\n          padding: 1.5rem;\n          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n        }\n\n        .vendor-form h2,\n        .vendor-listings h2 {\n          margin-top: 0;\n          margin-bottom: 1rem;\n        }\n\n        .input-group {\n          margin-bottom: 1rem;\n        }\n\n        .button-row sl-button + sl-button {\n          margin-left: 0.5rem;\n        }\n\n        .listing-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n          gap: 1rem;\n        }\n\n        .listing-card {\n          height: 100%;\n        }\n\n        .listing-meta {\n          display: flex;\n          justify-content: space-between;\n          align-items: center;\n          margin-bottom: 0.5rem;\n        }\n\n        .chip {\n          display: inline-block;\n          padding: 0.1rem 0.6rem;\n          border-radius: 999px;\n          background: #eef2f3;\n          font-size: 0.75rem;\n          text-transform: uppercase;\n          letter-spacing: 0.05em;\n        }\n\n        .price {\n          font-weight: bold;\n        }\n\n        .listing-actions {\n          display: flex;\n          justify-content: flex-end;\n          gap: 0.5rem;\n        }\n\n        @media (max-width: 900px) {\n          .vendor-layout {\n            grid-template-columns: 1fr;\n          }\n        }\n      </style>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\"\n                    >Personal Care</sl-menu-item\n                  >\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Describe the product & its ethical credentials\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <!-- Ethical profile inputs -->\n              <div class=\"input-group\">\n                <h3>Ethical profile</h3>\n                <p class=\"ethical-help\">\n                  Rate this product on key ethical dimensions from 0\u20135. These\n                  scores will be used to match your products to shopper\n                  preferences.\n                </p>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"eth_animalWelfare\"\n                  label=\"Animal welfare\"\n                  required\n                  value=", "\n                >\n                  <sl-menu-item value=\"0\">0 \u2013 Not applicable / unknown</sl-menu-item>\n                  <sl-menu-item value=\"1\">1 \u2013 Very poor</sl-menu-item>\n                  <sl-menu-item value=\"2\">2 \u2013 Below average</sl-menu-item>\n                  <sl-menu-item value=\"3\">3 \u2013 Acceptable baseline</sl-menu-item>\n                  <sl-menu-item value=\"4\">4 \u2013 Strong</sl-menu-item>\n                  <sl-menu-item value=\"5\">5 \u2013 Outstanding</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"eth_humanitarian\"\n                  label=\"Humanitarian / labour\"\n                  required\n                  value=", "\n                >\n                  <sl-menu-item value=\"0\">0 \u2013 Not applicable / unknown</sl-menu-item>\n                  <sl-menu-item value=\"1\">1 \u2013 Very poor</sl-menu-item>\n                  <sl-menu-item value=\"2\">2 \u2013 Below average</sl-menu-item>\n                  <sl-menu-item value=\"3\">3 \u2013 Acceptable baseline</sl-menu-item>\n                  <sl-menu-item value=\"4\">4 \u2013 Strong</sl-menu-item>\n                  <sl-menu-item value=\"5\">5 \u2013 Outstanding</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"eth_sustainability\"\n                  label=\"Sustainability (materials & lifecycle)\"\n                  required\n                  value=", "\n                >\n                  <sl-menu-item value=\"0\">0 \u2013 Not applicable / unknown</sl-menu-item>\n                  <sl-menu-item value=\"1\">1 \u2013 Very poor</sl-menu-item>\n                  <sl-menu-item value=\"2\">2 \u2013 Below average</sl-menu-item>\n                  <sl-menu-item value=\"3\">3 \u2013 Acceptable baseline</sl-menu-item>\n                  <sl-menu-item value=\"4\">4 \u2013 Strong</sl-menu-item>\n                  <sl-menu-item value=\"5\">5 \u2013 Outstanding</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"eth_environmentalism\"\n                  label=\"Environmental impact (carbon, pollution, land use)\"\n                  required\n                  value=", "\n                >\n                  <sl-menu-item value=\"0\">0 \u2013 Not applicable / unknown</sl-menu-item>\n                  <sl-menu-item value=\"1\">1 \u2013 Very poor</sl-menu-item>\n                  <sl-menu-item value=\"2\">2 \u2013 Below average</sl-menu-item>\n                  <sl-menu-item value=\"3\">3 \u2013 Acceptable baseline</sl-menu-item>\n                  <sl-menu-item value=\"4\">4 \u2013 Strong</sl-menu-item>\n                  <sl-menu-item value=\"5\">5 \u2013 Outstanding</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p class=\"image-help\">\n                  Upload a clear product image (JPG/PNG). Existing images will\n                  be kept unless you upload a new one when editing.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button type=\"primary\" submit class=\"listing-submit-btn\">\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14269,22 +14269,20 @@ class vendorManageListingsView {
 
   async handleListingSubmit(e) {
     e.preventDefault();
-    const formData = e.detail.formData; // Shoelace gives us FormData already
+    const formData = e.detail.formData; // Shoelace <sl-form> gives FormData
 
     const submitBtn = document.querySelector(".listing-submit-btn");
     if (submitBtn) submitBtn.setAttribute("loading", "");
 
     try {
-      let product;
-
       if (this.editingListing) {
         // UPDATE existing listing
-        product = await _ProductAPI.default.updateListing(this.editingListing._id, formData);
+        await _ProductAPI.default.updateListing(this.editingListing._id, formData);
 
         _Toast.default.show("Listing updated");
       } else {
         // CREATE new listing
-        product = await _ProductAPI.default.createListing(formData);
+        await _ProductAPI.default.createListing(formData);
 
         _Toast.default.show("Listing created");
       } // Reset edit state & reload from API
@@ -14328,7 +14326,8 @@ class vendorManageListingsView {
   render() {
     const listing = this.editingListing;
     const listings = this.listings || [];
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), listing ? "Edit Listing" : "Create New Listing", this.handleListingSubmit.bind(this), listing ? listing.title : "", listing ? listing.category : "", listing ? listing.price : "", listing ? listing.description || "" : "", listing ? "Save Changes" : "Create Listing", listing ? (0, _litHtml.html)(_templateObject2(), this.handleCancelEdit.bind(this)) : "", listings.length === 0 ? (0, _litHtml.html)(_templateObject3()) : (0, _litHtml.html)(_templateObject4(), listings.map(l => (0, _litHtml.html)(_templateObject5(), l.image ? (0, _litHtml.html)(_templateObject6(), _App.default.apiBase, l.image, l.title) : "", l.title, (l.category || "uncategorised").toUpperCase(), Number(l.price || 0).toFixed(2), l.description || "No description provided. Add one to help shoppers understand your product and its ethical credentials.", () => this.handleEditClick(l), () => this.handleDeleteClick(l._id)))));
+    const ethical = listing && listing.ethicalRatings ? listing.ethicalRatings : {};
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), listing ? "Edit Listing" : "Create New Listing", this.handleListingSubmit.bind(this), listing ? listing.title : "", listing ? listing.category : "", listing ? listing.price : "", listing ? listing.description || "" : "", ethical.animalWelfare !== undefined ? String(ethical.animalWelfare) : "3", ethical.humanitarian !== undefined ? String(ethical.humanitarian) : "3", ethical.sustainability !== undefined ? String(ethical.sustainability) : "3", ethical.environmentalism !== undefined ? String(ethical.environmentalism) : "3", listing ? "Save Changes" : "Create Listing", listing ? (0, _litHtml.html)(_templateObject2(), this.handleCancelEdit.bind(this)) : "", listings.length === 0 ? (0, _litHtml.html)(_templateObject3()) : (0, _litHtml.html)(_templateObject4(), listings.map(l => (0, _litHtml.html)(_templateObject5(), l.image ? (0, _litHtml.html)(_templateObject6(), _App.default.apiBase, l.image, l.title) : "", l.title, (l.category || "uncategorised").toUpperCase(), Number(l.price || 0).toFixed(2), l.description || "No description provided. Add one to help shoppers understand your product and its ethical credentials.", () => this.handleEditClick(l), () => this.handleDeleteClick(l._id)))));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14462,7 +14461,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Preview Items\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content preview-layout\">\n        ", "\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Preview Items\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content preview-layout\">\n        ", "\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -16471,16 +16470,16 @@ LitElement.finalized = true;
  */
 
 LitElement.render = _shadyRender.render;
-},{"lit-html":"../node_modules/lit-html/lit-html.js","lit-html/lib/shady-render":"../node_modules/lit-html/lib/shady-render.js","./lib/updating-element.js":"../node_modules/@polymer/lit-element/lib/updating-element.js","./lib/decorators.js":"../node_modules/@polymer/lit-element/lib/decorators.js","lit-html/lit-html":"../node_modules/lit-html/lit-html.js","./lib/css-tag.js":"../node_modules/@polymer/lit-element/lib/css-tag.js"}],"components/va-app-header.js":[function(require,module,exports) {
+},{"lit-html":"../node_modules/lit-html/lit-html.js","lit-html/lib/shady-render":"../node_modules/lit-html/lib/shady-render.js","./lib/updating-element.js":"../node_modules/@polymer/lit-element/lib/updating-element.js","./lib/decorators.js":"../node_modules/@polymer/lit-element/lib/decorators.js","lit-html/lit-html":"../node_modules/lit-html/lit-html.js","./lib/css-tag.js":"../node_modules/@polymer/lit-element/lib/css-tag.js"}],"components/br-app-header.js":[function(require,module,exports) {
 "use strict";
 
 var _litElement = require("@polymer/lit-element");
 
-var _Router = require("./../Router");
+var _Router = require("../Router");
 
-var _Auth = _interopRequireDefault(require("./../Auth"));
+var _Auth = _interopRequireDefault(require("../Auth"));
 
-var _App = _interopRequireDefault(require("./../App"));
+var _App = _interopRequireDefault(require("../App"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16505,7 +16504,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  const data = _taggedTemplateLiteral(["\n                  <!-- VENDOR MENU: based on vendor flow in proposal -->\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/manageProducts\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a\n                    href=\"/vendor/previewProducts\"\n                    @click=\"", "\"\n                  >\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
+  const data = _taggedTemplateLiteral(["\n                  <!-- VENDOR MENU: based on vendor flow in proposal -->\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/manageProducts\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a href=\"/vendor/previewProducts\" @click=\"", "\">\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -16576,7 +16575,7 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-customElements.define("va-app-header", class AppHeader extends _litElement.LitElement {
+customElements.define("br-app-header", class AppHeader extends _litElement.LitElement {
   constructor() {
     super();
   }
@@ -16651,7 +16650,7 @@ customElements.define("va-app-header", class AppHeader extends _litElement.LitEl
   }
 
 });
-},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","../Router":"Router.js","../Auth":"Auth.js","../App":"App.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -16728,7 +16727,7 @@ module.hot.accept(reloadCSS);
 
 var _App = _interopRequireDefault(require("./App.js"));
 
-require("./components/va-app-header");
+require("./components/br-app-header");
 
 require("./scss/master.scss");
 
@@ -16740,7 +16739,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener("DOMContentLoaded", () => {
   _App.default.init();
 });
-},{"./App.js":"App.js","./components/va-app-header":"components/va-app-header.js","./scss/master.scss":"scss/master.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./App.js":"App.js","./components/br-app-header":"components/br-app-header.js","./scss/master.scss":"scss/master.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

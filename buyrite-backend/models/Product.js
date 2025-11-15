@@ -30,6 +30,37 @@ const productSchema = new Schema({
   active: {
     type: Boolean,
     default: true
+  },
+  // New ethical ratings block (0–5 scale)
+  ethicalRatings: {
+    animalWelfare: {
+      type: Number,
+      min: 0,
+      max: 5,
+      required: true,
+      default: 3
+    },
+    humanitarian: {
+      type: Number,
+      min: 0,
+      max: 5,
+      required: true,
+      default: 3
+    },
+    sustainability: {
+      type: Number,
+      min: 0,
+      max: 5,
+      required: true,
+      default: 3
+    },
+    environmentalism: {
+      type: Number,
+      min: 0,
+      max: 5,
+      required: true,
+      default: 3
+    }
   }
 }, { timestamps: true })
 

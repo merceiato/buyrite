@@ -1,10 +1,10 @@
 import { LitElement, html, css } from "@polymer/lit-element";
-import { anchorRoute, gotoRoute } from "./../Router";
-import Auth from "./../Auth";
-import App from "./../App";
+import { anchorRoute, gotoRoute } from "../Router";
+import Auth from "../Auth";
+import App from "../App";
 
 customElements.define(
-  "va-app-header",
+  "br-app-header",
   class AppHeader extends LitElement {
     constructor() {
       super();
@@ -249,10 +249,7 @@ customElements.define(
                   <a href="/vendor/manageProducts" @click="${this.menuClick}">
                     Manage Listings
                   </a>
-                  <a
-                    href="/vendor/previewProducts"
-                    @click="${this.menuClick}"
-                  >
+                  <a href="/vendor/previewProducts" @click="${this.menuClick}">
                     Preview Items
                   </a>
                   <a href="/about" @click="${this.menuClick}">

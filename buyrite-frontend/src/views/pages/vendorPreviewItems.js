@@ -85,10 +85,10 @@ class vendorPreviewItemsView {
     const error = this.error;
 
     const template = html`
-      <va-app-header
+      <br-app-header
         title="Preview Items"
         user=${JSON.stringify(Auth.currentUser)}
-      ></va-app-header>
+      ></br-app-header>
 
       <div class="page-content preview-layout">
         ${isLoading
