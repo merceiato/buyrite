@@ -108,8 +108,10 @@ router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
   }
 });
 
-// POST - create new user ------------------------------------------------------
-router.post('/', (req, res) => {
+// POST - create new user (signup) --------------------------------------------
+// NOTE: we use uploadAvatar here too so multipart/form-data signups
+// (FormData from the front end) get parsed into req.body.
+router.post('/', uploadAvatar, (req, res) => {
   // validate request
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).send({ message: 'User content can not be empty' });
@@ -125,7 +127,17 @@ router.post('/', (req, res) => {
 
     // create new user
     let newUser = new User(req.body);
-    newUser.save()
+
+    // If an avatar was uploaded at signup, save its filename
+    if (req.file) {
+      newUser.avatar = `${newUser._id}-${Date.now()}.jpg`; // optional – depends how you want to name it
+      // Note: if you want sharp processing here as well, you can
+      // mirror the logic from the PUT route, but usually signup
+      // doesn't handle avatar yet so this is optional.
+    }
+
+    newUser
+      .save()
       .then(user => {
         // success! return 201 status with user object
         return res.status(201).json(user);
