@@ -13990,7 +13990,7 @@ var _moment = _interopRequireDefault(require("moment"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Vendor Dashboard\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <h2>Welcome, ", "</h2>\n        <p>Role: Vendor</p>\n        <p>\n          Last updated:\n          ", "\n        </p>\n\n        <div class=\"vendor-grid\">\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Manage Products</h3>\n            <p>\n              Add, edit and organise the products you make available to shoppers.\n            </p>\n            <sl-button\n              @click=", "\n              variant=\"primary\"\n            >\n              Go to Products\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Brand Profile</h3>\n            <p>\n              Tell shoppers about your brand, values and certifications.\n            </p>\n            <sl-button\n              @click=", "\n              variant=\"default\"\n            >\n              Edit Brand Profile\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Insights (placeholder)</h3>\n            <p>\n              In the future this area can show engagement and performance data.\n            </p>\n          </sl-card>\n        </div>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Vendor Dashboard\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <h2>Welcome, ", "</h2>\n        <p>Role: Vendor</p>\n        <p>\n          Last updated:\n          ", "\n        </p>\n\n        <div class=\"vendor-grid\">\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Manage Products</h3>\n            <p>\n              Add, edit and organise the products you make available to\n              shoppers.\n            </p>\n            <sl-button\n              @click=", "\n              variant=\"primary\"\n            >\n              Go to Products\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Brand Profile</h3>\n            <p>Tell shoppers about your brand, values and certifications.</p>\n            <sl-button @click=", " variant=\"default\">\n              Edit Brand Profile\n            </sl-button>\n          </sl-card>\n\n          <sl-card class=\"vendor-card\">\n            <h3 slot=\"header\">Insights (placeholder)</h3>\n            <p>\n              In the future this area can show engagement and performance data.\n            </p>\n          </sl-card>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14003,12 +14003,12 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 class VendorHomeView {
   init() {
-    console.log('VendorHomeView.init');
-    document.title = 'Vendor Dashboard'; // Guard: only allow vendors (accessLevel 2)
+    console.log("VendorHomeView.init");
+    document.title = "Vendor Dashboard"; // Guard: only allow vendors (accessLevel 2)
 
     if (!_Auth.default.currentUser || _Auth.default.currentUser.accessLevel !== 2) {
       // send non-vendors back to consumer home (or profile, etc.)
-      (0, _Router.gotoRoute)('/');
+      (0, _Router.gotoRoute)("/");
       return;
     }
 
@@ -14018,7 +14018,7 @@ class VendorHomeView {
   }
 
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser.firstName, (0, _moment.default)(_Auth.default.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a'), () => (0, _Router.gotoRoute)('/vendor/products'), () => (0, _Router.gotoRoute)('/profile'));
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser.firstName, (0, _moment.default)(_Auth.default.currentUser.updatedAt).format("MMMM Do YYYY, @ h:mm a"), () => (0, _Router.gotoRoute)("/vendor/manageProducts"), () => (0, _Router.gotoRoute)("/profile"));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14050,7 +14050,7 @@ class ProductAPI {
     };
   }
 
-  async getVendorListings() {
+  async getvendorManageListings() {
     const response = await fetch("".concat(_App.default.apiBase, "/product/vendor"), {
       method: "GET",
       headers: this.authHeader
@@ -14117,7 +14117,7 @@ class ProductAPI {
 var _default = new ProductAPI();
 
 exports.default = _default;
-},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/vendorListings.js":[function(require,module,exports) {
+},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/vendorManageListings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14152,7 +14152,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n                        <sl-card class=\"listing-card\">\n                          ", "\n                          <h3 slot=\"header\">", "</h3>\n\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">\n                              ", "\n                            </span>\n                            <span class=\"price\">\n                              $", "\n                            </span>\n                          </div>\n\n                          <p>\n                            ", "\n                          </p>\n\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "], ["\n                        <sl-card class=\"listing-card\">\n                          ", "\n                          <h3 slot=\"header\">", "</h3>\n\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">\n                              ", "\n                            </span>\n                            <span class=\"price\">\n                              \\$", "\n                            </span>\n                          </div>\n\n                          <p>\n                            ", "\n                          </p>\n\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "]);
+  const data = _taggedTemplateLiteral(["\n                        <sl-card class=\"listing-card\">\n                          ", "\n                          <h3 slot=\"header\">", "</h3>\n\n                          <div class=\"listing-meta\">\n                            <span class=\"chip\">\n                              ", "\n                            </span>\n                            <span class=\"price\">\n                              $", "\n                            </span>\n                          </div>\n\n                          <p>\n                            ", "\n                          </p>\n\n                          <div slot=\"footer\" class=\"listing-actions\">\n                            <sl-button\n                              size=\"small\"\n                              @click=", "\n                              >Edit</sl-button\n                            >\n                            <sl-button\n                              size=\"small\"\n                              variant=\"danger\"\n                              @click=", "\n                              >Delete</sl-button\n                            >\n                          </div>\n                        </sl-card>\n                      "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -14192,7 +14192,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Describe the product & its ethical credentials\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p\n                  style=\"font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;\"\n                >\n                  Upload a clear product image (JPG/PNG). Existing images will be\n                  kept unless you upload a new one when editing.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button\n                  type=\"primary\"\n                  submit\n                  class=\"listing-submit-btn\"\n                >\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n\n      <style>\n        .vendor-layout {\n          display: grid;\n          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);\n          gap: 2rem;\n        }\n\n        .vendor-form,\n        .vendor-listings {\n          background: #fff;\n          border-radius: 12px;\n          padding: 1.5rem;\n          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n        }\n\n        .vendor-form h2,\n        .vendor-listings h2 {\n          margin-top: 0;\n          margin-bottom: 1rem;\n        }\n\n        .input-group {\n          margin-bottom: 1rem;\n        }\n\n        .button-row sl-button + sl-button {\n          margin-left: 0.5rem;\n        }\n\n        .listing-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n          gap: 1rem;\n        }\n\n        .listing-card {\n          height: 100%;\n        }\n\n        .listing-meta {\n          display: flex;\n          justify-content: space-between;\n          align-items: center;\n          margin-bottom: 0.5rem;\n        }\n\n        .chip {\n          display: inline-block;\n          padding: 0.1rem 0.6rem;\n          border-radius: 999px;\n          background: #eef2f3;\n          font-size: 0.75rem;\n          text-transform: uppercase;\n          letter-spacing: 0.05em;\n        }\n\n        .price {\n          font-weight: bold;\n        }\n\n        .listing-actions {\n          display: flex;\n          justify-content: flex-end;\n          gap: 0.5rem;\n        }\n\n        @media (max-width: 900px) {\n          .vendor-layout {\n            grid-template-columns: 1fr;\n          }\n        }\n      </style>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Manage Listings\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content\">\n        <div class=\"vendor-layout\">\n          <!-- LEFT: Listing form -->\n          <section class=\"vendor-form\">\n            <h2>", "</h2>\n            <sl-form\n              class=\"page-form\"\n              @sl-submit=", "\n            >\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"title\"\n                  type=\"text\"\n                  label=\"Product Name\"\n                  placeholder=\"e.g. Organic Fair-Trade Coffee Beans\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-select\n                  name=\"category\"\n                  label=\"Category\"\n                  placeholder=\"Select a category\"\n                  value=", "\n                >\n                  <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n                  <sl-menu-item value=\"household\">Household</sl-menu-item>\n                  <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n                  <sl-menu-item value=\"personal-care\"\n                    >Personal Care</sl-menu-item\n                  >\n                  <sl-menu-item value=\"other\">Other</sl-menu-item>\n                </sl-select>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-input\n                  name=\"price\"\n                  type=\"number\"\n                  min=\"0\"\n                  step=\"0.01\"\n                  label=\"Price (AUD)\"\n                  placeholder=\"e.g. 12.95\"\n                  required\n                  value=", "\n                ></sl-input>\n              </div>\n\n              <div class=\"input-group\">\n                <sl-textarea\n                  name=\"description\"\n                  rows=\"4\"\n                  label=\"Description\"\n                  placeholder=\"Describe the product & its ethical credentials\"\n                  >", "</sl-textarea\n                >\n              </div>\n\n              <div class=\"input-group\">\n                <label>Primary Image</label><br />\n                <input type=\"file\" name=\"image\" accept=\"image/*\" />\n                <p\n                  style=\"font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;\"\n                >\n                  Upload a clear product image (JPG/PNG). Existing images will\n                  be kept unless you upload a new one when editing.\n                </p>\n              </div>\n\n              <div class=\"button-row\">\n                <sl-button type=\"primary\" submit class=\"listing-submit-btn\">\n                  ", "\n                </sl-button>\n                ", "\n              </div>\n            </sl-form>\n          </section>\n\n          <!-- RIGHT: Existing listings -->\n          <section class=\"vendor-listings\">\n            <h2>Your Listings</h2>\n\n            ", "\n          </section>\n        </div>\n      </div>\n\n      <style>\n        .vendor-layout {\n          display: grid;\n          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);\n          gap: 2rem;\n        }\n\n        .vendor-form,\n        .vendor-listings {\n          background: #fff;\n          border-radius: 12px;\n          padding: 1.5rem;\n          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n        }\n\n        .vendor-form h2,\n        .vendor-listings h2 {\n          margin-top: 0;\n          margin-bottom: 1rem;\n        }\n\n        .input-group {\n          margin-bottom: 1rem;\n        }\n\n        .button-row sl-button + sl-button {\n          margin-left: 0.5rem;\n        }\n\n        .listing-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n          gap: 1rem;\n        }\n\n        .listing-card {\n          height: 100%;\n        }\n\n        .listing-meta {\n          display: flex;\n          justify-content: space-between;\n          align-items: center;\n          margin-bottom: 0.5rem;\n        }\n\n        .chip {\n          display: inline-block;\n          padding: 0.1rem 0.6rem;\n          border-radius: 999px;\n          background: #eef2f3;\n          font-size: 0.75rem;\n          text-transform: uppercase;\n          letter-spacing: 0.05em;\n        }\n\n        .price {\n          font-weight: bold;\n        }\n\n        .listing-actions {\n          display: flex;\n          justify-content: flex-end;\n          gap: 0.5rem;\n        }\n\n        @media (max-width: 900px) {\n          .vendor-layout {\n            grid-template-columns: 1fr;\n          }\n        }\n      </style>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14203,9 +14203,9 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-class VendorListingsView {
+class vendorManageListingsView {
   init() {
-    console.log("VendorListingsView.init");
+    console.log("vendorManageListingsView.init");
     document.title = "Manage Listings"; // Vendor guard
 
     if (!_Auth.default.currentUser || Number(_Auth.default.currentUser.accessLevel) !== 2) {
@@ -14226,7 +14226,7 @@ class VendorListingsView {
 
   async getListings() {
     try {
-      this.listings = await _ProductAPI.default.getVendorListings();
+      this.listings = await _ProductAPI.default.getvendorManageListings();
       this.render();
     } catch (err) {
       console.error(err);
@@ -14302,7 +14302,228 @@ class VendorListingsView {
 
 }
 
-var _default = new VendorListingsView();
+var _default = new vendorManageListingsView();
+
+exports.default = _default;
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../ProductAPI":"ProductAPI.js"}],"views/pages/vendorPreviewItems.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _App = _interopRequireDefault(require("./../../App"));
+
+var _litHtml = require("lit-html");
+
+var _Router = require("./../../Router");
+
+var _Auth = _interopRequireDefault(require("./../../Auth"));
+
+var _Utils = _interopRequireDefault(require("./../../Utils"));
+
+var _Toast = _interopRequireDefault(require("./../../Toast"));
+
+var _ProductAPI = _interopRequireDefault(require("./../../ProductAPI"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _templateObject11() {
+  const data = _taggedTemplateLiteral(["\n                              <img\n                                slot=\"image\"\n                                src=\"", "/images/", "\"\n                                alt=\"", "\"\n                              />\n                            "]);
+
+  _templateObject11 = function _templateObject11() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject10() {
+  const data = _taggedTemplateLiteral(["\n                      <sl-card class=\"preview-detail-card\">\n                        ", "\n\n                        <div class=\"preview-detail-header\" slot=\"header\">\n                          <div>\n                            <h3>", "</h3>\n                            <div class=\"preview-detail-tags\">\n                              <span class=\"chip\">\n                                ", "\n                              </span>\n                            </div>\n                          </div>\n                          <div class=\"preview-detail-price\">\n                            $", "\n                          </div>\n                        </div>\n\n                        <p>", "</p>\n\n                        <div slot=\"footer\" class=\"preview-detail-footer\">\n                          <small>\n                            This is a preview of how shoppers will see this\n                            product in the customer interface.\n                          </small>\n                        </div>\n                      </sl-card>\n                    "]);
+
+  _templateObject10 = function _templateObject10() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject9() {
+  const data = _taggedTemplateLiteral(["<p>Select an item on the left to preview it.</p>"]);
+
+  _templateObject9 = function _templateObject9() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject8() {
+  const data = _taggedTemplateLiteral(["<div class=\"preview-list-thumb--placeholder\">\n                                No image\n                              </div>"]);
+
+  _templateObject8 = function _templateObject8() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject7() {
+  const data = _taggedTemplateLiteral(["\n                                <img\n                                  src=\"", "/images/", "\"\n                                  alt=\"", "\"\n                                />\n                              "]);
+
+  _templateObject7 = function _templateObject7() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject6() {
+  const data = _taggedTemplateLiteral(["\n                      <li\n                        class=\"preview-list-item ", "\"\n                        @click=", "\n                      >\n                        <div class=\"preview-list-thumb\">\n                          ", "\n                        </div>\n\n                        <div class=\"preview-list-text\">\n                          <div class=\"preview-list-title\">\n                            ", "\n                          </div>\n                          <div class=\"preview-list-meta\">\n                            <span class=\"preview-list-category\">\n                              ", "\n                            </span>\n                            <span class=\"preview-list-price\">\n                              $", "\n                            </span>\n                          </div>\n                        </div>\n\n                        <div class=\"preview-list-actions\">\n                          <sl-icon-button\n                            name=\"pencil-square\"\n                            label=\"Edit listing\"\n                            @click=", "\n                          ></sl-icon-button>\n                        </div>\n                      </li>\n                    "]);
+
+  _templateObject6 = function _templateObject6() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject5() {
+  const data = _taggedTemplateLiteral(["\n              <!-- LEFT: list of items -->\n              <section class=\"preview-list-panel\">\n                <header class=\"preview-list-header\">\n                  <h2>Your items</h2>\n                  <sl-icon-button\n                    name=\"plus-lg\"\n                    label=\"Create listing\"\n                    @click=", "\n                  ></sl-icon-button>\n                </header>\n\n                <ul class=\"preview-list\">\n                  ", "\n                </ul>\n              </section>\n\n              <!-- RIGHT: full preview of selected item -->\n              <section class=\"preview-detail-panel\">\n                <h2>Customer view</h2>\n\n                ", "\n              </section>\n            "]);
+
+  _templateObject5 = function _templateObject5() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject4() {
+  const data = _taggedTemplateLiteral(["\n              <div class=\"preview-empty\">\n                <h2>No items yet</h2>\n                <p>\n                  You haven't created any products. Create one from the Manage\n                  Items page.\n                </p>\n                <sl-button variant=\"primary\" @click=", ">\n                  Go to Manage Items\n                </sl-button>\n              </div>\n            "]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject3() {
+  const data = _taggedTemplateLiteral(["<p class=\"error-msg\">", "</p>"]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  const data = _taggedTemplateLiteral(["\n              <div class=\"preview-loading\">\n                <sl-spinner></sl-spinner>\n                <p>Loading your items\u2026</p>\n              </div>\n            "]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject() {
+  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Preview Items\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content preview-layout\">\n        ", "\n      </div>\n    "]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+class vendorPreviewItemsView {
+  constructor() {
+    this.items = [];
+    this.selectedListing = null;
+    this.isLoading = false;
+    this.error = null;
+  }
+
+  async init() {
+    console.log("vendorPreviewItemsView.init");
+    document.title = "Preview Items"; // vendor-only guard
+
+    if (!_Auth.default.currentUser || Number(_Auth.default.currentUser.accessLevel) !== 2) {
+      (0, _Router.gotoRoute)("/");
+      return;
+    }
+
+    this.items = [];
+    this.selectedListing = null;
+    this.isLoading = true;
+    this.error = null;
+    this.render();
+
+    _Utils.default.pageIntroAnim();
+
+    await this.getItems();
+  }
+
+  async getItems() {
+    try {
+      // ✅ reuse the same API call your manage/edit page uses
+      this.items = await _ProductAPI.default.getvendorManageListings();
+      this.isLoading = false; // auto-select first item if any
+
+      this.selectedListing = this.items.length > 0 ? this.items[0] : null;
+      this.render();
+    } catch (err) {
+      console.error(err);
+      this.error = err.message || "Problem fetching items";
+      this.isLoading = false;
+
+      _Toast.default.show(this.error, "error");
+
+      this.render();
+    }
+  } // select a listing when user clicks a row on the left
+
+
+  handleSelectListing(listing) {
+    this.selectedListing = listing;
+    this.render();
+  } // go to Manage Listings to edit this item
+
+
+  gotoEditListing(e, listing) {
+    e.stopPropagation(); // send them to /vendor/manageProducts with ?edit=<id>
+
+    (0, _Router.gotoRoute)("/vendor/manageProducts?edit=".concat(listing._id));
+  } // go to Manage Listings to create a new listing
+
+
+  gotoCreateListing() {
+    (0, _Router.gotoRoute)("/vendor/manageProducts");
+  }
+
+  getShortDescription(desc) {
+    if (!desc) return "No description provided yet.";
+    if (desc.length <= 200) return desc;
+    return desc.slice(0, 200) + "…";
+  }
+
+  render() {
+    const items = this.items || [];
+    const selected = this.selectedListing;
+    const isLoading = this.isLoading;
+    const error = this.error;
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), isLoading ? (0, _litHtml.html)(_templateObject2()) : error ? (0, _litHtml.html)(_templateObject3(), error) : items.length === 0 ? (0, _litHtml.html)(_templateObject4(), this.gotoCreateListing) : (0, _litHtml.html)(_templateObject5(), this.gotoCreateListing, items.map(l => (0, _litHtml.html)(_templateObject6(), selected && selected._id === l._id ? "is-active" : "", () => this.handleSelectListing(l), l.image ? (0, _litHtml.html)(_templateObject7(), _App.default.apiBase, l.image, l.title) : (0, _litHtml.html)(_templateObject8()), l.title || "Untitled listing", (l.category || "uncategorised").toUpperCase(), Number(l.price || 0).toFixed(2), e => this.gotoEditListing(e, l))), !selected ? (0, _litHtml.html)(_templateObject9()) : (0, _litHtml.html)(_templateObject10(), selected.image ? (0, _litHtml.html)(_templateObject11(), _App.default.apiBase, selected.image, selected.title) : "", selected.title || "Untitled listing", (selected.category || "uncategorised").toUpperCase(), Number(selected.price || 0).toFixed(2), this.getShortDescription(selected.description))));
+    (0, _litHtml.render)(template, _App.default.rootEl);
+  }
+
+}
+
+var _default = new vendorPreviewItemsView();
 
 exports.default = _default;
 },{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../ProductAPI":"ProductAPI.js"}],"Router.js":[function(require,module,exports) {
@@ -14333,7 +14554,9 @@ var _buyrite = _interopRequireDefault(require("./views/pages/buyrite"));
 
 var _vendorHome = _interopRequireDefault(require("./views/pages/vendorHome"));
 
-var _vendorListings = _interopRequireDefault(require("./views/pages/vendorListings"));
+var _vendorManageListings = _interopRequireDefault(require("./views/pages/vendorManageListings"));
+
+var _vendorPreviewItems = _interopRequireDefault(require("./views/pages/vendorPreviewItems"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14349,8 +14572,9 @@ const routes = {
   "/guide": _guide.default,
   "/buyrite": _buyrite.default,
   "/editProfile": _editProfile.default,
-  '/vendor': _vendorHome.default,
-  '/vendor/products': _vendorListings.default
+  "/vendor": _vendorHome.default,
+  "/vendor/manageProducts": _vendorManageListings.default,
+  "/vendor/previewProducts": _vendorPreviewItems.default
 };
 
 class Router {
@@ -14404,7 +14628,7 @@ function anchorRoute(e) {
   const pathname = e.target.closest("a").pathname;
   AppRouter.gotoRoute(pathname);
 }
-},{"./views/pages/home":"views/pages/home.js","./views/pages/404":"views/pages/404.js","./views/pages/signin":"views/pages/signin.js","./views/pages/signup":"views/pages/signup.js","./views/pages/profile":"views/pages/profile.js","./views/pages/editProfile":"views/pages/editProfile.js","./views/pages/guide":"views/pages/guide.js","./views/pages/buyrite":"views/pages/buyrite.js","./views/pages/vendorHome":"views/pages/vendorHome.js","./views/pages/vendorListings":"views/pages/vendorListings.js"}],"App.js":[function(require,module,exports) {
+},{"./views/pages/home":"views/pages/home.js","./views/pages/404":"views/pages/404.js","./views/pages/signin":"views/pages/signin.js","./views/pages/signup":"views/pages/signup.js","./views/pages/profile":"views/pages/profile.js","./views/pages/editProfile":"views/pages/editProfile.js","./views/pages/guide":"views/pages/guide.js","./views/pages/buyrite":"views/pages/buyrite.js","./views/pages/vendorHome":"views/pages/vendorHome.js","./views/pages/vendorManageListings":"views/pages/vendorManageListings.js","./views/pages/vendorPreviewItems":"views/pages/vendorPreviewItems.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16230,7 +16454,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  const data = _taggedTemplateLiteral(["\n                  <!-- VENDOR MENU: based on vendor flow in proposal -->\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/products\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a href=\"/vendor/products/preview\" @click=\"", "\">\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
+  const data = _taggedTemplateLiteral(["\n                  <!-- VENDOR MENU: based on vendor flow in proposal -->\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/manageProducts\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a\n                    href=\"/vendor/previewProducts\"\n                    @click=\"", "\"\n                  >\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -16250,7 +16474,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n                            <sl-menu-item\n                              @click=\"", "\"\n                              >Vendor Dashboard</sl-menu-item\n                            >\n                          "]);
+  const data = _taggedTemplateLiteral(["\n                            <sl-menu-item @click=\"", "\"\n                              >Vendor Dashboard</sl-menu-item\n                            >\n                          "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -16484,7 +16708,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32947" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34689" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -9,7 +9,7 @@ class ProductAPI {
     };
   }
 
-  async getVendorListings() {
+  async getvendorManageListings() {
     const response = await fetch(`${App.apiBase}/product/vendor`, {
       method: "GET",
       headers: this.authHeader,

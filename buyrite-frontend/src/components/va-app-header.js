@@ -51,19 +51,16 @@ customElements.define(
         return;
       }
       appSideMenu.hide();
-      appSideMenu.addEventListener(
-        "sl-after-hide",
-        () => gotoRoute(pathname),
-        { once: true }
-      );
+      appSideMenu.addEventListener("sl-after-hide", () => gotoRoute(pathname), {
+        once: true,
+      });
     }
 
     render() {
       // Use global Auth.currentUser for consistent behaviour
       const currentUser = Auth.currentUser || null;
       const isLoggedIn = !!currentUser;
-      const isVendor =
-        isLoggedIn && Number(currentUser.accessLevel) === 2;
+      const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
 
       return html`
         <style>
@@ -163,9 +160,7 @@ customElements.define(
           ></sl-icon-button>
 
           <div class="app-header-main">
-            ${this.title
-              ? html`<h1 class="page-title">${this.title}</h1>`
-              : ``}
+            ${this.title ? html`<h1 class="page-title">${this.title}</h1>` : ``}
             <slot></slot>
           </div>
 
@@ -201,8 +196,7 @@ customElements.define(
                       >
                       ${isVendor
                         ? html`
-                            <sl-menu-item
-                              @click="${() => gotoRoute("/vendor")}"
+                            <sl-menu-item @click="${() => gotoRoute("/vendor")}"
                               >Vendor Dashboard</sl-menu-item
                             >
                           `
@@ -231,10 +225,13 @@ customElements.define(
                   <a href="/vendor" @click="${this.menuClick}">
                     Vendor Dashboard
                   </a>
-                  <a href="/vendor/products" @click="${this.menuClick}">
+                  <a href="/vendor/manageProducts" @click="${this.menuClick}">
                     Manage Listings
                   </a>
-                  <a href="/vendor/products/preview" @click="${this.menuClick}">
+                  <a
+                    href="/vendor/previewProducts"
+                    @click="${this.menuClick}"
+                  >
                     Preview Items
                   </a>
                   <a href="/about" @click="${this.menuClick}">

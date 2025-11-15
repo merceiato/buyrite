@@ -1,0 +1,180 @@
+/* ================================
+   VENDOR PREVIEW PAGE LAYOUT
+   Two columns: left (list) + right (preview)
+   ================================ */
+
+.preview-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch;
+  min-height: calc(100vh - 140px); // adjust depending on header height
+}
+
+/* ================================
+   LEFT COLUMN (LIST)
+   ================================ */
+
+.preview-list-panel {
+  flex: 0 0 360px;   
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #eee;
+  padding-right: 0.75rem;
+}
+
+.preview-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.preview-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+/* ================================
+   LIST ITEM STYLING
+   ================================ */
+
+.preview-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 0.6rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.preview-list-item + .preview-list-item {
+  margin-top: 0.4rem;
+}
+
+.preview-list-item:hover {
+  background: #faf7f2;
+}
+
+.preview-list-item.is-active {
+  border-color: #d0c0a0;
+  background: #fffaf2;
+}
+
+/* Thumbnail LEFT side */
+.preview-list-thumb {
+  flex: 0 0 56px;
+  height: 56px;
+  border-radius: 4px;
+  overflow: hidden;
+
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-list-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-list-thumb--placeholder {
+  font-size: 0.7rem;
+  color: #777;
+}
+
+/* Text RIGHT side */
+.preview-list-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.preview-list-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-list-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Edit button inside list item */
+.preview-list-actions {
+  flex: 0 0 auto;
+  margin-left: 0.25rem;
+}
+
+/* ================================
+   RIGHT COLUMN (DETAIL PREVIEW)
+   ================================ */
+
+.preview-detail-panel {
+  flex: 1 1 auto;
+  padding-left: 0.75rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-detail-card {
+  height: 100%;
+}
+
+.preview-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.preview-detail-price {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ================================
+   MOBILE LAYOUT
+   ================================ */
+
+@media (max-width: 800px) {
+  .preview-layout {
+    flex-direction: column;
+  }
+
+  .preview-list-panel {
+    flex: 0 0 auto;
+    max-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-right: 0;
+    padding-bottom: 0.75rem;
+  }
+
+  .preview-list {
+    max-height: 260px; 
+    overflow-y: auto;
+  }
+
+  .preview-detail-panel {
+    padding-left: 0;
+    padding-top: 0.75rem;
+  }
+}

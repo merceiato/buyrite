@@ -6,9 +6,9 @@ import Utils from "./../../Utils";
 import Toast from "./../../Toast";
 import ProductAPI from "./../../ProductAPI";
 
-class VendorListingsView {
+class vendorManageListingsView {
   init() {
-    console.log("VendorListingsView.init");
+    console.log("vendorManageListingsView.init");
     document.title = "Manage Listings";
 
     // Vendor guard
@@ -29,7 +29,7 @@ class VendorListingsView {
 
   async getListings() {
     try {
-      this.listings = await ProductAPI.getVendorListings();
+      this.listings = await ProductAPI.getvendorManageListings();
       this.render();
     } catch (err) {
       console.error(err);
@@ -49,7 +49,10 @@ class VendorListingsView {
 
       if (this.editingListing) {
         // UPDATE existing listing
-        product = await ProductAPI.updateListing(this.editingListing._id, formData);
+        product = await ProductAPI.updateListing(
+          this.editingListing._id,
+          formData
+        );
         Toast.show("Listing updated");
       } else {
         // CREATE new listing
@@ -129,7 +132,9 @@ class VendorListingsView {
                   <sl-menu-item value="grocery">Grocery</sl-menu-item>
                   <sl-menu-item value="household">Household</sl-menu-item>
                   <sl-menu-item value="fashion">Fashion</sl-menu-item>
-                  <sl-menu-item value="personal-care">Personal Care</sl-menu-item>
+                  <sl-menu-item value="personal-care"
+                    >Personal Care</sl-menu-item
+                  >
                   <sl-menu-item value="other">Other</sl-menu-item>
                 </sl-select>
               </div>
@@ -163,17 +168,13 @@ class VendorListingsView {
                 <p
                   style="font-size: 0.8em; color: #666; margin-top: 0.25em; max-width: 36rem;"
                 >
-                  Upload a clear product image (JPG/PNG). Existing images will be
-                  kept unless you upload a new one when editing.
+                  Upload a clear product image (JPG/PNG). Existing images will
+                  be kept unless you upload a new one when editing.
                 </p>
               </div>
 
               <div class="button-row">
-                <sl-button
-                  type="primary"
-                  submit
-                  class="listing-submit-btn"
-                >
+                <sl-button type="primary" submit class="listing-submit-btn">
                   ${listing ? "Save Changes" : "Create Listing"}
                 </sl-button>
                 ${listing
@@ -216,7 +217,7 @@ class VendorListingsView {
                               ${(l.category || "uncategorised").toUpperCase()}
                             </span>
                             <span class="price">
-                              \$${Number(l.price || 0).toFixed(2)}
+                              $${Number(l.price || 0).toFixed(2)}
                             </span>
                           </div>
 
@@ -325,4 +326,4 @@ class VendorListingsView {
   }
 }
 
-export default new VendorListingsView();
+export default new vendorManageListingsView();
