@@ -10,6 +10,7 @@ import buyriteView from "./views/pages/buyrite";
 import VendorHomeView from "./views/pages/vendorHome";
 import vendorManageListingsView from "./views/pages/vendorManageListings";
 import vendorPreviewListingsView from "./views/pages/vendorPreviewItems";
+import ConsumerHomeView from "./views/pages/consumerHome";
 
 // define routes
 const routes = {
@@ -25,6 +26,7 @@ const routes = {
   "/vendor": VendorHomeView,
   "/vendor/manageProducts": vendorManageListingsView,
   "/vendor/previewProducts": vendorPreviewListingsView,
+  "/consumer": ConsumerHomeView,
 };
 
 class Router {

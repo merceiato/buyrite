@@ -1,6 +1,17 @@
-/* =========================================
-   BUY RIGHT CONSUMER VIEW
-   ========================================= */
+sl-progress-bar.buyrite-ethic-bar {
+  --indicator-color: #22c55e;
+  --track-color: #e5e5e5;
+  --height: 6px;
+  width: 100%;
+}
+
+sl-progress-bar.buyrite-ethic-bar::part(base),
+sl-progress-bar.buyrite-ethic-bar::part(indicator) {
+  border-radius: 999px;
+}
+
+/* IMPORTANT: no width/transform on ::part(indicator) */
+
 
 .page-content {
   position: absolute;
@@ -153,13 +164,13 @@
   width: 100%;
 }
 
-/* Make Shoelace progress bars actually visible */
-.buyrite-ethic-bar::part(base) {
-  height: 6px;
-  border-radius: 999px;
-  --indicator-color: #22c55e;    /* Shoelace's fill color */
-  --track-color: #b3855fb5;        /* Background */
-}
+// /* Make Shoelace progress bars actually visible */
+// .buyrite-ethic-bar::part(base) {
+//   height: 6px;
+//   border-radius: 999px;
+//   --indicator-color: #22c55e;    /* Shoelace's fill color */
+//   --track-color: #b3855fb5;        /* Background */
+// }
 
 // .buyrite-ethic-bar::part(indicator) {
 //   border-radius: 999px;

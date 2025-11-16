@@ -87,17 +87,29 @@ class Auth {
     // save access token (jwt) to local storage
     localStorage.setItem('accessToken', data.accessToken)
 
-    // set current user
+        // set current user
     this.currentUser = data.user
 
-    // NO LONGER re-initialise Router here – avoids duplicate init + logs
+    // re-init router
+    Router.init()
 
-    // redirect according to newUser flag
-    if (data.user.newUser == true) {
+    // redirect according to newUser flag + accessLevel
+    // accessLevel: 1 = shopper / consumer, 2 = vendor
+    if (data.user.newUser === true) {
+      // first-time users always see the guide
       gotoRoute('/guide')
     } else {
-      gotoRoute('/vendor')
+      // returning users go straight to their home screen
+      const level = Number(data.user.accessLevel)
+      if (level === 2) {
+        // vendor
+        gotoRoute('/vendor')
+      } else {
+        // shopper / consumer
+        gotoRoute('/buyrite')
+      }
     }
+
   }
 
   // -----------------------------

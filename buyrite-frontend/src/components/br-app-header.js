@@ -267,8 +267,8 @@ customElements.define(
                   </a>
                 `
               : html`
-                  <a href="/" @click="${this.menuClick}">Home</a>
-                  <a href="/buyrite" @click="${this.menuClick}">
+                  <a href="/consumer" @click="${this.menuClick}">Home</a>
+                  <a href="/consumer" @click="${this.menuClick}">
                     Consumer Interface
                   </a>
                   <a href="/guide" @click="${this.menuClick}">

@@ -13,7 +13,7 @@ class VendorHomeView {
     // Guard: only allow vendors (accessLevel 2)
     if (!Auth.currentUser || Auth.currentUser.accessLevel !== 2) {
       // send non-vendors back to consumer home (or profile, etc.)
-      gotoRoute("/");
+      gotoRoute("/consumer");
       return;
     }
 

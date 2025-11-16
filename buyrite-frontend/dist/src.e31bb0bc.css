@@ -3,7 +3,7 @@
 :root {
   --base-txt-color: #1C3322;
   --heading-color: #1C3322;
-  --base-font-family: 'Work Sans', sans-serif;
+  --base-font-family: "Work Sans", sans-serif;
   --body-bg: #FAFAF8;
   --brand-color: #B9825C;
   --link-color: --brand-color;
@@ -11,15 +11,15 @@
   --app-header-txt-color: #FAFAF8;
   --app-header-title-font-size: 1.6em;
   --sl-color-primary-50: #FAFAF8;
-  --sl-color-primary-100: rgb(246.2875536481, 239.4420600858, 234.7124463519);
-  --sl-color-primary-200: rgb(230.9656652361, 212.0815450644, 199.0343347639);
-  --sl-color-primary-300: rgb(215.643776824, 184.7210300429, 163.356223176);
-  --sl-color-primary-400: rgb(200.321888412, 157.3605150215, 127.678111588);
+  --sl-color-primary-100: #f6efeb;
+  --sl-color-primary-200: #e7d4c7;
+  --sl-color-primary-300: #d8b9a3;
+  --sl-color-primary-400: #c89d80;
   --sl-color-primary-500: #B9825C;
-  --sl-color-primary-600: rgb(158.1030042918, 104.7553648069, 67.8969957082);
-  --sl-color-primary-700: rgb(122.4248927039, 81.1158798283, 52.5751072961);
-  --sl-color-primary-800: rgb(86.7467811159, 57.4763948498, 37.2532188841);
-  --sl-color-primary-900: rgb(51.0686695279, 33.8369098712, 21.9313304721);
+  --sl-color-primary-600: #9e6944;
+  --sl-color-primary-700: #7a5135;
+  --sl-color-primary-800: #573925;
+  --sl-color-primary-900: #332216;
   --sl-focus-ring-color-primary: rgba(185, 130, 92, 0.1);
 }
 
@@ -425,9 +425,19 @@ sl-dialog::part(title) {
     grid-template-columns: 1fr;
   }
 }
-/* =========================================
-   BUY RIGHT CONSUMER VIEW
-   ========================================= */
+sl-progress-bar.buyrite-ethic-bar {
+  --indicator-color: #22c55e;
+  --track-color: #e5e5e5;
+  --height: 6px;
+  width: 100%;
+}
+
+sl-progress-bar.buyrite-ethic-bar::part(base),
+sl-progress-bar.buyrite-ethic-bar::part(indicator) {
+  border-radius: 999px;
+}
+
+/* IMPORTANT: no width/transform on ::part(indicator) */
 .page-content {
   position: absolute;
   top: var(--app-header-height);
@@ -573,14 +583,6 @@ sl-dialog::part(title) {
   width: 100%;
 }
 
-/* Make Shoelace progress bars actually visible */
-.buyrite-ethic-bar::part(base) {
-  height: 6px;
-  border-radius: 999px;
-  --indicator-color: #22c55e; /* Shoelace's fill color */
-  --track-color: #b3855fb5; /* Background */
-}
-
 /* States */
 .buyrite-loading,
 .buyrite-empty {
@@ -607,9 +609,11 @@ sl-dialog::part(title) {
   .buyrite-controls {
     grid-template-columns: 1fr;
   }
+
   .buyrite-ethics-question {
     flex-direction: column;
   }
+
   .buyrite-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
