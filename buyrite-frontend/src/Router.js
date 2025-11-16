@@ -7,10 +7,12 @@ import profileView from "./views/pages/profile";
 import editProfileView from "./views/pages/editProfile";
 import guideView from "./views/pages/guide";
 import buyriteView from "./views/pages/buyrite";
-import VendorHomeView from "./views/pages/vendorHome";
+import vendorHomeView from "./views/pages/vendorHome";
 import vendorManageListingsView from "./views/pages/vendorManageListings";
 import vendorPreviewListingsView from "./views/pages/vendorPreviewItems";
-import ConsumerHomeView from "./views/pages/consumerHome";
+import consumerHomeView from "./views/pages/consumerHome";
+import questionnaireView from "./views/pages/questionnaire";
+
 
 // define routes
 const routes = {
@@ -23,10 +25,11 @@ const routes = {
   "/guide": guideView,
   "/buyrite": buyriteView,
   "/editProfile": editProfileView,
-  "/vendor": VendorHomeView,
+  "/vendor": vendorHomeView,
   "/vendor/manageProducts": vendorManageListingsView,
   "/vendor/previewProducts": vendorPreviewListingsView,
-  "/consumer": ConsumerHomeView,
+  "/consumer": consumerHomeView,
+  "/questionnaire": questionnaireView,
 };
 
 class Router {

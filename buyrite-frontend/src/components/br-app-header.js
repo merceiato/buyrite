@@ -3,6 +3,7 @@ import { anchorRoute, gotoRoute } from "../Router";
 import Auth from "../Auth";
 import App from "../App";
 
+// simple app header component using Lit
 customElements.define(
   "br-app-header",
   class AppHeader extends LitElement {
@@ -10,6 +11,7 @@ customElements.define(
       super();
     }
 
+    // public props passed in from parent
     static get properties() {
       return {
         title: { type: String },
@@ -17,11 +19,13 @@ customElements.define(
       };
     }
 
+    // runs after first render – safe to access shadow DOM
     firstUpdated() {
       super.firstUpdated();
       this.navActiveLinks();
     }
 
+    // highlight current route in header + side nav
     navActiveLinks() {
       const currentPath = window.location.pathname;
       const navLinks = this.shadowRoot.querySelectorAll(
@@ -35,11 +39,13 @@ customElements.define(
       });
     }
 
+    // open side drawer menu (mobile)
     hamburgerClick() {
       const appMenu = this.shadowRoot.querySelector(".app-side-menu");
       if (appMenu) appMenu.show();
     }
 
+    // handle clicks inside the side menu and route after closing
     menuClick(e) {
       e.preventDefault();
       const anchor = e.target.closest("a");
@@ -48,6 +54,7 @@ customElements.define(
       const pathname = anchor.pathname;
       const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
 
+      // if no drawer (just in case), navigate directly
       if (!appSideMenu) {
         gotoRoute(pathname);
         return;
@@ -61,12 +68,14 @@ customElements.define(
         appSideMenu.removeEventListener("sl-after-hide", onAfterHide);
       };
 
+      // wait for drawer to fully hide before routing
       appSideMenu.addEventListener("sl-after-hide", onAfterHide, { once: true });
 
       appSideMenu.hide();
     }
 
     render() {
+      // pick up auth state directly from Auth helper
       const currentUser = Auth.currentUser || null;
       const isLoggedIn = !!currentUser;
       const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
@@ -95,13 +104,13 @@ customElements.define(
             outline: none;
           }
 
-          /* ★ Centered logo */
+          /* centered logo over the header */
           .app-header-logo {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            pointer-events: none; /* allow clicks to nav behind it */
+            pointer-events: none; /* let links behind still be clickable */
           }
 
           .app-header-logo img {
@@ -180,6 +189,7 @@ customElements.define(
         </style>
 
         <header class="app-header" tabindex="-1">
+          <!-- hamburger for small screens -->
           <sl-icon-button
             class="hamburger-btn"
             name="list"
@@ -187,7 +197,7 @@ customElements.define(
             style="font-size: 1.5em;"
           ></sl-icon-button>
 
-          <!-- ★ centered logo -->
+          <!-- centered logo in the header -->
           <div class="app-header-logo">
             <img src="/images/logo.svg" alt="BuyRight" />
           </div>
@@ -197,6 +207,7 @@ customElements.define(
             <slot></slot>
           </div>
 
+          <!-- desktop nav -->
           <nav class="app-top-nav">
             <a href="/" @click="${anchorRoute}">Home</a>
 
@@ -243,6 +254,7 @@ customElements.define(
           </nav>
         </header>
 
+        <!-- side drawer nav for mobile -->
         <sl-drawer class="app-side-menu" placement="left">
           <img class="app-side-menu-logo" src="/images/logo.svg" />
           <nav class="app-side-menu-items">
@@ -271,7 +283,7 @@ customElements.define(
                   <a href="/consumer" @click="${this.menuClick}">
                     Consumer Interface
                   </a>
-                  <a href="/guide" @click="${this.menuClick}">
+                  <a href="/questionnaire" @click="${this.menuClick}">
                     Questionnaire
                   </a>
                   <a href="/favouriteHaircuts" @click="${this.menuClick}">
@@ -282,7 +294,9 @@ customElements.define(
                   </a>
                 `}
             ${isLoggedIn
-              ? html` <a href="#" @click="${() => Auth.signOut()}">Sign Out</a> `
+              ? html`
+                  <a href="#" @click="${() => Auth.signOut()}">Sign Out</a>
+                `
               : ""}
           </nav>
         </sl-drawer>

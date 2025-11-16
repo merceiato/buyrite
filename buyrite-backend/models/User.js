@@ -3,11 +3,11 @@ const Schema = mongoose.Schema
 const Utils = require('./../utils')
 require('mongoose-type-email')
 
-// user accounts for login + profile info
+// schema
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    require: true   // small typo in original but mongoose still handles this
+    require: true
   },
   lastName: {
     type: String,
@@ -15,37 +15,74 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: mongoose.SchemaTypes.Email,
-    required: true   // built-in email validation from plugin
+    required: true    
   },
   password: {
     type: String,
-    required: true    // will be hashed before saving
+    required: true
   },
   avatar: {
-    type: String      // optional profile picture
+    type: String    
   },
   bio: {
-    type: String      // short user intro
+    type: String    
   },
   accessLevel: {
-    type: Number      // leave flexible for admin/user roles later
+    // 1 = shopper/consumer, 2 = vendor
+    type: Number    
   },
   newUser: {
     type: Boolean,
-    default: true     // can be used for onboarding prompts
+    default: true    
+  },
+
+  // ethical preferences stored from the questionnaire 
+  ethicalPreferences: {
+    animalWelfare: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 3
+    },
+    humanitarian: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 3
+    },
+    sustainability: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 3
+    },
+    environmentalism: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 3
+    }
+  },
+
+  // track if the questionnaire has been completed at least once
+  questionnaireCompleted: {
+    type: Boolean,
+    default: false
   }
+
 }, { timestamps: true })
 
-// encrypt password before saving to DB
-userSchema.pre('save', function(next) {
-  // only hash if the field is set AND actually changed
+// encrypt password field on save
+userSchema.pre('save', function (next) {
+  // check if password is present and is modifed  
   if (this.password && this.isModified()) {
     this.password = Utils.hashPassword(this.password)
   }
   next()
 })
 
-// final model
+// model
 const userModel = mongoose.model('User', userSchema)
 
+// export
 module.exports = userModel

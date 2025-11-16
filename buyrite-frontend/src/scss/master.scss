@@ -1,3 +1,6 @@
+// master.scss
+// Master SCSS entry file that pulls together partials.
+
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,300;0,500;1,100;1,200;1,500&display=swap');
 @import 'vars';
 @import 'base';
@@ -7,3 +10,4 @@
 @import 'vendorPreviewItems';
 @import 'vendorManageListings';
 @import 'buyrite';
+@import 'questionnaire';
