@@ -6,9 +6,8 @@ const Utils = require('./../utils')
 const Product = require('./../models/Product')
 const User = require('./../models/User')
 
-// -------------------------
-// helper: parse & validate ethical ratings from body
-// -------------------------
+// helpers for parsing rating fields ----------------------------
+// simple numeric check so user can’t submit weird stuff
 function parseRating(value) {
   const n = Number(value)
   if (!Number.isFinite(n)) return null
@@ -16,6 +15,7 @@ function parseRating(value) {
   return n
 }
 
+// bundle all ethical rating fields together
 function buildEthicalRatingsFromBody(body) {
   const hasAnyEthField =
     body.eth_animalWelfare !== undefined ||
@@ -28,10 +28,10 @@ function buildEthicalRatingsFromBody(body) {
   const sustainability = parseRating(body.eth_sustainability)
   const environmentalism = parseRating(body.eth_environmentalism)
 
-  // If none of the eth_ fields are present at all, return null
+  // nothing provided → skip updating this block
   if (!hasAnyEthField) return null
 
-  // If any are invalid, signal error
+  // if any rating is bad → reject
   if (
     animalWelfare === null ||
     humanitarian === null ||
@@ -41,35 +41,24 @@ function buildEthicalRatingsFromBody(body) {
     return 'invalid'
   }
 
-  return {
-    animalWelfare,
-    humanitarian,
-    sustainability,
-    environmentalism
-  }
+  return { animalWelfare, humanitarian, sustainability, environmentalism }
 }
 
-// -------------------------
-// helper: must be vendor (check against DB for safety)
-// -------------------------
+// checks vendor access based on DB lookup ----------------------
 function requireVendor(req, res, next) {
   if (!req.user || !req.user._id) {
     return res.status(401).json({ message: 'Not authenticated' })
   }
 
-  // Look up the user in Mongo to confirm accessLevel
   User.findById(req.user._id)
     .then(user => {
-      if (!user) {
-        return res.status(401).json({ message: 'User not found' })
-      }
+      if (!user) return res.status(401).json({ message: 'User not found' })
 
-      // Force numeric comparison
+      // vendor = accessLevel 2 (simple system)
       if (Number(user.accessLevel) !== 2) {
         return res.status(403).json({ message: 'Vendor access required' })
       }
 
-      // Keep accessLevel in req.user for later if needed
       req.user.accessLevel = user.accessLevel
       next()
     })
@@ -79,9 +68,8 @@ function requireVendor(req, res, next) {
     })
 }
 
-// -------------------------
-// GET /product/vendor - products for the logged-in vendor
-// -------------------------
+// GET /product/vendor ------------------------------------------
+// returns all products for this vendor
 router.get('/vendor', Utils.authenticateToken, requireVendor, (req, res) => {
   Product.find({ vendor: req.user._id })
     .sort({ createdAt: -1 })
@@ -92,9 +80,8 @@ router.get('/vendor', Utils.authenticateToken, requireVendor, (req, res) => {
     })
 })
 
-// -------------------------
-// GET /product - public list for consumer interface
-// -------------------------
+// GET /product -------------------------------------------------
+// public product list (only active ones)
 router.get('/', (req, res) => {
   Product.find({ active: true })
     .sort({ createdAt: -1 })
@@ -105,20 +92,19 @@ router.get('/', (req, res) => {
     })
 })
 
-// -------------------------
-// POST /product - create new product for vendor (with optional image)
-// -------------------------
+// POST /product ------------------------------------------------
+// create a new vendor product
 router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
   if (!req.body && !req.files) {
     return res.status(400).json({ message: 'Product data cannot be empty' })
   }
 
-  // Ethical ratings are MANDATORY on create
+  // ethical ratings required on create
   const ethicalRatings = buildEthicalRatingsFromBody(req.body)
   if (ethicalRatings === null || ethicalRatings === 'invalid') {
     return res.status(400).json({
       message:
-        'All ethical ratings (animal welfare, humanitarian, sustainability, environmentalism) are required and must be between 0 and 5.'
+        'All ethical ratings are required and must be between 0 and 5.'
     })
   }
 
@@ -129,14 +115,13 @@ router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
       category: req.body.category,
       price: req.body.price,
       description: req.body.description,
-      ethicalRatings // new block
+      ethicalRatings
     }
 
     if (imageFilename) productData.image = imageFilename
 
-    const newProduct = new Product(productData)
-
-    newProduct.save()
+    new Product(productData)
+      .save()
       .then(product => res.status(201).json(product))
       .catch(err => {
         console.log(err)
@@ -155,9 +140,8 @@ router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
   }
 })
 
-// -------------------------
-// PUT /product/:id - update product (only vendor owner)
-// -------------------------
+// PUT /product/:id --------------------------------------------
+// update vendor product
 router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   if (!req.body && !req.files) {
     return res.status(400).json({ message: 'Product data cannot be empty' })
@@ -166,20 +150,18 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   const update = {}
   const fields = ['title', 'category', 'price', 'description', 'active']
 
+  // optional patch update — only add fields they provided
   fields.forEach(field => {
     if (req.body[field] !== undefined && req.body[field] !== '') {
       update[field] = req.body[field]
     }
   })
 
-  // Ethical ratings on update:
-  // - if none of the eth_* fields are present, leave existing ratings untouched
-  // - if any are present, require all 4 to be valid (0–5) and update them
+  // ethical ratings: optional on update, but if submitted must be valid
   const ethicalRatings = buildEthicalRatingsFromBody(req.body)
   if (ethicalRatings === 'invalid') {
     return res.status(400).json({
-      message:
-        'Ethical ratings must be numbers between 0 and 5 when provided.'
+      message: 'Ethical ratings must be between 0 and 5.'
     })
   }
   if (ethicalRatings && ethicalRatings !== 'invalid') {
@@ -190,7 +172,7 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
     if (imageFilename) update.image = imageFilename
 
     Product.findOneAndUpdate(
-      { _id: req.params.id, vendor: req.user._id }, // vendor scoping
+      { _id: req.params.id, vendor: req.user._id }, // vendor-only edit
       update,
       { new: true }
     )
@@ -216,9 +198,8 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   }
 })
 
-// -------------------------
-// DELETE /product/:id - delete product (only vendor owner)
-// -------------------------
+// DELETE /product/:id ------------------------------------------
+// vendor deletes their own product
 router.delete('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   Product.findOneAndDelete({ _id: req.params.id, vendor: req.user._id })
     .then(product => {

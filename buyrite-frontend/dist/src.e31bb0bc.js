@@ -7569,26 +7569,23 @@ class Auth {
 
     localStorage.setItem('accessToken', data.accessToken); // set current user
 
-    this.currentUser = data.user; // re-init router
+    this.currentUser = data.user; // NO LONGER re-initialise Router here – avoids duplicate init + logs
+    // redirect based on role + newUser flag
 
-    _Router.default.init(); // redirect according to newUser flag + accessLevel
-    // accessLevel: 1 = shopper / consumer, 2 = vendor
+    const user = data.user;
+    const accessLevel = Number(user.accessLevel);
+    const isVendor = accessLevel === 2;
+    const isShopper = accessLevel === 1; // redirect according to newUser flag
 
-
-    if (data.user.newUser === true) {
-      // first-time users always see the guide
+    if (isShopper && user.newUser === true) {
+      // brand-new shopper → go to guide first
       (0, _Router.gotoRoute)('/guide');
+    } else if (isVendor) {
+      // vendors (new or existing) → vendor dashboard
+      (0, _Router.gotoRoute)('/vendor');
     } else {
-      // returning users go straight to their home screen
-      const level = Number(data.user.accessLevel);
-
-      if (level === 2) {
-        // vendor
-        (0, _Router.gotoRoute)('/vendor');
-      } else {
-        // shopper / consumer
-        (0, _Router.gotoRoute)('/buyrite');
-      }
+      // existing shoppers (or any other roles) → Buy Right
+      (0, _Router.gotoRoute)('/buyrite');
     }
   } // -----------------------------
   // CHECK TOKEN
@@ -14184,7 +14181,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Buy Right\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content buyrite-layout\">\n        <!-- Controls row -->\n        <section class=\"buyrite-controls\">\n          <div class=\"buyrite-control\">\n            <sl-input\n              label=\"Search key words\"\n              placeholder=\"Search products\u2026\"\n              type=\"search\"\n              clearable\n              @sl-input=", "\n            ></sl-input>\n          </div>\n\n          <div class=\"buyrite-control\">\n            <sl-select\n              label=\"Select category\"\n              value=", "\n              @sl-change=", "\n            >\n              <sl-menu-item value=\"all\">All categories</sl-menu-item>\n              <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n              <sl-menu-item value=\"household\">Household</sl-menu-item>\n              <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n              <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n              <sl-menu-item value=\"other\">Other</sl-menu-item>\n            </sl-select>\n          </div>\n        </section>\n\n        <!-- Simple ethics question -->\n        <section class=\"buyrite-ethics-question\">\n          <p class=\"buyrite-ethics-question__text\">\n            Only show products with strong ethical credentials?\n          </p>\n          <div class=\"buyrite-ethics-question__buttons\">\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >Yes</sl-button\n            >\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >No</sl-button\n            >\n          </div>\n        </section>\n\n        <!-- Grid of items -->\n        <section class=\"buyrite-grid-wrapper\">\n          ", "\n        </section>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header\n        title=\"Buy Right\"\n        user=", "\n      ></va-app-header>\n\n      <div class=\"page-content buyrite-layout\">\n        <!-- Controls row -->\n        <section class=\"buyrite-controls\">\n          <div class=\"buyrite-control\">\n            <sl-input\n              label=\"Search key words\"\n              placeholder=\"Search products\u2026\"\n              type=\"search\"\n              clearable\n              @sl-input=", "\n            ></sl-input>\n          </div>\n\n          <div class=\"buyrite-control\">\n            <sl-select\n              label=\"Select category\"\n              value=", "\n              @sl-change=", "\n            >\n              <sl-menu-item value=\"all\">All categories</sl-menu-item>\n              <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n              <sl-menu-item value=\"household\">Household</sl-menu-item>\n              <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n              <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n              <sl-menu-item value=\"other\">Other</sl-menu-item>\n            </sl-select>\n          </div>\n        </section>\n\n        <!-- Simple ethics question -->\n        <section class=\"buyrite-ethics-question\">\n          <p class=\"buyrite-ethics-question__text\">\n            Only show products with strong ethical credentials?\n          </p>\n          <div class=\"buyrite-ethics-question__buttons\">\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >Yes</sl-button\n            >\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >No</sl-button\n            >\n          </div>\n        </section>\n\n        <!-- Grid of items -->\n        <section class=\"buyrite-grid-wrapper\">\n          ", "\n        </section>\n      </div>\n    "]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -14194,7 +14191,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <div class=\"buyrite-tile-ethics\">\n      <div class=\"buyrite-ethic-row\">\n        <span class=\"buyrite-ethic-label\">\n          Animal welfare (", "/5)\n        </span>\n        <sl-progress-bar\n          class=\"buyrite-ethic-bar\"\n          .value=", "\n        ></sl-progress-bar>\n      </div>\n\n      <div class=\"buyrite-ethic-row\">\n        <span class=\"buyrite-ethic-label\">\n          Humanitarian (", "/5)\n        </span>\n        <sl-progress-bar\n          class=\"buyrite-ethic-bar\"\n          .value=", "\n        ></sl-progress-bar>\n      </div>\n\n      <div class=\"buyrite-ethic-row\">\n        <span class=\"buyrite-ethic-label\">\n          Sustainability (", "/5)\n        </span>\n        <sl-progress-bar\n          class=\"buyrite-ethic-bar\"\n          .value=", "/5\n        ></sl-progress-bar>\n      </div>\n\n      <div class=\"buyrite-ethic-row\">\n        <span class=\"buyrite-ethic-label\">\n          Environmentalism (", "/5)\n        </span>\n        <sl-progress-bar\n          class=\"buyrite-ethic-bar\"\n          .value=", "\n        ></sl-progress-bar>\n      </div>\n    </div>\n  "]);
+  const data = _taggedTemplateLiteral(["\n      <div class=\"buyrite-tile-ethics\">\n        <div class=\"buyrite-ethic-row\">\n          <span class=\"buyrite-ethic-label\">\n            Animal welfare (", "/5)\n          </span>\n          <sl-progress-bar\n            class=\"buyrite-ethic-bar\"\n            .value=", "\n          ></sl-progress-bar>\n        </div>\n\n        <div class=\"buyrite-ethic-row\">\n          <span class=\"buyrite-ethic-label\">\n            Humanitarian (", "/5)\n          </span>\n          <sl-progress-bar\n            class=\"buyrite-ethic-bar\"\n            .value=", "\n          ></sl-progress-bar>\n        </div>\n\n        <div class=\"buyrite-ethic-row\">\n          <span class=\"buyrite-ethic-label\">\n            Sustainability (", "/5)\n          </span>\n          <sl-progress-bar\n            class=\"buyrite-ethic-bar\"\n            .value=", "\n          ></sl-progress-bar>\n        </div>\n\n        <div class=\"buyrite-ethic-row\">\n          <span class=\"buyrite-ethic-label\">\n            Environmentalism (", "/5)\n          </span>\n          <sl-progress-bar\n            class=\"buyrite-ethic-bar\"\n            .value=", "\n          ></sl-progress-bar>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14296,7 +14293,6 @@ class buyriteView {
       return true;
     });
   } // rendering helpers -----------------------
-  // buyrite.js
 
 
   renderEthicsBars(p) {
@@ -14304,15 +14300,7 @@ class buyriteView {
 
     const toPct = v => {
       const n = Number(v);
-      if (!Number.isFinite(n) || n <= 0) return 0; // If it's between 0–1, treat as a fraction (0.0–1.0)
-
-      if (n <= 1) return n * 100; // If it's between 1–5, treat as a 5-star rating
-
-      if (n <= 5) return n / 5 * 100; // If it's already 0–100, just use it as is
-
-      if (n <= 100) return n; // Anything bigger: clamp to 100%
-
-      return 100;
+      return Number.isFinite(n) ? n / 5 * 100 : 0;
     };
 
     const safeNum = v => {
@@ -14320,7 +14308,7 @@ class buyriteView {
       return Number.isFinite(n) ? n : "–";
     };
 
-    return (0, _litHtml.html)(_templateObject(), safeNum(er.animalWelfare), toPct(er.animalWelfare), safeNum(er.humanitarian), toPct(er.humanitarian), safeNum(er.sustainability), safeNum(er.sustainability), safeNum(er.environmentalism), toPct(er.environmentalism));
+    return (0, _litHtml.html)(_templateObject(), safeNum(er.animalWelfare), toPct(er.animalWelfare), safeNum(er.humanitarian), toPct(er.humanitarian), safeNum(er.sustainability), toPct(er.sustainability), safeNum(er.environmentalism), toPct(er.environmentalism));
   }
 
   render() {
@@ -14804,263 +14792,7 @@ class vendorPreviewItemsView {
 var _default = new vendorPreviewItemsView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../ProductAPI":"ProductAPI.js"}],"views/pages/consumerHome.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _App = _interopRequireDefault(require("../../App"));
-
-var _litHtml = require("lit-html");
-
-var _Router = require("../../Router");
-
-var _Auth = _interopRequireDefault(require("../../Auth"));
-
-var _Utils = _interopRequireDefault(require("../../Utils"));
-
-var _Toast = _interopRequireDefault(require("../../Toast"));
-
-var _ProductAPI = _interopRequireDefault(require("../../ProductAPI"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _templateObject10() {
-  const data = _taggedTemplateLiteral(["\n                              <img\n                                slot=\"image\"\n                                src=\"", "/images/", "\"\n                                alt=\"", "\"\n                              />\n                            "]);
-
-  _templateObject10 = function _templateObject10() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject9() {
-  const data = _taggedTemplateLiteral(["\n                      <sl-card class=\"buyrite-tile\">\n                        ", "\n\n                        <h3 slot=\"header\" class=\"buyrite-tile-title\">\n                          ", "\n                        </h3>\n\n                        <div class=\"buyrite-tile-meta\">\n                          <span class=\"buyrite-tile-category\">\n                            ", "\n                          </span>\n                          <span class=\"buyrite-tile-price\">\n                            $", "\n                          </span>\n                        </div>\n\n                        <p class=\"buyrite-tile-description\">\n                          ", "", "\n                        </p>\n\n                        ", "\n                      </sl-card>\n                    "]);
-
-  _templateObject9 = function _templateObject9() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject8() {
-  const data = _taggedTemplateLiteral(["\n                <div class=\"buyrite-grid\">\n                  ", "\n                </div>\n              "]);
-
-  _templateObject8 = function _templateObject8() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject7() {
-  const data = _taggedTemplateLiteral(["<p class=\"hint\">\n                        Tip: try turning off the ethics filter or broadening\n                        your search.\n                      </p>"]);
-
-  _templateObject7 = function _templateObject7() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject6() {
-  const data = _taggedTemplateLiteral(["\n                <div class=\"buyrite-empty\">\n                  <p>No products match your search and filters yet.</p>\n                  ", "\n                </div>\n              "]);
-
-  _templateObject6 = function _templateObject6() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject5() {
-  const data = _taggedTemplateLiteral(["<p class=\"error-msg\">", "</p>"]);
-
-  _templateObject5 = function _templateObject5() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject4() {
-  const data = _taggedTemplateLiteral(["\n                <div class=\"buyrite-loading\">\n                  <sl-spinner></sl-spinner>\n                  <p>Loading products\u2026</p>\n                </div>\n              "]);
-
-  _templateObject4 = function _templateObject4() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject3() {
-  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Buy Right\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content buyrite-layout\">\n        <!-- Controls row -->\n        <section class=\"buyrite-controls\">\n          <div class=\"buyrite-control\">\n            <sl-input\n              label=\"Search key words\"\n              placeholder=\"Search products\u2026\"\n              type=\"search\"\n              clearable\n              @sl-input=", "\n            ></sl-input>\n          </div>\n\n          <div class=\"buyrite-control\">\n            <sl-select\n              label=\"Select category\"\n              value=", "\n              @sl-change=", "\n            >\n              <sl-menu-item value=\"all\">All categories</sl-menu-item>\n              <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n              <sl-menu-item value=\"household\">Household</sl-menu-item>\n              <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n              <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n              <sl-menu-item value=\"other\">Other</sl-menu-item>\n            </sl-select>\n          </div>\n        </section>\n\n        <!-- Simple ethics question -->\n        <section class=\"buyrite-ethics-question\">\n          <p class=\"buyrite-ethics-question__text\">\n            Only show products with strong ethical credentials?\n          </p>\n          <div class=\"buyrite-ethics-question__buttons\">\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >Yes</sl-button\n            >\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >No</sl-button\n            >\n          </div>\n        </section>\n\n        <!-- Grid of items -->\n        <section class=\"buyrite-grid-wrapper\">\n          ", "\n        </section>\n      </div>\n    "]);
-
-  _templateObject3 = function _templateObject3() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\n    <div class=\"buyrite-tile-ethics\">\n      ", "\n      ", "\n      ", "\n      ", "\n    </div>\n  "]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <div class=\"buyrite-ethic-row\">\n      <span class=\"buyrite-ethic-label\">\n        ", " (", "/5)\n      </span>\n      <div class=\"buyrite-ethic-bar\">\n        <div\n          class=\"buyrite-ethic-bar-fill\"\n          style=\"width: ", "%;\"\n          aria-label=\"", "\"\n          role=\"img\"\n        ></div>\n      </div>\n    </div>\n  "]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-class consumerHomeView {
-  constructor() {
-    this.products = [];
-    this.searchTerm = "";
-    this.selectedCategory = "all";
-    this.ethicsStrict = false;
-    this.isLoading = false;
-    this.error = null;
-  }
-
-  async init() {
-    console.log("consumerHomeView.init");
-    document.title = "Buy Right"; // must be signed in
-
-    if (!_Auth.default.currentUser) {
-      (0, _Router.gotoRoute)("/signin");
-      return;
-    }
-
-    this.isLoading = true;
-    this.error = null;
-    this.render();
-
-    _Utils.default.pageIntroAnim();
-
-    try {
-      this.products = await _ProductAPI.default.getPublicProducts();
-      this.isLoading = false;
-      this.render();
-    } catch (err) {
-      console.error(err);
-      this.error = err.message || "Problem loading products";
-      this.isLoading = false;
-
-      _Toast.default.show(this.error, "error");
-
-      this.render();
-    }
-  } // UI event handlers -----------------------
-
-
-  handleSearchInput(e) {
-    this.searchTerm = (e.target.value || "").toLowerCase();
-    this.render();
-  }
-
-  handleCategoryChange(e) {
-    this.selectedCategory = e.target.value || "all";
-    this.render();
-  }
-
-  handleEthicsYes() {
-    this.ethicsStrict = true;
-    this.render();
-  }
-
-  handleEthicsNo() {
-    this.ethicsStrict = false;
-    this.render();
-  } // filtering logic -------------------------
-
-
-  getFilteredProducts() {
-    return (this.products || []).filter(p => {
-      // text search
-      const s = this.searchTerm;
-
-      if (s) {
-        const haystack = ((p.title || "") + " " + (p.description || "") + " " + (p.category || "")).toLowerCase();
-        if (!haystack.includes(s)) return false;
-      } // category filter
-
-
-      if (this.selectedCategory !== "all") {
-        if ((p.category || "") !== this.selectedCategory) return false;
-      } // simple ethics filter:
-      // when on, keep products where all ratings are >= 4
-
-
-      if (this.ethicsStrict) {
-        const er = p.ethicalRatings || {};
-        const vals = [Number(er.animalWelfare), Number(er.humanitarian), Number(er.sustainability), Number(er.environmentalism)];
-
-        if (vals.some(v => !Number.isFinite(v) || v < 4)) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  } // rendering helpers -----------------------
-  // consumerHome.js
-  // -----------------------
-  // rendering helpers
-  // -----------------------
-
-
-  renderEthicsBars(p) {
-    const er = p.ethicalRatings || {};
-
-    const toPct = v => {
-      const n = Number(v);
-      if (!Number.isFinite(n)) return 0;
-      const pct = n / 5 * 100;
-      return Math.max(0, Math.min(100, pct)); // clamp 0–100
-    };
-
-    const safeNum = v => {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : "–";
-    };
-
-    const ethicRow = (label, value, key) => (0, _litHtml.html)(_templateObject(), label, safeNum(value), toPct(value), label);
-
-    return (0, _litHtml.html)(_templateObject2(), ethicRow("Animal welfare", er.animalWelfare, "animalWelfare"), ethicRow("Humanitarian", er.humanitarian, "humanitarian"), ethicRow("Sustainability", er.sustainability, "sustainability"), ethicRow("Environmentalism", er.environmentalism, "environmentalism"));
-  }
-
-  render() {
-    const filtered = this.getFilteredProducts();
-    const isLoading = this.isLoading;
-    const error = this.error;
-    const template = (0, _litHtml.html)(_templateObject3(), JSON.stringify(_Auth.default.currentUser), this.handleSearchInput.bind(this), this.selectedCategory, this.handleCategoryChange.bind(this), this.ethicsStrict ? "primary" : "default", this.handleEthicsYes.bind(this), !this.ethicsStrict ? "primary" : "default", this.handleEthicsNo.bind(this), isLoading ? (0, _litHtml.html)(_templateObject4()) : error ? (0, _litHtml.html)(_templateObject5(), error) : filtered.length === 0 ? (0, _litHtml.html)(_templateObject6(), this.ethicsStrict ? (0, _litHtml.html)(_templateObject7()) : "") : (0, _litHtml.html)(_templateObject8(), filtered.map(p => (0, _litHtml.html)(_templateObject9(), p.image ? (0, _litHtml.html)(_templateObject10(), _App.default.apiBase, p.image, p.title) : "", p.title, (p.category || "uncategorised").toUpperCase(), Number(p.price || 0).toFixed(2), (p.description || "").slice(0, 90), (p.description || "").length > 90 ? "…" : "", this.renderEthicsBars(p)))));
-    (0, _litHtml.render)(template, _App.default.rootEl);
-  }
-
-}
-
-var _default = new consumerHomeView();
-
-exports.default = _default;
-},{"../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","../../Router":"Router.js","../../Auth":"Auth.js","../../Utils":"Utils.js","../../Toast":"Toast.js","../../ProductAPI":"ProductAPI.js"}],"Router.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../ProductAPI":"ProductAPI.js"}],"Router.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15092,8 +14824,6 @@ var _vendorManageListings = _interopRequireDefault(require("./views/pages/vendor
 
 var _vendorPreviewItems = _interopRequireDefault(require("./views/pages/vendorPreviewItems"));
 
-var _consumerHome = _interopRequireDefault(require("./views/pages/consumerHome"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import views
@@ -15110,8 +14840,7 @@ const routes = {
   "/editProfile": _editProfile.default,
   "/vendor": _vendorHome.default,
   "/vendor/manageProducts": _vendorManageListings.default,
-  "/vendor/previewProducts": _vendorPreviewItems.default,
-  "/consumer": _consumerHome.default
+  "/vendor/previewProducts": _vendorPreviewItems.default
 };
 
 class Router {
@@ -15184,7 +14913,7 @@ function anchorRoute(e) {
   const pathname = anchor.pathname;
   AppRouter.gotoRoute(pathname);
 }
-},{"./views/pages/home":"views/pages/home.js","./views/pages/404":"views/pages/404.js","./views/pages/signin":"views/pages/signin.js","./views/pages/signup":"views/pages/signup.js","./views/pages/profile":"views/pages/profile.js","./views/pages/editProfile":"views/pages/editProfile.js","./views/pages/guide":"views/pages/guide.js","./views/pages/buyrite":"views/pages/buyrite.js","./views/pages/vendorHome":"views/pages/vendorHome.js","./views/pages/vendorManageListings":"views/pages/vendorManageListings.js","./views/pages/vendorPreviewItems":"views/pages/vendorPreviewItems.js","./views/pages/consumerHome":"views/pages/consumerHome.js"}],"App.js":[function(require,module,exports) {
+},{"./views/pages/home":"views/pages/home.js","./views/pages/404":"views/pages/404.js","./views/pages/signin":"views/pages/signin.js","./views/pages/signup":"views/pages/signup.js","./views/pages/profile":"views/pages/profile.js","./views/pages/editProfile":"views/pages/editProfile.js","./views/pages/guide":"views/pages/guide.js","./views/pages/buyrite":"views/pages/buyrite.js","./views/pages/vendorHome":"views/pages/vendorHome.js","./views/pages/vendorManageListings":"views/pages/vendorManageListings.js","./views/pages/vendorPreviewItems":"views/pages/vendorPreviewItems.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16990,7 +16719,7 @@ var _App = _interopRequireDefault(require("../App"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject9() {
-  const data = _taggedTemplateLiteral([" <a href=\"#\" @click=\"", "\">Sign Out</a> "]);
+  const data = _taggedTemplateLiteral(["\n                  <a href=\"#\" @click=\"", "\">Sign Out</a>\n                "]);
 
   _templateObject9 = function _templateObject9() {
     return data;
@@ -17000,7 +16729,7 @@ function _templateObject9() {
 }
 
 function _templateObject8() {
-  const data = _taggedTemplateLiteral(["\n                  <a href=\"/consumer\" @click=\"", "\">Home</a>\n                  <a href=\"/consumer\" @click=\"", "\">\n                    Consumer Interface\n                  </a>\n                  <a href=\"/guide\" @click=\"", "\">\n                    Questionnaire\n                  </a>\n                  <a href=\"/favouriteHaircuts\" @click=\"", "\">\n                    Saved Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
+  const data = _taggedTemplateLiteral(["\n                  <!-- SHOPPER MENU: based on consumer flow in proposal -->\n                  <a href=\"/\" @click=\"", "\">Home</a>\n                  <a href=\"/buyrite\" @click=\"", "\">\n                    Consumer Interface\n                  </a>\n                  <a href=\"/guide\" @click=\"", "\">\n                    Questionnaire\n                  </a>\n                  <a href=\"/favouriteHaircuts\" @click=\"", "\">\n                    Saved Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
 
   _templateObject8 = function _templateObject8() {
     return data;
@@ -17010,7 +16739,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  const data = _taggedTemplateLiteral(["\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/manageProducts\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a href=\"/vendor/previewProducts\" @click=\"", "\">\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
+  const data = _taggedTemplateLiteral(["\n                  <!-- VENDOR MENU: based on vendor flow in proposal -->\n                  <a href=\"/vendor\" @click=\"", "\">\n                    Vendor Dashboard\n                  </a>\n                  <a href=\"/vendor/manageProducts\" @click=\"", "\">\n                    Manage Listings\n                  </a>\n                  <a href=\"/vendor/previewProducts\" @click=\"", "\">\n                    Preview Items\n                  </a>\n                  <a href=\"/about\" @click=\"", "\">\n                    About & Support\n                  </a>\n                "]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -17020,7 +16749,7 @@ function _templateObject7() {
 }
 
 function _templateObject6() {
-  const data = _taggedTemplateLiteral(["\n                  <a href=\"/signin\" @click=\"", "\">Sign In</a>\n                  <a href=\"/signup\" @click=\"", "\">Sign Up</a>\n                "]);
+  const data = _taggedTemplateLiteral(["\n                  <!-- Logged-out menu -->\n                  <a href=\"/signin\" @click=\"", "\">Sign In</a>\n                  <a href=\"/signup\" @click=\"", "\">Sign Up</a>\n                "]);
 
   _templateObject6 = function _templateObject6() {
     return data;
@@ -17070,7 +16799,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n        <style>\n          * {\n            box-sizing: border-box;\n          }\n\n          .app-header {\n            background: var(--brand-color);\n            position: fixed;\n            top: 0;\n            right: 0;\n            left: 0;\n            height: var(--app-header-height);\n            color: #fff;\n            display: flex;\n            align-items: center;\n            z-index: 9;\n            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);\n          }\n\n          .app-header:focus {\n            outline: none;\n          }\n\n          /* \u2605 Centered logo */\n          .app-header-logo {\n            position: absolute;\n            left: 50%;\n            transform: translateX(-50%);\n            z-index: 5;\n            pointer-events: none; /* allow clicks to nav behind it */\n          }\n\n          .app-header-logo img {\n            height: 15vh;\n            width: auto;\n            display: block;\n          }\n\n          .app-header-main {\n            flex-grow: 1;\n            display: flex;\n            align-items: center;\n          }\n\n          .app-logo img {\n            width: 90px;\n          }\n\n          .hamburger-btn::part(base) {\n            color: #fff;\n          }\n\n          .app-top-nav {\n            display: flex;\n            height: 100%;\n            align-items: center;\n          }\n\n          .app-top-nav a {\n            display: inline-block;\n            padding: 0.8em;\n            text-decoration: none;\n            color: #fff;\n          }\n\n          .app-side-menu-items {\n            padding-top: 150px;\n          }\n\n          .app-side-menu-items a {\n            display: block;\n            padding: 0.8em;\n            text-decoration: none;\n            font-size: 1.3em;\n            color: #333;\n          }\n\n          .app-side-menu-items a + a {\n            margin-top: 0.3em;\n          }\n\n          .app-side-menu-logo {\n            width: 120px;\n            margin-bottom: 1em;\n            position: absolute;\n            top: 2em;\n            left: 1.5em;\n          }\n\n          .page-title {\n            color: var(--app-header-txt-color);\n            margin-right: 0.5em;\n            font-size: var(--app-header-title-font-size);\n          }\n\n          .app-top-nav a.active,\n          .app-side-menu-items a.active {\n            font-weight: bold;\n          }\n\n          @media all and (max-width: 768px) {\n            .app-top-nav {\n              display: none;\n            }\n          }\n        </style>\n\n        <header class=\"app-header\" tabindex=\"-1\">\n          <sl-icon-button\n            class=\"hamburger-btn\"\n            name=\"list\"\n            @click=\"", "\"\n            style=\"font-size: 1.5em;\"\n          ></sl-icon-button>\n\n          <!-- \u2605 centered logo -->\n          <div class=\"app-header-logo\">\n            <img src=\"/images/logo.svg\" alt=\"BuyRight\" />\n          </div>\n\n          <div class=\"app-header-main\">\n            ", "\n            <slot></slot>\n          </div>\n\n          <nav class=\"app-top-nav\">\n            <a href=\"/\" @click=\"", "\">Home</a>\n\n            ", "\n          </nav>\n        </header>\n\n        <sl-drawer class=\"app-side-menu\" placement=\"left\">\n          <img class=\"app-side-menu-logo\" src=\"/images/logo.svg\" />\n          <nav class=\"app-side-menu-items\">\n            ", "\n            ", "\n          </nav>\n        </sl-drawer>\n      "]);
+  const data = _taggedTemplateLiteral(["\n        <style>\n          * {\n            box-sizing: border-box;\n          }\n\n          .app-header {\n            background: var(--brand-color);\n            position: fixed;\n            top: 0;\n            right: 0;\n            left: 0;\n            height: var(--app-header-height);\n            color: #fff;\n            display: flex;\n            z-index: 9;\n            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);\n            align-items: center;\n          }\n\n          .app-header:focus {\n            outline: none;\n          }\n\n          .app-header-main {\n            flex-grow: 1;\n            display: flex;\n            align-items: center;\n          }\n\n          .app-logo img {\n            width: 90px;\n          }\n\n          .hamburger-btn::part(base) {\n            color: #fff;\n          }\n\n          .app-top-nav {\n            display: flex;\n            height: 100%;\n            align-items: center;\n          }\n\n          .app-top-nav a {\n            display: inline-block;\n            padding: 0.8em;\n            text-decoration: none;\n            color: #fff;\n          }\n\n          .app-side-menu-items {\n            padding-top: 150px;\n          }\n\n          .app-side-menu-items a {\n            display: block;\n            padding: 0.8em;\n            text-decoration: none;\n            font-size: 1.3em;\n            color: #333;\n          }\n\n          .app-side-menu-items a + a {\n            margin-top: 0.3em;\n          }\n\n          .app-side-menu-logo {\n            width: 120px;\n            margin-bottom: 1em;\n            position: absolute;\n            top: 2em;\n            left: 1.5em;\n          }\n\n          .page-title {\n            color: var(--app-header-txt-color);\n            margin-right: 0.5em;\n            font-size: var(--app-header-title-font-size);\n          }\n\n          .app-top-nav a.active,\n          .app-side-menu-items a.active {\n            font-weight: bold;\n          }\n\n          @media all and (max-width: 768px) {\n            .app-top-nav {\n              display: none;\n            }\n          }\n        </style>\n\n        <!-- tabindex makes header focusable so we can move focus out of the drawer -->\n        <header class=\"app-header\" tabindex=\"-1\">\n          <sl-icon-button\n            class=\"hamburger-btn\"\n            name=\"list\"\n            @click=\"", "\"\n            style=\"font-size: 1.5em;\"\n          ></sl-icon-button>\n\n          <div class=\"app-header-main\">\n            ", "\n            <slot></slot>\n          </div>\n\n          <nav class=\"app-top-nav\">\n            <a href=\"/\" @click=\"", "\">Home</a>\n\n            ", "\n          </nav>\n        </header>\n\n        <sl-drawer class=\"app-side-menu\" placement=\"left\">\n          <img class=\"app-side-menu-logo\" src=\"/images/logo.svg\" />\n          <nav class=\"app-side-menu-items\">\n            ", "\n            ", "\n          </nav>\n        </sl-drawer>\n      "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -17093,7 +16822,8 @@ customElements.define("br-app-header", class AppHeader extends _litElement.LitEl
       },
       user: {
         type: Object
-      }
+      } // unused now but kept for compatibility
+
     };
   }
 
@@ -17124,14 +16854,16 @@ customElements.define("br-app-header", class AppHeader extends _litElement.LitEl
     const anchor = e.target.closest("a");
     if (!anchor) return;
     const pathname = anchor.pathname;
-    const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
+    const appSideMenu = this.shadowRoot.querySelector(".app-side-menu"); // If no drawer present, just navigate
 
     if (!appSideMenu) {
       (0, _Router.gotoRoute)(pathname);
       return;
-    }
+    } // Hide the drawer first, then move focus and navigate
+
 
     const onAfterHide = () => {
+      // move focus back to header (outside aria-hidden area)
       const header = this.shadowRoot.querySelector(".app-header");
       if (header) header.focus();
       (0, _Router.gotoRoute)(pathname);
@@ -17145,6 +16877,7 @@ customElements.define("br-app-header", class AppHeader extends _litElement.LitEl
   }
 
   render() {
+    // Use global Auth.currentUser for consistent behaviour
     const currentUser = _Auth.default.currentUser || null;
     const isLoggedIn = !!currentUser;
     const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;

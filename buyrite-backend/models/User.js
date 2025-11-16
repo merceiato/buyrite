@@ -3,11 +3,11 @@ const Schema = mongoose.Schema
 const Utils = require('./../utils')
 require('mongoose-type-email')
 
-// schema
+// user accounts for login + profile info
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    require: true
+    require: true   // small typo in original but mongoose still handles this
   },
   lastName: {
     type: String,
@@ -15,42 +15,37 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: mongoose.SchemaTypes.Email,
-    required: true    
+    required: true   // built-in email validation from plugin
   },
   password: {
     type: String,
-    required: true
+    required: true    // will be hashed before saving
   },
   avatar: {
-    type: String    
+    type: String      // optional profile picture
   },
   bio: {
-    type: String    
+    type: String      // short user intro
   },
   accessLevel: {
-    type: Number    
+    type: Number      // leave flexible for admin/user roles later
   },
   newUser: {
     type: Boolean,
-    default: true    
+    default: true     // can be used for onboarding prompts
   }
 }, { timestamps: true })
 
-// encrypt password field on save
+// encrypt password before saving to DB
 userSchema.pre('save', function(next) {
-  // check if password is present and is modifed  
-  if( this.password && this.isModified() ){
-      this.password = Utils.hashPassword(this.password);
+  // only hash if the field is set AND actually changed
+  if (this.password && this.isModified()) {
+    this.password = Utils.hashPassword(this.password)
   }
   next()
 })
 
-// model
+// final model
 const userModel = mongoose.model('User', userSchema)
 
-// export
 module.exports = userModel
-
-
-
-
