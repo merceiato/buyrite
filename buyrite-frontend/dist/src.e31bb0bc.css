@@ -1,0 +1,716 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,300;0,500;1,100;1,200;1,500&display=swap");
+:root {
+  --base-txt-color: #1C3322;
+  --heading-color: #1C3322;
+  --base-font-family: "Work Sans", sans-serif;
+  --body-bg: #FAFAF8;
+  --brand-color: #B9825C;
+  --link-color: --brand-color;
+  --app-header-height: 60px;
+  --app-header-txt-color: #FAFAF8;
+  --app-header-title-font-size: 1.6em;
+  --sl-color-primary-50: #FAFAF8;
+  --sl-color-primary-100: #f6efeb;
+  --sl-color-primary-200: #e7d4c7;
+  --sl-color-primary-300: #d8b9a3;
+  --sl-color-primary-400: #c89d80;
+  --sl-color-primary-500: #B9825C;
+  --sl-color-primary-600: #9e6944;
+  --sl-color-primary-700: #7a5135;
+  --sl-color-primary-800: #573925;
+  --sl-color-primary-900: #332216;
+  --sl-focus-ring-color-primary: rgba(185, 130, 92, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(250, 250, 248, 0);
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  color: var(--base-txt-color);
+  font-family: var(--base-font-family);
+  font-weight: 300;
+  background: var(--body-bg);
+  height: 100vh;
+}
+
+h1, h2, h3, h5, h6 {
+  margin: 0 0 0.5em;
+  color: var(--heading-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+.app-splash {
+  position: fixed;
+  background: #FAFAF8;
+  color: #D9C9A3;
+  display: flex;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.app-splash .app-logo {
+  width: 180px;
+  display: block;
+  margin-bottom: 1em;
+}
+
+.calign {
+  text-align: center;
+}
+
+.large-text {
+  font-size: 1.6em;
+}
+
+.brand-color {
+  color: var(--brand-color);
+}
+
+.generic-entry {
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.07);
+  border-radius: 5px;
+  margin-bottom: 0.5em;
+  padding: 1em;
+  background: #FAFAF8;
+}
+
+#root {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.page-content {
+  position: absolute;
+  top: var(--app-header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  padding: 1em;
+}
+.page-content.no-pad {
+  padding: 0;
+}
+
+.page-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signinup-box,
+.signup-box {
+  max-width: 320px;
+  text-align: center;
+}
+
+.signinup-logo {
+  width: 200px;
+  margin-bottom: 1em;
+}
+
+.guide-step {
+  padding: 1em;
+  margin: 1.5em auto;
+  max-width: 600px;
+}
+.guide-step img {
+  width: 100%;
+  height: auto;
+}
+
+@media all and (max-width: 768px) {
+  .signinup-box {
+    width: 90%;
+    max-width: none;
+  }
+}
+.input-group {
+  margin-bottom: 0.5em;
+}
+
+.page-form {
+  max-width: 700px;
+}
+
+sl-dialog::part(title) {
+  font-weight: 500;
+  font-size: 1.6em;
+}
+
+@media all and (max-width: 768px) {
+  sl-dialog::part(panel) {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    max-width: none;
+  }
+}
+#toasts {
+  position: fixed;
+  left: 50%;
+  top: 1em;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.toast-entry {
+  background: #FAFAF8;
+  margin: 0 auto;
+  color: #1C3322;
+  border-radius: 200px;
+  box-shadow: 0px 3px 25px rgba(0, 0, 0, 0.14);
+  padding: 0.7em 1.3em;
+  font-size: 1em;
+  margin-bottom: 0.25em;
+  text-align: center;
+  transition: all 0.2 ease;
+}
+.toast-entry.is-error {
+  background: #A33A3A;
+  color: #FAFAF8;
+}
+
+/* ================================
+   VENDOR PREVIEW PAGE LAYOUT
+   Two columns: left (list) + right (preview)
+   ================================ */
+.preview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
+  gap: 2rem;
+}
+
+/* ================================
+   PANELS
+   ================================ */
+.preview-list-panel,
+.preview-detail-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.preview-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* ================================
+   LEFT COLUMN (LIST)
+   ================================ */
+.preview-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.preview-list-item {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.preview-list-item.is-active {
+  background: #f5f7fa;
+}
+
+.preview-list-item + .preview-list-item {
+  margin-top: 0.25rem;
+}
+
+.preview-list-thumb img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.preview-list-thumb--placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #eef2f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.preview-list-title {
+  font-weight: 600;
+}
+
+.preview-list-meta {
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+
+.preview-list-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* ================================
+   RIGHT COLUMN (DETAIL)
+   ================================ */
+.preview-detail-card {
+  width: 100%;
+}
+
+.preview-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.preview-detail-tags {
+  margin-top: 0.25rem;
+}
+
+.preview-detail-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Re-use chip style; if you want one source of truth,
+   you can remove this and keep it only in one partial. */
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2f3;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.ethics-chips {
+  margin-top: 0.35rem;
+}
+
+/* ================================
+   STATES
+   ================================ */
+.preview-loading,
+.preview-empty {
+  text-align: center;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 900px) {
+  .preview-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* ================================
+   VENDOR MANAGE LISTINGS PAGE
+   ================================ */
+.vendor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.vendor-form,
+.vendor-listings {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.vendor-form h2,
+.vendor-listings h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.ethical-help {
+  font-size: 0.85rem;
+  color: #666;
+  max-width: 40rem;
+  margin-top: 0.25rem;
+}
+
+.image-help {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  max-width: 36rem;
+}
+
+.button-row sl-button + sl-button {
+  margin-left: 0.5rem;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.listing-card {
+  height: 100%;
+}
+
+.listing-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #eef2f3;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.listing-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .vendor-layout {
+    grid-template-columns: 1fr;
+  }
+}
+sl-progress-bar.buyrite-ethic-bar {
+  --indicator-color: #22c55e;
+  --track-color: #e5e5e5;
+  --height: 6px;
+  width: 100%;
+}
+
+sl-progress-bar.buyrite-ethic-bar::part(base),
+sl-progress-bar.buyrite-ethic-bar::part(indicator) {
+  border-radius: 999px;
+}
+
+/* IMPORTANT: no width/transform on ::part(indicator) */
+.page-content {
+  position: absolute;
+  top: var(--app-header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  padding: 1em;
+}
+
+.buyrite-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Controls row (search + category) */
+.buyrite-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  background: #4b4f52;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.buyrite-control sl-input::part(base),
+.buyrite-control sl-select::part(combobox) {
+  background-color: #fff;
+}
+
+/* Simple ethics question */
+.buyrite-ethics-question {
+  align-self: center;
+  text-align: center;
+  padding: 0.75rem 1.25rem;
+  background: #f4f6f7;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.buyrite-ethics-question__text {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.buyrite-ethics-question__buttons sl-button + sl-button {
+  margin-left: 0.5rem;
+}
+
+/* Grid – 8 columns on large screens */
+.buyrite-grid-wrapper {
+  min-height: 200px;
+}
+
+.buyrite-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Tile / card */
+.buyrite-tile::part(base) {
+  height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition-delay: 0.15s;
+}
+
+.buyrite-tile::part(header),
+.buyrite-tile::part(body),
+.buyrite-tile::part(footer) {
+  padding: 0.75rem;
+}
+
+.buyrite-tile:hover::part(base) {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Image: fixed height & cover to keep cards short */
+.buyrite-tile img[slot=image] {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Typography/layout inside the card */
+.buyrite-tile-title {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.buyrite-tile-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.buyrite-tile-category {
+  letter-spacing: 0.05em;
+}
+
+.buyrite-tile-price {
+  font-weight: 600;
+}
+
+.buyrite-tile-description {
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Ethical bars */
+.buyrite-tile-ethics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: auto;
+}
+
+.buyrite-ethic-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.buyrite-ethic-label {
+  font-size: 0.65rem;
+  color: #555;
+}
+
+.buyrite-ethic-bar {
+  width: 100%;
+}
+
+/* States */
+.buyrite-loading,
+.buyrite-empty {
+  text-align: center;
+}
+
+.buyrite-empty .hint {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Responsive tweaks: fewer columns on smaller screens */
+@media (max-width: 1600px) {
+  .buyrite-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1200px) {
+  .buyrite-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .buyrite-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .buyrite-ethics-question {
+    flex-direction: column;
+  }
+
+  .buyrite-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.buyrite-tile-title,
+.buyrite-tile-description {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .buyrite-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================
+   QUESTIONNAIRE VIEW
+   ========================================= */
+.questionnaire-layout {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Intro section */
+.questionnaire-intro {
+  text-align: left;
+}
+.questionnaire-intro h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.questionnaire-intro p {
+  font-size: 0.95rem;
+  color: #555;
+  max-width: 640px;
+}
+
+/* Form layout */
+.questionnaire-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Each question block */
+.question-block {
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  background: #f7f8fa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.question-block .question-header {
+  margin-bottom: 0.75rem;
+}
+.question-block .question-header h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+.question-block .question-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+.question-block sl-range {
+  width: 100%;
+}
+.question-block .range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: #777;
+}
+
+/* Primary action */
+.questionnaire-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .questionnaire-layout {
+    padding: 0 0.5rem;
+  }
+
+  .question-block {
+    padding: 1rem 1.1rem;
+  }
+
+  .questionnaire-intro h1 {
+    font-size: 1.4rem;
+  }
+}
+
+/*# sourceMappingURL=/src.e31bb0bc.css.map */

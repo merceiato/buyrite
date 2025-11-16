@@ -171,4 +171,31 @@ router.post('/', uploadAvatar, (req, res) => {
   })
 })
 
+// GET all users
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Problem retrieving users', error: err });
+  }
+});
+
+
+// DELETE all users (dangerous!)
+router.delete('/', async (req, res) => {
+  try {
+    const result = await User.deleteMany({});
+    res.status(200).json({
+      message: 'All users deleted',
+      deletedCount: result.deletedCount
+    });
+  } catch (err) {
+    console.error('Error deleting users:', err);
+    res.status(500).json({ message: 'Problem deleting users', error: err });
+  }
+});
+
+
 module.exports = router

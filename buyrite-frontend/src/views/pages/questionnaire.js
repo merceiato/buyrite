@@ -51,17 +51,20 @@ class QuestionnaireView {
       [key]: Number.isFinite(value) ? value : 3
     };
 
-    // Mostly for any live summary; sliders visually update themselves
+    // For any live summary; sliders visually update themselves
     this.render();
   }
 
   async handleSubmit(e) {
-    e.preventDefault();
+    // This is an sl-submit event from <sl-form>
+    console.log("Questionnaire handleSubmit()", this.values);
 
     if (!Auth.currentUser) {
       gotoRoute("/signin");
       return;
     }
+
+    if (this.isSaving) return; // avoid double-submit
 
     this.isSaving = true;
     this.render();
@@ -77,6 +80,8 @@ class QuestionnaireView {
         questionnaireCompleted: true
       };
 
+      console.log("Questionnaire payload:", payload);
+
       const updatedUser = await UserAPI.updateUser(
         Auth.currentUser._id,
         payload,
@@ -85,15 +90,18 @@ class QuestionnaireView {
 
       // keep local Auth.currentUser in sync with what the server now has
       Auth.currentUser = updatedUser;
+      this.isSaving = false;
+
       Toast.show(
         "Preferences saved – we’ll use these to help match products to your values.",
         "success"
       );
 
-      // You can keep them here, or send them to BuyRight:
+      // stay on page for now; you can redirect if you like
       // gotoRoute("/buyrite");
+      this.render();
     } catch (err) {
-      console.error(err);
+      console.error("Questionnaire save error:", err);
       Toast.show(
         err.message || "Problem saving preferences",
         "error"
@@ -154,9 +162,10 @@ class QuestionnaireView {
           </p>
         </section>
 
-        <form
+        <!-- Use Shoelace sl-form, just like signin.js -->
+        <sl-form
           class="questionnaire-form"
-          @submit=${this.handleSubmit.bind(this)}
+          @sl-submit=${this.handleSubmit.bind(this)}
         >
           ${this.renderSliderGroup(
             "Animal welfare",
@@ -188,15 +197,16 @@ class QuestionnaireView {
 
           <div class="questionnaire-actions">
             <sl-button
+              class="submit-btn"
               type="primary"
               size="large"
-              ?loading=${this.isSaving}
               submit
+              ?loading=${this.isSaving}
             >
               Save my preferences
             </sl-button>
           </div>
-        </form>
+        </sl-form>
       </div>
     `;
 
