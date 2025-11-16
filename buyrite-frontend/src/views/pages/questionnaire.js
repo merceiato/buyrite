@@ -51,12 +51,17 @@ class QuestionnaireView {
       [key]: Number.isFinite(value) ? value : 3
     };
 
-    // For any live summary; sliders visually update themselves
+    // Optional: if you don't want live re-render, you can remove this.
     this.render();
   }
 
   async handleSubmit(e) {
-    // This is an sl-submit event from <sl-form>
+    // sl-submit event from <sl-form>
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     console.log("Questionnaire handleSubmit()", this.values);
 
     if (!Auth.currentUser) {
@@ -162,7 +167,6 @@ class QuestionnaireView {
           </p>
         </section>
 
-        <!-- Use Shoelace sl-form, just like signin.js -->
         <sl-form
           class="questionnaire-form"
           @sl-submit=${this.handleSubmit.bind(this)}

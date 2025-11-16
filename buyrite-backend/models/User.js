@@ -15,28 +15,28 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: mongoose.SchemaTypes.Email,
-    required: true    
+    required: true
   },
   password: {
     type: String,
     required: true
   },
   avatar: {
-    type: String    
+    type: String
   },
   bio: {
-    type: String    
+    type: String
   },
   accessLevel: {
-    // 1 = shopper/consumer, 2 = vendor
-    type: Number    
+    // 1 = shopper, 2 = vendor
+    type: Number
   },
   newUser: {
     type: Boolean,
-    default: true    
+    default: true
   },
 
-  // ethical preferences stored from the questionnaire 
+  // ---------- Ethical preferences from questionnaire ----------
   ethicalPreferences: {
     animalWelfare: {
       type: Number,
@@ -64,7 +64,6 @@ const userSchema = new mongoose.Schema({
     }
   },
 
-  // track if the questionnaire has been completed at least once
   questionnaireCompleted: {
     type: Boolean,
     default: false
@@ -74,7 +73,7 @@ const userSchema = new mongoose.Schema({
 
 // encrypt password field on save
 userSchema.pre('save', function (next) {
-  // check if password is present and is modifed  
+  // check if password is present and is modified
   if (this.password && this.isModified()) {
     this.password = Utils.hashPassword(this.password)
   }

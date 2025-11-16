@@ -14859,7 +14859,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  const data = _taggedTemplateLiteral(["<p class=\"hint\">\n                        Tip: try turning off the ethics filter or broadening\n                        your search.\n                      </p>"]);
+  const data = _taggedTemplateLiteral(["<p class=\"hint\">\n                        Tip: try turning off the \"match my ethics\" filter or\n                        broadening your search.\n                      </p>"]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -14899,7 +14899,7 @@ function _templateObject4() {
 }
 
 function _templateObject3() {
-  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Buy Right\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content buyrite-layout\">\n        <!-- Controls row -->\n        <section class=\"buyrite-controls\">\n          <div class=\"buyrite-control\">\n            <sl-input\n              label=\"Search key words\"\n              placeholder=\"Search products\u2026\"\n              type=\"search\"\n              clearable\n              @sl-input=", "\n            ></sl-input>\n          </div>\n\n          <div class=\"buyrite-control\">\n            <sl-select\n              label=\"Select category\"\n              value=", "\n              @sl-change=", "\n            >\n              <sl-menu-item value=\"all\">All categories</sl-menu-item>\n              <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n              <sl-menu-item value=\"household\">Household</sl-menu-item>\n              <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n              <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n              <sl-menu-item value=\"other\">Other</sl-menu-item>\n            </sl-select>\n          </div>\n        </section>\n\n        <!-- Simple ethics question -->\n        <section class=\"buyrite-ethics-question\">\n          <p class=\"buyrite-ethics-question__text\">\n            Only show products with strong ethical credentials?\n          </p>\n          <div class=\"buyrite-ethics-question__buttons\">\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >Yes</sl-button\n            >\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >No</sl-button\n            >\n          </div>\n        </section>\n\n        <!-- Grid of items -->\n        <section class=\"buyrite-grid-wrapper\">\n          ", "\n        </section>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Buy Right\"\n        user=", "\n      ></br-app-header>\n\n      <div class=\"page-content buyrite-layout\">\n        <!-- Controls row -->\n        <section class=\"buyrite-controls\">\n          <div class=\"buyrite-control\">\n            <sl-input\n              label=\"Search key words\"\n              placeholder=\"Search products\u2026\"\n              type=\"search\"\n              clearable\n              @sl-input=", "\n            ></sl-input>\n          </div>\n\n          <div class=\"buyrite-control\">\n            <sl-select\n              label=\"Select category\"\n              value=", "\n              @sl-change=", "\n            >\n              <sl-menu-item value=\"all\">All categories</sl-menu-item>\n              <sl-menu-item value=\"grocery\">Grocery</sl-menu-item>\n              <sl-menu-item value=\"household\">Household</sl-menu-item>\n              <sl-menu-item value=\"fashion\">Fashion</sl-menu-item>\n              <sl-menu-item value=\"personal-care\">Personal Care</sl-menu-item>\n              <sl-menu-item value=\"other\">Other</sl-menu-item>\n            </sl-select>\n          </div>\n        </section>\n\n        <!-- Ethics toggle: match my preferences on/off -->\n        <section class=\"buyrite-ethics-question\">\n          <p class=\"buyrite-ethics-question__text\">\n            Only show products that match my ethical preferences (within 1 point)?\n          </p>\n          <div class=\"buyrite-ethics-question__buttons\">\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >Yes</sl-button\n            >\n            <sl-button\n              size=\"small\"\n              variant=", "\n              @click=", "\n              >No</sl-button\n            >\n          </div>\n        </section>\n\n        <!-- Grid of items -->\n        <section class=\"buyrite-grid-wrapper\">\n          ", "\n        </section>\n      </div>\n    "]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -14909,7 +14909,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\n    <div class=\"buyrite-tile-ethics\">\n      ", "\n      ", "\n      ", "\n      ", "\n    </div>\n  "]);
+  const data = _taggedTemplateLiteral(["\n      <div class=\"buyrite-tile-ethics\">\n        ", "\n        ", "\n        ", "\n        ", "\n      </div>\n    "]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -14919,7 +14919,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <div class=\"buyrite-ethic-row\">\n      <span class=\"buyrite-ethic-label\">\n        ", " (", "/5)\n      </span>\n      <div class=\"buyrite-ethic-bar\">\n        <div\n          class=\"buyrite-ethic-bar-fill\"\n          style=\"width: ", "%;\"\n          aria-label=\"", "\"\n          role=\"img\"\n        ></div>\n      </div>\n    </div>\n  "]);
+  const data = _taggedTemplateLiteral(["\n      <div class=\"buyrite-ethic-row\">\n        <span class=\"buyrite-ethic-label\">\n          ", " (", "/5)\n        </span>\n        <div class=\"buyrite-ethic-bar\">\n          <div\n            class=\"buyrite-ethic-bar-fill\"\n            style=\"width: ", "%;\"\n            aria-label=\"", "\"\n            role=\"img\"\n          ></div>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14935,7 +14935,8 @@ class consumerHomeView {
     this.products = [];
     this.searchTerm = "";
     this.selectedCategory = "all";
-    this.ethicsStrict = false;
+    this.ethicsStrict = false; // when true: only show products that match my ethics
+
     this.isLoading = false;
     this.error = null;
   }
@@ -14979,16 +14980,28 @@ class consumerHomeView {
   handleCategoryChange(e) {
     this.selectedCategory = e.target.value || "all";
     this.render();
-  }
+  } // turn "match my ethics" filter on
+
 
   handleEthicsYes() {
     this.ethicsStrict = true;
     this.render();
-  }
+  } // turn "match my ethics" filter off
+
 
   handleEthicsNo() {
     this.ethicsStrict = false;
     this.render();
+  } // ----------------------------------------
+  // ethics matching: within 1 point per rating
+  // ----------------------------------------
+
+
+  withinOnePoint(userPrefs, productRatings) {
+    if (!userPrefs || !productRatings) return false;
+    const up = userPrefs;
+    const diffsOk = Math.abs(Number(productRatings.animalWelfare) - Number(up.animalWelfare)) <= 1 && Math.abs(Number(productRatings.humanitarian) - Number(up.humanitarian)) <= 1 && Math.abs(Number(productRatings.sustainability) - Number(up.sustainability)) <= 1 && Math.abs(Number(productRatings.environmentalism) - Number(up.environmentalism)) <= 1;
+    return diffsOk;
   } // filtering logic -------------------------
 
 
@@ -15005,15 +15018,16 @@ class consumerHomeView {
 
       if (this.selectedCategory !== "all") {
         if ((p.category || "") !== this.selectedCategory) return false;
-      } // simple ethics filter:
-      // when on, keep products where all ratings are >= 4
+      } // user-specific ethics filter:
+      // when on, only keep products where each rating is within 1 point
+      // of the current user's ethicalPreferences set in the questionnaire
 
 
       if (this.ethicsStrict) {
+        const prefs = _Auth.default.currentUser && _Auth.default.currentUser.ethicalPreferences;
         const er = p.ethicalRatings || {};
-        const vals = [Number(er.animalWelfare), Number(er.humanitarian), Number(er.sustainability), Number(er.environmentalism)];
 
-        if (vals.some(v => !Number.isFinite(v) || v < 4)) {
+        if (!this.withinOnePoint(prefs, er)) {
           return false;
         }
       }
@@ -15021,10 +15035,6 @@ class consumerHomeView {
       return true;
     });
   } // rendering helpers -----------------------
-  // consumerHome.js
-  // -----------------------
-  // rendering helpers
-  // -----------------------
 
 
   renderEthicsBars(p) {
@@ -15085,7 +15095,7 @@ var _Toast = _interopRequireDefault(require("./../../Toast"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Tell us your values\"\n        user=\"", "\"\n      ></br-app-header>\n\n      <div class=\"page-content questionnaire-layout\">\n        <section class=\"questionnaire-intro\">\n          <h1>Help us tailor BuyRight to you</h1>\n          <p>\n            Use the sliders below to tell us how important each ethical area is.\n            We\u2019ll store these on your profile and use them as we build out the\n            matching logic in the Buy Right view.\n          </p>\n        </section>\n\n        <!-- Use Shoelace sl-form, just like signin.js -->\n        <sl-form\n          class=\"questionnaire-form\"\n          @sl-submit=", "\n        >\n          ", "\n\n          ", "\n\n          ", "\n\n          ", "\n\n          <div class=\"questionnaire-actions\">\n            <sl-button\n              class=\"submit-btn\"\n              type=\"primary\"\n              size=\"large\"\n              submit\n              ?loading=", "\n            >\n              Save my preferences\n            </sl-button>\n          </div>\n        </sl-form>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Tell us your values\"\n        user=\"", "\"\n      ></br-app-header>\n\n      <div class=\"page-content questionnaire-layout\">\n        <section class=\"questionnaire-intro\">\n          <h1>Help us tailor BuyRight to you</h1>\n          <p>\n            Use the sliders below to tell us how important each ethical area is.\n            We\u2019ll store these on your profile and use them as we build out the\n            matching logic in the Buy Right view.\n          </p>\n        </section>\n\n        <sl-form\n          class=\"questionnaire-form\"\n          @sl-submit=", "\n        >\n          ", "\n\n          ", "\n\n          ", "\n\n          ", "\n\n          <div class=\"questionnaire-actions\">\n            <sl-button\n              class=\"submit-btn\"\n              type=\"primary\"\n              size=\"large\"\n              submit\n              ?loading=", "\n            >\n              Save my preferences\n            </sl-button>\n          </div>\n        </sl-form>\n      </div>\n    "]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -15154,13 +15164,18 @@ class QuestionnaireView {
     const value = Number(raw);
     this.values = _objectSpread(_objectSpread({}, this.values), {}, {
       [key]: Number.isFinite(value) ? value : 3
-    }); // For any live summary; sliders visually update themselves
+    }); // Optional: if you don't want live re-render, you can remove this.
 
     this.render();
   }
 
   async handleSubmit(e) {
-    // This is an sl-submit event from <sl-form>
+    // sl-submit event from <sl-form>
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     console.log("Questionnaire handleSubmit()", this.values);
 
     if (!_Auth.default.currentUser) {
@@ -17445,7 +17460,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44509" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39049" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

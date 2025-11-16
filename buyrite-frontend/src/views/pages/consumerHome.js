@@ -7,13 +7,12 @@ import Utils from "../../Utils";
 import Toast from "../../Toast";
 import ProductAPI from "../../ProductAPI";
 
-
 class consumerHomeView {
   constructor() {
     this.products = [];
     this.searchTerm = "";
     this.selectedCategory = "all";
-    this.ethicsStrict = false;
+    this.ethicsStrict = false; // when true: only show products that match my ethics
     this.isLoading = false;
     this.error = null;
   }
@@ -58,14 +57,33 @@ class consumerHomeView {
     this.render();
   }
 
+  // turn "match my ethics" filter on
   handleEthicsYes() {
     this.ethicsStrict = true;
     this.render();
   }
 
+  // turn "match my ethics" filter off
   handleEthicsNo() {
     this.ethicsStrict = false;
     this.render();
+  }
+
+  // ----------------------------------------
+  // ethics matching: within 1 point per rating
+  // ----------------------------------------
+  withinOnePoint(userPrefs, productRatings) {
+    if (!userPrefs || !productRatings) return false;
+
+    const up = userPrefs;
+
+    const diffsOk =
+      Math.abs(Number(productRatings.animalWelfare) - Number(up.animalWelfare)) <= 1 &&
+      Math.abs(Number(productRatings.humanitarian) - Number(up.humanitarian)) <= 1 &&
+      Math.abs(Number(productRatings.sustainability) - Number(up.sustainability)) <= 1 &&
+      Math.abs(Number(productRatings.environmentalism) - Number(up.environmentalism)) <= 1;
+
+    return diffsOk;
   }
 
   // filtering logic -------------------------
@@ -90,17 +108,14 @@ class consumerHomeView {
         if ((p.category || "") !== this.selectedCategory) return false;
       }
 
-      // simple ethics filter:
-      // when on, keep products where all ratings are >= 4
+      // user-specific ethics filter:
+      // when on, only keep products where each rating is within 1 point
+      // of the current user's ethicalPreferences set in the questionnaire
       if (this.ethicsStrict) {
+        const prefs = Auth.currentUser && Auth.currentUser.ethicalPreferences;
         const er = p.ethicalRatings || {};
-        const vals = [
-          Number(er.animalWelfare),
-          Number(er.humanitarian),
-          Number(er.sustainability),
-          Number(er.environmentalism),
-        ];
-        if (vals.some((v) => !Number.isFinite(v) || v < 4)) {
+
+        if (!this.withinOnePoint(prefs, er)) {
           return false;
         }
       }
@@ -111,53 +126,46 @@ class consumerHomeView {
 
   // rendering helpers -----------------------
 
-// consumerHome.js
-// -----------------------
-// rendering helpers
-// -----------------------
+  renderEthicsBars(p) {
+    const er = p.ethicalRatings || {};
 
-renderEthicsBars(p) {
-  const er = p.ethicalRatings || {};
+    const toPct = (v) => {
+      const n = Number(v);
+      if (!Number.isFinite(n)) return 0;
+      const pct = (n / 5) * 100;
+      return Math.max(0, Math.min(100, pct)); // clamp 0–100
+    };
 
-  const toPct = (v) => {
-    const n = Number(v);
-    if (!Number.isFinite(n)) return 0;
-    const pct = (n / 5) * 100;
-    return Math.max(0, Math.min(100, pct)); // clamp 0–100
-  };
+    const safeNum = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : "–";
+    };
 
-  const safeNum = (v) => {
-    const n = Number(v);
-    return Number.isFinite(n) ? n : "–";
-  };
-
-  const ethicRow = (label, value, key) => html`
-    <div class="buyrite-ethic-row">
-      <span class="buyrite-ethic-label">
-        ${label} (${safeNum(value)}/5)
-      </span>
-      <div class="buyrite-ethic-bar">
-        <div
-          class="buyrite-ethic-bar-fill"
-          style="width: ${toPct(value)}%;"
-          aria-label="${label}"
-          role="img"
-        ></div>
+    const ethicRow = (label, value, key) => html`
+      <div class="buyrite-ethic-row">
+        <span class="buyrite-ethic-label">
+          ${label} (${safeNum(value)}/5)
+        </span>
+        <div class="buyrite-ethic-bar">
+          <div
+            class="buyrite-ethic-bar-fill"
+            style="width: ${toPct(value)}%;"
+            aria-label="${label}"
+            role="img"
+          ></div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
-  return html`
-    <div class="buyrite-tile-ethics">
-      ${ethicRow("Animal welfare", er.animalWelfare, "animalWelfare")}
-      ${ethicRow("Humanitarian", er.humanitarian, "humanitarian")}
-      ${ethicRow("Sustainability", er.sustainability, "sustainability")}
-      ${ethicRow("Environmentalism", er.environmentalism, "environmentalism")}
-    </div>
-  `;
-}
-
-
+    return html`
+      <div class="buyrite-tile-ethics">
+        ${ethicRow("Animal welfare", er.animalWelfare, "animalWelfare")}
+        ${ethicRow("Humanitarian", er.humanitarian, "humanitarian")}
+        ${ethicRow("Sustainability", er.sustainability, "sustainability")}
+        ${ethicRow("Environmentalism", er.environmentalism, "environmentalism")}
+      </div>
+    `;
+  }
 
   render() {
     const filtered = this.getFilteredProducts();
@@ -199,10 +207,10 @@ renderEthicsBars(p) {
           </div>
         </section>
 
-        <!-- Simple ethics question -->
+        <!-- Ethics toggle: match my preferences on/off -->
         <section class="buyrite-ethics-question">
           <p class="buyrite-ethics-question__text">
-            Only show products with strong ethical credentials?
+            Only show products that match my ethical preferences (within 1 point)?
           </p>
           <div class="buyrite-ethics-question__buttons">
             <sl-button
@@ -237,8 +245,8 @@ renderEthicsBars(p) {
                   <p>No products match your search and filters yet.</p>
                   ${this.ethicsStrict
                     ? html`<p class="hint">
-                        Tip: try turning off the ethics filter or broadening
-                        your search.
+                        Tip: try turning off the "match my ethics" filter or
+                        broadening your search.
                       </p>`
                     : ""}
                 </div>

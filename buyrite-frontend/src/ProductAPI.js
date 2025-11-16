@@ -71,9 +71,9 @@ class ProductAPI {
     return await response.json();
   }
 
-    async getPublicProducts() {
+  async getPublicProducts() {
     const response = await fetch(`${App.apiBase}/product`, {
-      method: "GET"
+      method: "GET",
       // public endpoint – no auth header required
     });
 
@@ -85,7 +85,6 @@ class ProductAPI {
 
     return await response.json();
   }
-
 }
 
 export default new ProductAPI();

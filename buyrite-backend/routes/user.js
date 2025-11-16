@@ -39,7 +39,7 @@ router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
   // only update fields they actually sent
   const update = {}
 
-  // 🔑 add new fields here
+  // NOTE: include the ethical fields here
   const allowed = [
     'firstName',
     'lastName',
@@ -57,39 +57,21 @@ router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
         update[field] = Number(req.body[field])
 
       } else if (field === 'newUser' || field === 'questionnaireCompleted') {
-        // accept boolean or "true"/"false" strings
         const v = req.body[field]
         update[field] = v === 'true' || v === true
 
       } else if (field === 'ethicalPreferences') {
-        // can arrive as JSON string (from multipart) or as an object (from JSON body)
-        let prefs = req.body.ethicalPreferences
-
-        if (typeof prefs === 'string') {
-          try {
-            prefs = JSON.parse(prefs)
-          } catch (e) {
-            console.warn('Could not parse ethicalPreferences JSON', e)
-            prefs = {}
-          }
-        }
-
-        // pick only the known keys, and coerce to numbers where possible
+        // coming from JSON body, so this should already be an object
+        // we still coerce to numbers just in case
+        const prefs = req.body.ethicalPreferences || {}
         const cleaned = {}
-        const keys = [
-          'animalWelfare',
-          'humanitarian',
-          'sustainability',
-          'environmentalism'
-        ]
-
-        keys.forEach(k => {
-          if (prefs[k] !== undefined) {
-            const n = Number(prefs[k])
-            if (Number.isFinite(n)) cleaned[k] = n
-          }
-        })
-
+        ;['animalWelfare', 'humanitarian', 'sustainability', 'environmentalism']
+          .forEach(k => {
+            if (prefs[k] !== undefined) {
+              const n = Number(prefs[k])
+              if (Number.isFinite(n)) cleaned[k] = n
+            }
+          })
         update.ethicalPreferences = cleaned
 
       } else {
@@ -155,7 +137,7 @@ router.post('/', uploadAvatar, (req, res) => {
     // user may upload an avatar on signup (optional)
     if (req.file) {
       newUser.avatar = `${newUser._id}-${Date.now()}.jpg`
-      // note: you can add sharp processing here if needed
+      // (if uploadAvatar stores the file, this filename should match)
     }
 
     newUser
@@ -170,32 +152,5 @@ router.post('/', uploadAvatar, (req, res) => {
       })
   })
 })
-
-// GET all users
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.status(200).json(users);
-  } catch (err) {
-    console.error('Error fetching users:', err);
-    res.status(500).json({ message: 'Problem retrieving users', error: err });
-  }
-});
-
-
-// DELETE all users (dangerous!)
-router.delete('/', async (req, res) => {
-  try {
-    const result = await User.deleteMany({});
-    res.status(200).json({
-      message: 'All users deleted',
-      deletedCount: result.deletedCount
-    });
-  } catch (err) {
-    console.error('Error deleting users:', err);
-    res.status(500).json({ message: 'Problem deleting users', error: err });
-  }
-});
-
 
 module.exports = router

@@ -87,7 +87,7 @@ class Auth {
     // save access token (jwt) to local storage
     localStorage.setItem('accessToken', data.accessToken)
 
-        // set current user
+    // set current user
     this.currentUser = data.user
 
     // re-init router
