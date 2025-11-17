@@ -6,6 +6,8 @@ const cors = require('cors');
 const port = process.env.PORT || 3000;
 const fileUpload = require('express-fileupload');
 
+app.use(cors());
+
 // connect to MongoDB --------------------------------------
 // simple connection block; logs success/fail to console
 mongoose
@@ -51,6 +53,8 @@ app.use(
 );
 
 // start server --------------------------------------------
-app.listen(port, () => {
-  console.log('App running on port ', port);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });

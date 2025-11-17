@@ -26,4 +26,8 @@ class App {
   }
 }
 
+const App = {
+  apiBase: "http://ec2-13-238-182-113.ap-southeast-2.compute.amazonaws.com:3000",
+};
+
 export default new App()
