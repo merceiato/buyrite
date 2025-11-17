@@ -15094,8 +15094,38 @@ var _Toast = _interopRequireDefault(require("./../../Toast"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _templateObject5() {
+  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Tell us your values\"\n        user=\"", "\"\n      ></br-app-header>\n\n      <div class=\"page-content questionnaire-layout\">\n        <section class=\"questionnaire-intro\">\n          <h1>Help us tailor BuyRight to you</h1>\n          <p>\n            Start with a few quick yes/no questions, then fine-tune your values\n            using the sliders. We\u2019ll store these on your profile and use them in\n            the Buy Right view to match products to what matters most to you.\n          </p>\n        </section>\n\n        ", "\n\n        <sl-form\n          class=\"questionnaire-form\"\n          @sl-submit=", "\n        >\n          ", "\n\n          ", "\n\n          ", "\n\n          ", "\n\n          <div class=\"questionnaire-actions\">\n            <sl-button\n              class=\"submit-btn\"\n              type=\"primary\"\n              size=\"large\"\n              submit\n              ?loading=", "\n            >\n              Save my preferences\n            </sl-button>\n          </div>\n        </sl-form>\n      </div>\n    "]);
+
+  _templateObject5 = function _templateObject5() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject4() {
+  const data = _taggedTemplateLiteral(["\n      <section class=\"question-block\">\n        <header class=\"question-header\">\n          <h2>", "</h2>\n          <p>", "</p>\n        </header>\n\n        <sl-range\n          min=\"1\"\n          max=\"5\"\n          step=\"1\"\n          value=", "\n          @sl-change=", "\n        ></sl-range>\n\n        <div class=\"range-labels\">\n          <span>Not important</span>\n          <span>Neutral</span>\n          <span>Very important</span>\n        </div>\n      </section>\n    "]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject3() {
+  const data = _taggedTemplateLiteral(["\n      <section class=\"questionnaire-quickfire\">\n        <h2>Quick-fire values check</h2>\n        <p class=\"questionnaire-quickfire-sub\">\n          Answer a few yes/no questions to help us set your starting values.\n        </p>\n\n        <div class=\"quickfire-status\">\n          <span>Question ", " of ", "</span>\n          <span>", "</span>\n        </div>\n\n        <p class=\"quickfire-question-text\">\n          ", "\n        </p>\n\n        <div class=\"quickfire-actions\">\n          <sl-button\n            type=\"primary\"\n            @click=", "\n          >\n            Yes\n          </sl-button>\n          <sl-button\n            type=\"default\"\n            @click=", "\n          >\n            No\n          </sl-button>\n        </div>\n      </section>\n    "]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\n      <br-app-header\n        title=\"Tell us your values\"\n        user=\"", "\"\n      ></br-app-header>\n\n      <div class=\"page-content questionnaire-layout\">\n        <section class=\"questionnaire-intro\">\n          <h1>Help us tailor BuyRight to you</h1>\n          <p>\n            Use the sliders below to tell us how important each ethical area is.\n            We\u2019ll store these on your profile and use them as we build out the\n            matching logic in the Buy Right view.\n          </p>\n        </section>\n\n        <sl-form\n          class=\"questionnaire-form\"\n          @sl-submit=", "\n        >\n          ", "\n\n          ", "\n\n          ", "\n\n          ", "\n\n          <div class=\"questionnaire-actions\">\n            <sl-button\n              class=\"submit-btn\"\n              type=\"primary\"\n              size=\"large\"\n              submit\n              ?loading=", "\n            >\n              Save my preferences\n            </sl-button>\n          </div>\n        </sl-form>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral([""]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -15105,7 +15135,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <section class=\"question-block\">\n        <header class=\"question-header\">\n          <h2>", "</h2>\n          <p>", "</p>\n        </header>\n\n        <sl-range\n          min=\"1\"\n          max=\"5\"\n          step=\"1\"\n          value=", "\n          @sl-change=", "\n        ></sl-range>\n\n        <div class=\"range-labels\">\n          <span>Not important</span>\n          <span>Neutral</span>\n          <span>Very important</span>\n        </div>\n      </section>\n    "]);
+  const data = _taggedTemplateLiteral(["\n        <section class=\"questionnaire-quickfire\">\n          <h2>Quick-fire questions complete</h2>\n          <p>\n            You\u2019ve answered all the yes/no questions. You can fine-tune your\n            values using the sliders below before saving.\n          </p>\n        </section>\n      "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -15131,7 +15161,44 @@ class QuestionnaireView {
       sustainability: 3,
       environmentalism: 3
     };
-    this.isSaving = false;
+    this.isSaving = false; // quick-fire yes/no questions
+    // each question maps to one ethical key and has a weight
+
+    this.questions = [{
+      key: "animalWelfare",
+      text: "I avoid brands that test their products on animals whenever possible.",
+      weight: 1
+    }, {
+      key: "animalWelfare",
+      text: "I would pay more for products that guarantee humane treatment of animals.",
+      weight: 1
+    }, {
+      key: "humanitarian",
+      text: "I care if workers in the supply chain are paid fairly and work in safe conditions.",
+      weight: 1
+    }, {
+      key: "humanitarian",
+      text: "I try to avoid brands that have been exposed for poor labour practices.",
+      weight: 1
+    }, {
+      key: "sustainability",
+      text: "I prefer products that are designed to last or be repaired instead of thrown away.",
+      weight: 1
+    }, {
+      key: "sustainability",
+      text: "I notice how much packaging a product uses when I buy it.",
+      weight: 1
+    }, {
+      key: "environmentalism",
+      text: "I actively look for brands that reduce their carbon footprint or emissions.",
+      weight: 1
+    }, {
+      key: "environmentalism",
+      text: "I avoid products that are known to damage ecosystems or biodiversity.",
+      weight: 1
+    }];
+    this.currentQuestionIndex = 0;
+    this.questionsCompleted = false;
   }
 
   async init() {
@@ -15149,12 +15216,67 @@ class QuestionnaireView {
     if (level === 2) {
       (0, _Router.gotoRoute)("/vendor");
       return;
-    }
+    } // if the user already has saved preferences, start from those instead of neutral
 
+
+    const prefs = _Auth.default.currentUser.ethicalPreferences || {};
+    this.values = {
+      animalWelfare: Number(prefs.animalWelfare) && Number.isFinite(Number(prefs.animalWelfare)) ? Number(prefs.animalWelfare) : 3,
+      humanitarian: Number(prefs.humanitarian) && Number.isFinite(Number(prefs.humanitarian)) ? Number(prefs.humanitarian) : 3,
+      sustainability: Number(prefs.sustainability) && Number.isFinite(Number(prefs.sustainability)) ? Number(prefs.sustainability) : 3,
+      environmentalism: Number(prefs.environmentalism) && Number.isFinite(Number(prefs.environmentalism)) ? Number(prefs.environmentalism) : 3
+    };
     this.render();
 
     _Utils.default.pageIntroAnim();
-  } // ---------- event handlers ----------
+  } // ---------- quick-fire question logic ----------
+
+
+  handleQuestionAnswer(answerYes) {
+    if (this.questionsCompleted) return;
+    const q = this.questions[this.currentQuestionIndex];
+
+    if (q) {
+      const current = Number(this.values[q.key]) || 3; // yes = increase importance, no = slightly decrease
+
+      const delta = answerYes ? q.weight : -q.weight;
+      const next = Math.max(1, Math.min(5, current + delta));
+      this.values = _objectSpread(_objectSpread({}, this.values), {}, {
+        [q.key]: next
+      });
+    }
+
+    const nextIndex = this.currentQuestionIndex + 1;
+
+    if (nextIndex >= this.questions.length) {
+      this.questionsCompleted = true;
+    } else {
+      this.currentQuestionIndex = nextIndex;
+    } // re-render so:
+    // - next question shows
+    // - sliders reflect updated values
+
+
+    this.render();
+  }
+
+  renderQuickfireBlock() {
+    if (this.questionsCompleted) {
+      return (0, _litHtml.html)(_templateObject());
+    }
+
+    const q = this.questions[this.currentQuestionIndex];
+    if (!q) return (0, _litHtml.html)(_templateObject2());
+    const index = this.currentQuestionIndex + 1;
+    const total = this.questions.length;
+    const categoryLabels = {
+      animalWelfare: "Animal welfare",
+      humanitarian: "Humanitarian impact",
+      sustainability: "Sustainability",
+      environmentalism: "Environmentalism"
+    };
+    return (0, _litHtml.html)(_templateObject3(), index, total, categoryLabels[q.key] || "", q.text, () => this.handleQuestionAnswer(true), () => this.handleQuestionAnswer(false));
+  } // ---------- slider event handlers ----------
 
 
   handleRangeChange(key, e) {
@@ -15164,8 +15286,7 @@ class QuestionnaireView {
     const value = Number(raw);
     this.values = _objectSpread(_objectSpread({}, this.values), {}, {
       [key]: Number.isFinite(value) ? value : 3
-    }); // Optional: if you don't want live re-render, you can remove this.
-
+    });
     this.render();
   }
 
@@ -15204,9 +15325,7 @@ class QuestionnaireView {
       _Auth.default.currentUser = updatedUser;
       this.isSaving = false;
 
-      _Toast.default.show("Preferences saved – we’ll use these to help match products to your values.", "success"); // stay on page for now; you can redirect if you like
-      // gotoRoute("/buyrite");
-
+      _Toast.default.show("Preferences saved – we’ll use these to help match products to your values.", "success");
 
       this.render();
     } catch (err) {
@@ -15221,7 +15340,7 @@ class QuestionnaireView {
 
 
   renderSliderGroup(label, description, key, value) {
-    return (0, _litHtml.html)(_templateObject(), label, description, value, e => this.handleRangeChange(key, e));
+    return (0, _litHtml.html)(_templateObject4(), label, description, value, e => this.handleRangeChange(key, e));
   }
 
   render() {
@@ -15231,7 +15350,7 @@ class QuestionnaireView {
       sustainability,
       environmentalism
     } = this.values;
-    const template = (0, _litHtml.html)(_templateObject2(), JSON.stringify(_Auth.default.currentUser), this.handleSubmit.bind(this), this.renderSliderGroup("Animal welfare", "Humane treatment of animals across sourcing, testing, and production.", "animalWelfare", animalWelfare), this.renderSliderGroup("Humanitarian impact", "Worker rights, fair pay, safe conditions, and overall human impact.", "humanitarian", humanitarian), this.renderSliderGroup("Sustainability", "Resource use, waste reduction, circularity, and long-term sustainability.", "sustainability", sustainability), this.renderSliderGroup("Environmentalism", "Carbon footprint, pollution, biodiversity, and ecosystem impact.", "environmentalism", environmentalism), this.isSaving);
+    const template = (0, _litHtml.html)(_templateObject5(), JSON.stringify(_Auth.default.currentUser), this.renderQuickfireBlock(), this.handleSubmit.bind(this), this.renderSliderGroup("Animal welfare", "Humane treatment of animals across sourcing, testing, and production.", "animalWelfare", animalWelfare), this.renderSliderGroup("Humanitarian impact", "Worker rights, fair pay, safe conditions, and overall human impact.", "humanitarian", humanitarian), this.renderSliderGroup("Sustainability", "Resource use, waste reduction, circularity, and long-term sustainability.", "sustainability", sustainability), this.renderSliderGroup("Environmentalism", "Carbon footprint, pollution, biodiversity, and ecosystem impact.", "environmentalism", environmentalism), this.isSaving);
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
