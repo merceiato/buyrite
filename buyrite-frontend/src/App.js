@@ -5,9 +5,9 @@ import Toast from './Toast'
 
 class App {
   constructor(){
-    this.name = "Haircuts"
+    this.name = "Buyrite"
     this.version = "1.0.0"
-    this.apiBase = 'http://localhost:3000'
+    this.apiBase = 'http://ec2-3-27-66-119.ap-southeast-2.compute.amazonaws.com:3000'
     this.rootEl = document.getElementById("root")
     this.version = "1.0.0"
   }
