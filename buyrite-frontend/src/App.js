@@ -7,7 +7,7 @@ class App {
   constructor(){
     this.name = "Buyrite"
     this.version = "1.0.0"
-    this.apiBase = 'http://ec2-3-27-66-119.ap-southeast-2.compute.amazonaws.com:3000'
+    this.apiBase = 'http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000'
     this.rootEl = document.getElementById("root")
     this.version = "1.0.0"
   }

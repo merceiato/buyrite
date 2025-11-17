@@ -1,5 +1,5 @@
 // import views
-import homeView from "./views/pages/home";
+// import homeView from "./views/pages/home";
 import fourOFourView from "./views/pages/404";
 import signinView from "./views/pages/signin";
 import signupView from "./views/pages/signup";
@@ -16,7 +16,7 @@ import questionnaireView from "./views/pages/questionnaire";
 
 // define routes
 const routes = {
-  "/": homeView,
+  "/": signinView,
   404: fourOFourView,
   "/signin": signinView,
   "/signup": signupView,
