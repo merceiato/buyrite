@@ -1,0 +1,87 @@
+Project: BuyRight – Ethical Shopping Platform
+Unit: UX3 / DIG31 – Assessment 3: Full Stack Website Application
+Student: Thomas Lambert
+Date: [UPDATE THIS]
+
+------------------------------------------------------------
+1. Live URLs
+------------------------------------------------------------
+
+Frontend (Single Page Application):
+https://[YOUR-FRONTEND-HOST].netlify.app
+
+Backend (Node.js + Express API):
+http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000
+
+MongoDB:
+Hosted on MongoDB Atlas (connection string configured on the backend server).
+
+------------------------------------------------------------
+2. User Accounts (For Marking)
+------------------------------------------------------------
+
+Access Level 1 – Consumer / Shopper
+-----------------------------------
+Login email: [shopper@email.com]
+Password:    [password]
+
+Notes:
+- Demonstrates the consumer experience:
+  - First login → Guide page
+  - Then redirected to BuyRight consumer home
+  - Profile page and profile edit (including avatar upload)
+
+Access Level 2 – Vendor
+-----------------------
+Login email: [vendor@email.com]
+Password:    [password]
+
+Notes:
+- Demonstrates the vendor experience:
+  - Vendor home/dashboard
+  - Manage and preview product listings
+  - Profile page and profile edit (including avatar upload)
+
+------------------------------------------------------------
+3. Technical Notes
+------------------------------------------------------------
+
+Frontend:
+- Single Page Application (SPA) using:
+  - HTML, SCSS (Sass), JavaScript (ES6)
+  - Shoelace web components
+  - Parcel bundler
+- All views are rendered inside <div id="root"> using a client-side router.
+
+Backend:
+- Node.js + Express REST API
+- MongoDB Atlas via Mongoose
+- JWT-based authentication for protected routes
+- Multer + Sharp used for avatar upload, resizing and storage
+- Public avatar images served from: /images/[filename]
+
+Key Routes:
+- POST  /auth/signin      – user login and token issuance
+- GET   /auth/validate    – validate JWT and return user data
+- POST  /user             – create new user (sign up)
+- GET   /user/:id         – fetch user (authenticated)
+- PUT   /user/:id         – update user fields and optional avatar image
+
+------------------------------------------------------------
+4. How To Use (Marker Instructions)
+------------------------------------------------------------
+
+1. Visit the frontend URL and sign in using the Consumer account.
+2. On first sign-in, you will be taken to the Guide/Intro page, then to the BuyRight home.
+3. Navigate to:
+   - The Questionnaire to set ethical preferences.
+   - The Profile page to view and edit user details and avatar.
+4. Sign out, then sign back in to confirm the returning user flow (Guide page is no longer shown).
+
+5. Sign in using the Vendor account to:
+   - Access the vendor home/dashboard.
+   - Manage and preview product listings.
+   - Access the Profile page and update user details.
+
+If any access issues arise, please contact me at:
+22068271@student.curtin.edu.au

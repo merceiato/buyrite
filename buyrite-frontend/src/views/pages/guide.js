@@ -56,21 +56,21 @@ class GuideView {
               <div class="guide-step">
                 <h4>Navigate to manage listings</h4>
                 <img
-                  src="/images/br-menu-manage-listings.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-menu-manage-listings.png"
                 />
               </div>
 
               <div class="guide-step">
                 <h4>Crete & Edit listings</h4>
                 <img
-                  src="/images/br-menu-manage-listings.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-menu-manage-listings.png"
                 />
               </div>
 
               <div class="guide-step">
                 <h4>Preview Listings</h4>
                 <img
-                  src="/images/br-preview-listings-page.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-preview-listings-page.png"
                 />
               </div>
             `
@@ -83,21 +83,21 @@ class GuideView {
               <div class="guide-step">
                 <h4>Navigate to consumer interface</h4>
                 <img
-                  src="/images/br-searchbar-categories.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-searchbar-categories.png"
                 />
               </div>
 
               <div class="guide-step">
                 <h4>Turn on or off ethical filtering</h4>
                 <img
-                  src="/images/br-categories-page.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-categories-page.png"
                 />
               </div>
 
               <div class="guide-step">
                 <h4>Refine ethical profile</h4>
                 <img
-                  src="/images/br-categories-page.png"
+                  src="http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000/images/br-categories-page.png"
                 />
               </div>
             `}

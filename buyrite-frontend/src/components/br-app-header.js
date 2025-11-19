@@ -233,7 +233,7 @@ customElements.define(
                     </a>
                     <sl-menu>
                       <sl-menu-item @click="${() => gotoRoute("/profile")}"
-                        >Account</sl-menu-item
+                        >View Profile</sl-menu-item
                       >
                       <sl-menu-item @click="${() => gotoRoute("/editProfile")}"
                         >Edit Profile</sl-menu-item
@@ -285,9 +285,6 @@ customElements.define(
                   </a>
                   <a href="/questionnaire" @click="${this.menuClick}">
                     Questionnaire
-                  </a>
-                  <a href="/favouriteHaircuts" @click="${this.menuClick}">
-                    Saved Items
                   </a>
                   <a href="/about" @click="${this.menuClick}">
                     About & Support
