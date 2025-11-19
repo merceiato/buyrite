@@ -1,3 +1,5 @@
+// Basic user schema + model.
+// Mostly the same idea as A1 but with avatar/bio/accessLevel for the SPA profile view.
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Utils = require('./../utils')
@@ -15,67 +17,32 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: mongoose.SchemaTypes.Email,
-    required: true
+    required: true    
   },
   password: {
     type: String,
     required: true
   },
   avatar: {
-    type: String
+    type: String    
   },
   bio: {
-    type: String
+    type: String    
   },
   accessLevel: {
-    // 1 = shopper, 2 = vendor
-    type: Number
+    type: Number    
   },
   newUser: {
     type: Boolean,
-    default: true
-  },
-
-  // ---------- Ethical preferences from questionnaire ----------
-  ethicalPreferences: {
-    animalWelfare: {
-      type: Number,
-      min: 1,
-      max: 5,
-      default: 3
-    },
-    humanitarian: {
-      type: Number,
-      min: 1,
-      max: 5,
-      default: 3
-    },
-    sustainability: {
-      type: Number,
-      min: 1,
-      max: 5,
-      default: 3
-    },
-    environmentalism: {
-      type: Number,
-      min: 1,
-      max: 5,
-      default: 3
-    }
-  },
-
-  questionnaireCompleted: {
-    type: Boolean,
-    default: false
+    default: true    
   }
-
 }, { timestamps: true })
 
 // encrypt password field on save
-userSchema.pre('save', function (next) {
-  // check if password is present and is modified
-  if (this.password && this.isModified()) {
-    this.password = Utils.hashPassword(this.password)
+userSchema.pre('save', function(next) {
+  // only hash when password exists and the doc has changed
+  if( this.password && this.isModified() ){
+      this.password = Utils.hashPassword(this.password);
   }
   next()
 })

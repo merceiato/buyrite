@@ -1,17 +1,18 @@
+// Product model for vendor items that show up in the shop.
+// Ethical ratings live on the same doc so they are easy to query/filter later.
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-// Product schema holds everything needed to list an item in the marketplace
 const productSchema = new Schema({
   vendor: {
     type: Schema.Types.ObjectId,
-    ref: 'User',  // links back to whoever created the product
+    ref: 'User',
     required: true
   },
   title: {
     type: String,
     required: true,
-    trim: true    // helps keep things cleaner
+    trim: true
   },
   category: {
     type: String,
@@ -20,20 +21,19 @@ const productSchema = new Schema({
   price: {
     type: Number,
     required: true,
-    min: 0        // no negative prices obviously
+    min: 0
   },
   description: {
     type: String
   },
   image: {
-    type: String   // stores the file name from /public/images
+    type: String // filename saved into /public/images
   },
   active: {
     type: Boolean,
-    default: true  // lets vendors disable an item without deleting it
+    default: true
   },
-
-  // basic ethical ratings (0–5). Just a simple block to expand on later if needed
+  // group of simple numeric ratings for the "ethical" side of the app (0–5)
   ethicalRatings: {
     animalWelfare: {
       type: Number,
@@ -64,6 +64,6 @@ const productSchema = new Schema({
       default: 3
     }
   }
-}, { timestamps: true })  // auto-adds createdAt + updatedAt
+}, { timestamps: true })
 
 module.exports = mongoose.model('Product', productSchema)

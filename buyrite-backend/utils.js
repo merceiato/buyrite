@@ -1,21 +1,20 @@
+// Small utility helper class that keeps auth and file upload logic in one place.
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 let crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid')
 const path = require('path')
 
-// simple utility class to keep shared helpers tidy
 class Utils {
 
-    // create salted password hash --------------------------------
-    // format stored: "salt$hash"
+    // basic salted hash for passwords using crypto (pbkdf2)
     hashPassword(password){
         const salt = crypto.randomBytes(16).toString('hex');
         const hash = crypto.pbkdf2Sync(password, salt, 2048, 32, 'sha512').toString('hex');
         return [salt, hash].join('$');
     }
 
-    // compare password to stored hash ----------------------------
+    // compare a plain password with the stored "salt$hash" string
     verifyHash(password, original){
         const originalHash = original.split('$')[1];
         const salt = original.split('$')[0];
@@ -23,25 +22,21 @@ class Utils {
         return hash === originalHash;
     }
 
-    // create JWT for the user ------------------------------------
-    // expires in 7 days — simple long-ish session style
+    // basic JWT access token wrapper (7 day expiry is fine for this project)
     generateAccessToken(user){
         return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d'})
     }
 
-    // middleware for protecting routes ---------------------------
+    // express middleware to check the "Authorization: Bearer <token>" header
     authenticateToken(req, res, next){
         const authHeader = req.headers['authorization']        
         const token = authHeader && authHeader.split(' ')[1]
-
-        // no token → reject
         if(token == null){
             return res.status(401).json({
                 message: "Unauthorised"
             })
         } 
-        
-        // verify token and pass user payload forward
+
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) {
                 return res.status(401).json({
@@ -53,25 +48,20 @@ class Utils {
         })
     }
 
-    // save an uploaded file to disk ------------------------------
-    // used for product images
+    // helper for saving uploaded files (used for product images)
     uploadFile(file, uploadPath, callback){        
-        // get extension from original filename
+        // get file extension (.jpg, .png etc)
         const fileExt = file.name.split('.').pop()
-
-        // avoid collisions by using uuid
+        // create unique file name  
         const uniqueFilename = uuidv4() + '.' + fileExt
-
-        // final location we're saving into
+        // set upload path (where to store image on server)
         const uploadPathFull = path.join(uploadPath, uniqueFilename)
-
-        // move file to destination
+        // move image to uploadPath
         file.mv(uploadPathFull, function(err) {
             if(err){
                 console.log(err)
                 return false
             }
-            // callback gives the new file name back to route
             if(typeof callback == 'function'){
                 callback(uniqueFilename)
             }
@@ -79,5 +69,4 @@ class Utils {
     }
 }
 
-// export a single instance
 module.exports = new Utils()

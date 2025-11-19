@@ -1,156 +1,156 @@
-const express = require('express')
-const router = express.Router()
-const Utils = require('./../utils')
-const User = require('./../models/User')
-const path = require('path')
-const fs = require('fs')
-const sharp = require('sharp')
-const uploadAvatar = require('../middleware/uploadAvatar')
+// Routes for reading and updating a single user, including avatar upload.
+// These are used by the profile page in the SPA.
+const express = require('express');
+const router = express.Router();
+const Utils = require('./../utils');
+const User = require('./../models/User');
+const path = require('path');
+const fs = require('fs');
+const sharp = require('sharp');
+const uploadAvatar = require('../middleware/uploadAvatar'); // multer middleware
 
-// GET /user/:id --------------------------------------------------
-// only the user can view their own data
+// GET - get single user -------------------------------------------------------
 router.get('/:id', Utils.authenticateToken, (req, res) => {
+  // user can only load their own profile
   if (req.user._id != req.params.id) {
-    return res.status(401).json({ message: 'Not authorised' })
+    return res.status(401).json({
+      message: 'Not authorised'
+    });
   }
 
   User.findById(req.params.id)
     .then(user => {
-      if (!user) return res.status(404).json({ message: 'User not found' })
-      res.json(user)
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+      res.json(user);
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ message: "Couldn't get user", error: err })
-    })
-})
+      console.log(err);
+      res.status(500).json({
+        message: "Couldn't get user",
+        error: err
+      });
+    });
+});
 
-// PUT /user/:id --------------------------------------------------
-// update profile + optional avatar upload
+// PUT - update user (includes avatar via multer + sharp) ----------------------
 router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
+  // only allow user to update their own profile
   if (req.user._id != req.params.id) {
-    return res.status(401).json({ message: 'Not authorised' })
+    return res.status(401).json({ message: 'Not authorised' });
   }
 
+  // if nothing at all was sent
   if (!req.body && !req.file) {
-    return res.status(400).send("User content can't be empty")
+    return res.status(400).send("User content can't be empty");
   }
 
-  // only update fields they actually sent
-  const update = {}
-
-  // NOTE: include the ethical fields here
-  const allowed = [
+  // Build update object only from provided fields
+  const update = {};
+  const updatableFields = [
     'firstName',
     'lastName',
     'email',
     'bio',
     'accessLevel',
-    'newUser',
-    'ethicalPreferences',
-    'questionnaireCompleted'
-  ]
+    'newUser'
+  ];
 
-  allowed.forEach(field => {
+  updatableFields.forEach(field => {
     if (req.body[field] !== undefined && req.body[field] !== '') {
       if (field === 'accessLevel') {
-        update[field] = Number(req.body[field])
-
-      } else if (field === 'newUser' || field === 'questionnaireCompleted') {
-        const v = req.body[field]
-        update[field] = v === 'true' || v === true
-
-      } else if (field === 'ethicalPreferences') {
-        // coming from JSON body, so this should already be an object
-        // we still coerce to numbers just in case
-        const prefs = req.body.ethicalPreferences || {}
-        const cleaned = {}
-        ;['animalWelfare', 'humanitarian', 'sustainability', 'environmentalism']
-          .forEach(k => {
-            if (prefs[k] !== undefined) {
-              const n = Number(prefs[k])
-              if (Number.isFinite(n)) cleaned[k] = n
-            }
-          })
-        update.ethicalPreferences = cleaned
-
+        update[field] = Number(req.body[field]);
+      } else if (field === 'newUser') {
+        // handle "true"/"false" strings or boolean
+        update[field] = req.body[field] === 'true' || req.body[field] === true;
       } else {
-        update[field] = req.body[field]
+        update[field] = req.body[field];
       }
     }
-  })
+  });
 
   try {
-    // process avatar if given
+    // If avatar file is uploaded, process it with sharp and save jpeg to disk
     if (req.file) {
-      const uploadDir = path.join(__dirname, '..', 'public', 'images')
+      const uploadDir = path.join(__dirname, '..', 'public', 'images');
       if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true })
+        fs.mkdirSync(uploadDir, { recursive: true });
       }
 
-      const filename = `${req.params.id}-${Date.now()}.jpg`
-      const fullPath = path.join(uploadDir, filename)
+      const filename = `${req.params.id}-${Date.now()}.jpg`;
+      const fullPath = path.join(uploadDir, filename);
 
       await sharp(req.file.buffer)
-        .resize(256, 256, { fit: 'cover' }) // simple square avatar
+        .resize(256, 256, { fit: 'cover' })
         .jpeg({ quality: 80 })
-        .toFile(fullPath)
+        .toFile(fullPath);
 
-      update.avatar = filename
+      update.avatar = filename;
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      update,
-      { new: true }
-    )
+    const user = await User.findByIdAndUpdate(req.params.id, update, {
+      new: true
+    });
 
-    if (!user) return res.status(404).json({ message: 'User not found' })
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
 
-    return res.json(user)
+    return res.json(user);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).json({
       message: 'Problem updating user',
       error: err
-    })
+    });
   }
-})
+});
 
-// POST /user (signup) --------------------------------------------
-// new account creation
+// POST - create new user (signup) --------------------------------------------
+// NOTE: we use uploadAvatar here too so multipart/form-data signups
+// (FormData from the front end) get parsed into req.body.
 router.post('/', uploadAvatar, (req, res) => {
+  // validate request (basic check for body)
   if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).send({ message: 'User content can not be empty' })
+    return res.status(400).send({ message: 'User content can not be empty' });
   }
 
-  // check if email already exists
+  // check account with email doesn't already exist
   User.findOne({ email: req.body.email }).then(user => {
     if (user != null) {
       return res.status(400).json({
         message: 'email already in use, use different email address'
-      })
+      });
     }
 
-    let newUser = new User(req.body)
+    // create new user
+    let newUser = new User(req.body);
 
-    // user may upload an avatar on signup (optional)
+    // If an avatar was uploaded at signup, we can hook in extra processing later
     if (req.file) {
-      newUser.avatar = `${newUser._id}-${Date.now()}.jpg`
-      // (if uploadAvatar stores the file, this filename should match)
+      newUser.avatar = `${newUser._id}-${Date.now()}.jpg`;
+      // For now, main sharp handling is in the PUT route once the profile is edited.
     }
 
     newUser
       .save()
-      .then(user => res.status(201).json(user))
+      .then(user => {
+        // success! return 201 status with user object
+        return res.status(201).json(user);
+      })
       .catch(err => {
-        console.log(err)
-        res.status(500).send({
+        console.log(err);
+        return res.status(500).send({
           message: 'Problem creating account',
           error: err
-        })
-      })
-  })
-})
+        });
+      });
+  });
+});
 
-module.exports = router
+module.exports = router;
