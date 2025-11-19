@@ -1,3 +1,5 @@
+// Routes for reading and updating a single user, including avatar upload.
+// These are used by the profile page in the SPA.
 const express = require('express');
 const router = express.Router();
 const Utils = require('./../utils');
@@ -9,6 +11,7 @@ const uploadAvatar = require('../middleware/uploadAvatar'); // multer middleware
 
 // GET - get single user -------------------------------------------------------
 router.get('/:id', Utils.authenticateToken, (req, res) => {
+  // user can only load their own profile
   if (req.user._id != req.params.id) {
     return res.status(401).json({
       message: 'Not authorised'
@@ -70,7 +73,7 @@ router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
   });
 
   try {
-    // If avatar file is uploaded, process it with sharp
+    // If avatar file is uploaded, process it with sharp and save jpeg to disk
     if (req.file) {
       const uploadDir = path.join(__dirname, '..', 'public', 'images');
       if (!fs.existsSync(uploadDir)) {
@@ -112,7 +115,7 @@ router.put('/:id', Utils.authenticateToken, uploadAvatar, async (req, res) => {
 // NOTE: we use uploadAvatar here too so multipart/form-data signups
 // (FormData from the front end) get parsed into req.body.
 router.post('/', uploadAvatar, (req, res) => {
-  // validate request
+  // validate request (basic check for body)
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).send({ message: 'User content can not be empty' });
   }
@@ -128,12 +131,10 @@ router.post('/', uploadAvatar, (req, res) => {
     // create new user
     let newUser = new User(req.body);
 
-    // If an avatar was uploaded at signup, save its filename
+    // If an avatar was uploaded at signup, we can hook in extra processing later
     if (req.file) {
-      newUser.avatar = `${newUser._id}-${Date.now()}.jpg`; // optional – depends how you want to name it
-      // Note: if you want sharp processing here as well, you can
-      // mirror the logic from the PUT route, but usually signup
-      // doesn't handle avatar yet so this is optional.
+      newUser.avatar = `${newUser._id}-${Date.now()}.jpg`;
+      // For now, main sharp handling is in the PUT route once the profile is edited.
     }
 
     newUser

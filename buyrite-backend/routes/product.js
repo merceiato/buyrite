@@ -1,3 +1,4 @@
+// Routes for creating and managing products for vendors and the public product list.
 const express = require('express')
 const router = express.Router()
 const path = require('path')
@@ -6,9 +7,7 @@ const Utils = require('./../utils')
 const Product = require('./../models/Product')
 const User = require('./../models/User')
 
-// -------------------------
-// helper: parse & validate ethical ratings from body
-// -------------------------
+// helper: turn rating values from the form into safe numbers (0–5)
 function parseRating(value) {
   const n = Number(value)
   if (!Number.isFinite(n)) return null
@@ -16,6 +15,7 @@ function parseRating(value) {
   return n
 }
 
+// build the ethicalRatings object from the incoming body fields
 function buildEthicalRatingsFromBody(body) {
   const hasAnyEthField =
     body.eth_animalWelfare !== undefined ||
@@ -28,10 +28,10 @@ function buildEthicalRatingsFromBody(body) {
   const sustainability = parseRating(body.eth_sustainability)
   const environmentalism = parseRating(body.eth_environmentalism)
 
-  // If none of the eth_ fields are present at all, return null
+  // If none of the eth_ fields are present at all, return null so we can skip updates
   if (!hasAnyEthField) return null
 
-  // If any are invalid, signal error
+  // If any are invalid, signal error back to the route handler
   if (
     animalWelfare === null ||
     humanitarian === null ||
@@ -49,9 +49,7 @@ function buildEthicalRatingsFromBody(body) {
   }
 }
 
-// -------------------------
-// helper: must be vendor (check against DB for safety)
-// -------------------------
+// middleware: make sure the logged in user is a vendor (accessLevel 2)
 function requireVendor(req, res, next) {
   if (!req.user || !req.user._id) {
     return res.status(401).json({ message: 'Not authenticated' })
@@ -64,7 +62,7 @@ function requireVendor(req, res, next) {
         return res.status(401).json({ message: 'User not found' })
       }
 
-      // Force numeric comparison
+      // Force numeric comparison so "2" also works
       if (Number(user.accessLevel) !== 2) {
         return res.status(403).json({ message: 'Vendor access required' })
       }
@@ -79,9 +77,7 @@ function requireVendor(req, res, next) {
     })
 }
 
-// -------------------------
 // GET /product/vendor - products for the logged-in vendor
-// -------------------------
 router.get('/vendor', Utils.authenticateToken, requireVendor, (req, res) => {
   Product.find({ vendor: req.user._id })
     .sort({ createdAt: -1 })
@@ -92,9 +88,7 @@ router.get('/vendor', Utils.authenticateToken, requireVendor, (req, res) => {
     })
 })
 
-// -------------------------
-// GET /product - public list for consumer interface
-// -------------------------
+// GET /product - public list for consumer interface (only active products)
 router.get('/', (req, res) => {
   Product.find({ active: true })
     .sort({ createdAt: -1 })
@@ -105,15 +99,13 @@ router.get('/', (req, res) => {
     })
 })
 
-// -------------------------
 // POST /product - create new product for vendor (with optional image)
-// -------------------------
 router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
   if (!req.body && !req.files) {
     return res.status(400).json({ message: 'Product data cannot be empty' })
   }
 
-  // Ethical ratings are MANDATORY on create
+  // Ethical ratings are mandatory on create so every product is scored
   const ethicalRatings = buildEthicalRatingsFromBody(req.body)
   if (ethicalRatings === null || ethicalRatings === 'invalid') {
     return res.status(400).json({
@@ -144,7 +136,7 @@ router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
       })
   }
 
-  // handle image upload if present
+  // handle image upload if present (uses express-fileupload)
   if (req.files && req.files.image) {
     const uploadPath = path.join(__dirname, '..', 'public', 'images')
     Utils.uploadFile(req.files.image, uploadPath, (uniqueFilename) => {
@@ -155,9 +147,7 @@ router.post('/', Utils.authenticateToken, requireVendor, (req, res) => {
   }
 })
 
-// -------------------------
 // PUT /product/:id - update product (only vendor owner)
-// -------------------------
 router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   if (!req.body && !req.files) {
     return res.status(400).json({ message: 'Product data cannot be empty' })
@@ -166,6 +156,7 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   const update = {}
   const fields = ['title', 'category', 'price', 'description', 'active']
 
+  // only copy across fields that were actually sent
   fields.forEach(field => {
     if (req.body[field] !== undefined && req.body[field] !== '') {
       update[field] = req.body[field]
@@ -174,7 +165,7 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
 
   // Ethical ratings on update:
   // - if none of the eth_* fields are present, leave existing ratings untouched
-  // - if any are present, require all 4 to be valid (0–5) and update them
+  // - if any are present, require all 4 to be valid (0–5) and then overwrite
   const ethicalRatings = buildEthicalRatingsFromBody(req.body)
   if (ethicalRatings === 'invalid') {
     return res.status(400).json({
@@ -216,9 +207,7 @@ router.put('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   }
 })
 
-// -------------------------
 // DELETE /product/:id - delete product (only vendor owner)
-// -------------------------
 router.delete('/:id', Utils.authenticateToken, requireVendor, (req, res) => {
   Product.findOneAndDelete({ _id: req.params.id, vendor: req.user._id })
     .then(product => {

@@ -1,3 +1,5 @@
+// Product model for vendor items that show up in the shop.
+// Ethical ratings live on the same doc so they are easy to query/filter later.
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
@@ -25,13 +27,13 @@ const productSchema = new Schema({
     type: String
   },
   image: {
-    type: String // filename in /public/images
+    type: String // filename saved into /public/images
   },
   active: {
     type: Boolean,
     default: true
   },
-  // New ethical ratings block (0–5 scale)
+  // group of simple numeric ratings for the "ethical" side of the app (0–5)
   ethicalRatings: {
     animalWelfare: {
       type: Number,

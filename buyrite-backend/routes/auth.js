@@ -1,3 +1,4 @@
+// Simple auth routes for login and token validation using JWT.
 require('dotenv').config()
 const express = require('express')
 const router = express.Router()
@@ -5,27 +6,26 @@ const User = require('./../models/User')
 const Utils = require('./../utils')
 const jwt = require('jsonwebtoken')
 
-// GET /signIn ---------------------------------------
+// POST /signin ---------------------------------------
 router.post('/signin', (req, res) => {
-  // 1. check if email and passwore are empty
+  // quick check that both email and password were sent from the client
   if( !req.body.email || !req.body.password ){     
     return res.status(400).json({message: "Please provide email and password"})
   }
-  // 2. continue to check credentials
   // find the user in the database
   User.findOne({email: req.body.email})
   .then(async user => {
      // account doesn't exist
      if(user == null) return res.status(400).json({message: 'No account found'})     
-     // user exists, now check password
+     // user exists, now check password against stored hash
      if (Utils.verifyHash(req.body.password, user.password)) {
   // credentials match - create JWT token
   let payload = {
     _id: user._id,
-    accessLevel: user.accessLevel   // 👈 add this
+    accessLevel: user.accessLevel   // keep accessLevel so the front end knows vendor vs normal user
   }
   let accessToken = Utils.generateAccessToken(payload)
-  // strip the password from our user object        
+  // strip the password from our user object before sending it back        
   user.password = undefined
   return res.json({
     accessToken: accessToken,
@@ -50,8 +50,9 @@ else{
 
 
 // GET /validate --------------------------------------
+// used on initial app load to check if the stored token is still valid
 router.get('/validate', (req, res) => {   
-  // get token
+  // get token from "Authorization: Bearer <token>"
   let token = req.headers['authorization'].split(' ')[1];
   // validate token using jwt
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, authData) => {
@@ -62,7 +63,7 @@ router.get('/validate', (req, res) => {
       })
     }
 
-    // token valid - send back to payload/authData as json
+    // token valid - send back the latest user data
     User.findById(authData._id)
       .then(user => {
         // remove password field (never send this back!)
@@ -82,5 +83,5 @@ router.get('/validate', (req, res) => {
 })
 
 
-  
+
 module.exports = router

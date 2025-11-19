@@ -1,4 +1,5 @@
-// dependencies------------------------------
+// Entry point for the backend API.
+// Sets up Express, connects to MongoDB and mounts auth/user/product routes.
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
