@@ -54,23 +54,23 @@ class GuideView {
               </p>
 
               <div class="guide-step">
-                <h4>Create your first listing</h4>
+                <h4>Navigate to manage listings</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Add+Product"
+                  src="/images/br-menu-manage-listings.png"
                 />
               </div>
 
               <div class="guide-step">
-                <h4>Set ethical ratings</h4>
+                <h4>Crete & Edit listings</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Ethical+Values"
+                  src="/images/br-menu-manage-listings.png"
                 />
               </div>
 
               <div class="guide-step">
-                <h4>Manage your catalogue</h4>
+                <h4>Preview Listings</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Manage+Listings"
+                  src="/images/br-preview-listings-page.png"
                 />
               </div>
             `
@@ -81,23 +81,23 @@ class GuideView {
               </p>
 
               <div class="guide-step">
-                <h4>Search or browse categories</h4>
+                <h4>Navigate to consumer interface</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Search+%26+Filter"
+                  src="/images/br-searchbar-categories.png"
                 />
               </div>
 
               <div class="guide-step">
-                <h4>Check ethical scores</h4>
+                <h4>Turn on or off ethical filtering</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Ethical+Bars"
+                  src="/images/br-categories-page.png"
                 />
               </div>
 
               <div class="guide-step">
-                <h4>Save favourites</h4>
+                <h4>Refine ethical profile</h4>
                 <img
-                  src="https://plchldr.co/i/500x300?&bg=dddddd&fc=666666&text=Favourites"
+                  src="/images/br-categories-page.png"
                 />
               </div>
             `}
