@@ -1,3 +1,4 @@
+// Sign up screen – create a new shopper or vendor account.
 import App from './../../App'
 import Auth from './../../Auth'
 import {html, render } from 'lit-html'

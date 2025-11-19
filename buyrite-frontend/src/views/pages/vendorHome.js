@@ -1,3 +1,4 @@
+// Vendor dashboard home – quick links into vendor tools.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";

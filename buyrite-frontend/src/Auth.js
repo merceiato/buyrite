@@ -1,3 +1,4 @@
+// Handles sign up, sign in, token validation and session state.
 import App from './App'
 import Router, { gotoRoute } from './Router'
 import splash from './views/partials/splash'

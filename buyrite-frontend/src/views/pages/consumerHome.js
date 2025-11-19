@@ -1,4 +1,4 @@
-// src/views/pages/consumerHome.js
+// Consumer home view – main product browsing page for shoppers.
 import App from "../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "../../Router";

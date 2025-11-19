@@ -1,3 +1,4 @@
+// Entry point – loads global styles/components and runs App.init().
 import App from "./App.js";
 
 // components (custom web components)

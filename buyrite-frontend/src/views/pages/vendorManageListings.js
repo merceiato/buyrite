@@ -1,3 +1,4 @@
+// Vendor Manage Listings view – create, edit and delete products.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";

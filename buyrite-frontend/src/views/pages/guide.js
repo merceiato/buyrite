@@ -1,4 +1,4 @@
-// src/views/pages/guide.js
+// Simple guide / onboarding screen for new users (vendor vs shopper copy).
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";

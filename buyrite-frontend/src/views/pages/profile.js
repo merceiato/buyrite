@@ -1,3 +1,4 @@
+// Profile view – shows basic account info and bio.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute, anchorRoute } from "./../../Router";

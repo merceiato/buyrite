@@ -1,3 +1,4 @@
+// API wrapper for product CRUD + public product retrieval.
 import App from "./App";
 import Auth from "./Auth";
 import Toast from "./Toast";

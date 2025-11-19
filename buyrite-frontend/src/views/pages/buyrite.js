@@ -1,4 +1,4 @@
-// src/views/pages/buyrite.js
+// BuyRight view – shopper-facing product grid with filters and ethics scores.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";

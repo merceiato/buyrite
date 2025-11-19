@@ -1,3 +1,4 @@
+// Sign in screen – lets existing users log in.
 import App from './../../App'
 import {html, render } from 'lit-html'
 import {anchorRoute, gotoRoute} from './../../Router'

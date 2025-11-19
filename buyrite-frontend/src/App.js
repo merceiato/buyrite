@@ -1,3 +1,4 @@
+// Main app bootstrap – sets API base, checks auth and starts router.
 import Router from './Router'
 import Auth from './Auth'
 import Toast from './Toast'

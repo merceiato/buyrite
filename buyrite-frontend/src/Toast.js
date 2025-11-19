@@ -1,3 +1,4 @@
+// Lightweight toast notification system using GSAP animations.
 import App from './App'
 import {html, render } from 'lit-html'
 import { gsap } from 'gsap'

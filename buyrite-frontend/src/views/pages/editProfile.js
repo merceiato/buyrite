@@ -1,3 +1,4 @@
+// Edit Profile view – update bio, avatar and user type.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute, anchorRoute } from "./../../Router";

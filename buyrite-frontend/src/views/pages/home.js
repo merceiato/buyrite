@@ -1,3 +1,4 @@
+// Basic home view – mainly for testing navigation and layout.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute, anchorRoute } from "./../../Router";

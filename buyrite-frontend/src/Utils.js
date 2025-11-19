@@ -1,3 +1,4 @@
+// Utility helpers like mobile detection and page intro animations.
 import gsap from 'gsap'
 
 class Utils {

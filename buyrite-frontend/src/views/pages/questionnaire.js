@@ -1,4 +1,4 @@
-// src/views/pages/questionnaire.js
+// Questionnaire view – lets shoppers set their ethical preferences.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";

@@ -1,9 +1,10 @@
+// App header web component.
+// Handles the top navigation bar, logo and the mobile side drawer.
 import { LitElement, html, css } from "@polymer/lit-element";
 import { anchorRoute, gotoRoute } from "../Router";
 import Auth from "../Auth";
 import App from "../App";
 
-// simple app header component using Lit
 customElements.define(
   "br-app-header",
   class AppHeader extends LitElement {
@@ -11,7 +12,7 @@ customElements.define(
       super();
     }
 
-    // public props passed in from parent
+    // simple reactive props so parent views can pass in a title and user object
     static get properties() {
       return {
         title: { type: String },
@@ -19,13 +20,12 @@ customElements.define(
       };
     }
 
-    // runs after first render – safe to access shadow DOM
     firstUpdated() {
       super.firstUpdated();
       this.navActiveLinks();
     }
 
-    // highlight current route in header + side nav
+    // highlight the current route in both the top nav and the drawer
     navActiveLinks() {
       const currentPath = window.location.pathname;
       const navLinks = this.shadowRoot.querySelectorAll(
@@ -39,13 +39,13 @@ customElements.define(
       });
     }
 
-    // open side drawer menu (mobile)
+    // open the side drawer on small screens
     hamburgerClick() {
       const appMenu = this.shadowRoot.querySelector(".app-side-menu");
       if (appMenu) appMenu.show();
     }
 
-    // handle clicks inside the side menu and route after closing
+    // handle clicks inside the drawer and route using our SPA router
     menuClick(e) {
       e.preventDefault();
       const anchor = e.target.closest("a");
@@ -54,7 +54,7 @@ customElements.define(
       const pathname = anchor.pathname;
       const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
 
-      // if no drawer (just in case), navigate directly
+      // if no drawer is found, just route straight away
       if (!appSideMenu) {
         gotoRoute(pathname);
         return;
@@ -68,14 +68,12 @@ customElements.define(
         appSideMenu.removeEventListener("sl-after-hide", onAfterHide);
       };
 
-      // wait for drawer to fully hide before routing
       appSideMenu.addEventListener("sl-after-hide", onAfterHide, { once: true });
 
       appSideMenu.hide();
     }
 
     render() {
-      // pick up auth state directly from Auth helper
       const currentUser = Auth.currentUser || null;
       const isLoggedIn = !!currentUser;
       const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
@@ -104,13 +102,13 @@ customElements.define(
             outline: none;
           }
 
-          /* centered logo over the header */
+          /* centred brand logo that sits over the nav */
           .app-header-logo {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            pointer-events: none; /* let links behind still be clickable */
+            pointer-events: none; /* allow clicks to nav behind it */
           }
 
           .app-header-logo img {
@@ -189,7 +187,6 @@ customElements.define(
         </style>
 
         <header class="app-header" tabindex="-1">
-          <!-- hamburger for small screens -->
           <sl-icon-button
             class="hamburger-btn"
             name="list"
@@ -197,7 +194,7 @@ customElements.define(
             style="font-size: 1.5em;"
           ></sl-icon-button>
 
-          <!-- centered logo in the header -->
+          <!-- centred logo over the header bar -->
           <div class="app-header-logo">
             <img src="/images/logo.svg" alt="BuyRight" />
           </div>
@@ -207,7 +204,6 @@ customElements.define(
             <slot></slot>
           </div>
 
-          <!-- desktop nav -->
           <nav class="app-top-nav">
             <a href="/" @click="${anchorRoute}">Home</a>
 
@@ -233,7 +229,7 @@ customElements.define(
                     </a>
                     <sl-menu>
                       <sl-menu-item @click="${() => gotoRoute("/profile")}"
-                        >View Profile</sl-menu-item
+                        >Account</sl-menu-item
                       >
                       <sl-menu-item @click="${() => gotoRoute("/editProfile")}"
                         >Edit Profile</sl-menu-item
@@ -254,7 +250,6 @@ customElements.define(
           </nav>
         </header>
 
-        <!-- side drawer nav for mobile -->
         <sl-drawer class="app-side-menu" placement="left">
           <img class="app-side-menu-logo" src="/images/logo.svg" />
           <nav class="app-side-menu-items">
@@ -283,17 +278,18 @@ customElements.define(
                   <a href="/consumer" @click="${this.menuClick}">
                     Consumer Interface
                   </a>
-                  <a href="/questionnaire" @click="${this.menuClick}">
+                  <a href="/guide" @click="${this.menuClick}">
                     Questionnaire
+                  </a>
+                  <a href="/favouriteHaircuts" @click="${this.menuClick}">
+                    Saved Items
                   </a>
                   <a href="/about" @click="${this.menuClick}">
                     About & Support
                   </a>
                 `}
             ${isLoggedIn
-              ? html`
-                  <a href="#" @click="${() => Auth.signOut()}">Sign Out</a>
-                `
+              ? html` <a href="#" @click="${() => Auth.signOut()}">Sign Out</a> `
               : ""}
           </nav>
         </sl-drawer>

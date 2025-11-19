@@ -1,3 +1,4 @@
+// Vendor Preview Items view – see how listings will look to shoppers.
 import App from "./../../App";
 import { html, render } from "lit-html";
 import { gotoRoute } from "./../../Router";
