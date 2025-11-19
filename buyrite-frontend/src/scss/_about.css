@@ -1,0 +1,40 @@
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 2fr);
+  gap: 2rem;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-panel,
+.support-panel {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.about-panel h3,
+.support-panel h3 {
+  margin-top: 0;
+}
+
+.about-list {
+  padding-left: 1.2rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.about-list li {
+  margin-bottom: 0.35rem;
+}
+
+.support-contact a {
+  font-weight: 600;
+}
+
+sl-details {
+  margin-bottom: 0.75rem;
+}
