@@ -1,20 +1,20 @@
 Project: BuyRight – Ethical Shopping Platform
 Unit: UX3 / DIG31 – Assessment 3: Full Stack Website Application
 Student: Thomas Lambert
-Date: [UPDATE THIS]
+Date: 26/11/25
 
 ------------------------------------------------------------
 1. Live URLs
 ------------------------------------------------------------
 
 Frontend (Single Page Application):
-https://[YOUR-FRONTEND-HOST].netlify.app
+http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:4000
 
 Backend (Node.js + Express API):
 http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000
 
 MongoDB:
-Hosted on MongoDB Atlas (connection string configured on the backend server).
+Hosted on MongoDB Atlas (connection string configured via MONGO_URI in the backend .env file).
 
 ------------------------------------------------------------
 2. User Accounts (For Marking)
@@ -22,25 +22,27 @@ Hosted on MongoDB Atlas (connection string configured on the backend server).
 
 Access Level 1 – Consumer / Shopper
 -----------------------------------
-Login email: [shopper@email.com]
-Password:    [password]
+Login email: shopper@email.com
+Password:    password
 
 Notes:
-- Demonstrates the consumer experience:
-  - First login → Guide page
-  - Then redirected to BuyRight consumer home
-  - Profile page and profile edit (including avatar upload)
+- Shows the consumer experience:
+  - First login → Guide page (onboarding)
+  - Then redirected to the BuyRight / consumer home
+  - Questionnaire page for setting ethical preferences
+  - Profile + Edit Profile pages (includes avatar upload)
 
 Access Level 2 – Vendor
 -----------------------
-Login email: [vendor@email.com]
-Password:    [password]
+Login email: vendor@email.com
+Password:    password
 
 Notes:
-- Demonstrates the vendor experience:
+- Shows the vendor experience:
   - Vendor home/dashboard
-  - Manage and preview product listings
-  - Profile page and profile edit (including avatar upload)
+  - Manage Listings (create, edit, delete)
+  - Preview Items (how products look to shoppers)
+  - Profile + Edit Profile pages (includes avatar upload)
 
 ------------------------------------------------------------
 3. Technical Notes
@@ -48,40 +50,79 @@ Notes:
 
 Frontend:
 - Single Page Application (SPA) using:
-  - HTML, SCSS (Sass), JavaScript (ES6)
-  - Shoelace web components
+  - HTML, SCSS and JavaScript (ES6)
+  - lit-html for templating
+  - Shoelace web components (via CDN)
   - Parcel bundler
-- All views are rendered inside <div id="root"> using a client-side router.
+- All views are rendered into <div id="root"> via a small custom router.
 
 Backend:
 - Node.js + Express REST API
 - MongoDB Atlas via Mongoose
 - JWT-based authentication for protected routes
 - Multer + Sharp used for avatar upload, resizing and storage
-- Public avatar images served from: /images/[filename]
+- express-fileupload used for product image uploads
+- Public images served from:
+  - /images/[filename] on the backend (mapped to /public/images)
 
 Key Routes:
-- POST  /auth/signin      – user login and token issuance
-- GET   /auth/validate    – validate JWT and return user data
-- POST  /user             – create new user (sign up)
-- GET   /user/:id         – fetch user (authenticated)
-- PUT   /user/:id         – update user fields and optional avatar image
+- POST  /auth/signin         – user login and token
+- GET   /auth/validate       – validate JWT and return user data
+- POST  /user                – create new user (sign up)
+- GET   /user/:id            – fetch user (authenticated)
+- PUT   /user/:id            – update user fields and optional avatar image
+- GET   /product             – public list of active products (consumer)
+- GET   /product/vendor      – vendor’s own listings (auth + vendor only)
+- POST  /product             – create product (vendor)
+- PUT   /product/:id         – update product (vendor)
+- DELETE /product/:id        – delete product (vendor)
 
 ------------------------------------------------------------
 4. How To Use (Marker Instructions)
 ------------------------------------------------------------
 
-1. Visit the frontend URL and sign in using the Consumer account.
-2. On first sign-in, you will be taken to the Guide/Intro page, then to the BuyRight home.
+1. Visit the frontend URL and sign in using the **Consumer** account.
+2. On first sign-in:
+   - You should see the Guide/Intro page
+   - Then you will be redirected to the consumer / BuyRight home.
 3. Navigate to:
    - The Questionnaire to set ethical preferences.
-   - The Profile page to view and edit user details and avatar.
-4. Sign out, then sign back in to confirm the returning user flow (Guide page is no longer shown).
+   - The Profile page to view user details.
+   - The Edit Profile page to update user details and upload an avatar.
+4. Sign out, then sign back in with the same consumer account to confirm the returning user flow (Guide page is not shown again).
 
-5. Sign in using the Vendor account to:
-   - Access the vendor home/dashboard.
-   - Manage and preview product listings.
-   - Access the Profile page and update user details.
+5. Sign in using the **Vendor** account to:
+   - Access the Vendor dashboard (/vendor).
+   - Manage Listings (create/edit/delete products).
+   - Preview Items to see how products appear to shoppers.
+   - Access the Profile and Edit Profile pages.
 
 If any access issues arise, please contact me at:
 22068271@student.curtin.edu.au
+
+------------------------------------------------------------
+5. Quick Setup / Deployment Summary (for future reference)
+------------------------------------------------------------
+
+Backend (EC2 / Node):
+- Clone or copy the backend folder to the server.
+- Run:
+  - npm install
+  - npm install mongodb   (in case it’s not already installed)
+- Create a .env file with:
+  - PORT=3000
+  - MONGO_URI=<MongoDB Atlas connection string>
+  - ACCESS_TOKEN_SECRET=<random secret string>
+- Start the server with:
+  - npm start
+  or:
+  - npx pm2 start server.js --name buyright-api
+
+Frontend (Netlify or similar):
+- From the frontend folder:
+  - npm install
+  - npm run build
+- Deploy the dist/ folder to a static host (e.g. Netlify).
+- Make sure the API base URL in App.js matches the backend URL.
+
+These notes are just to remind me how to get everything running again later if I need to redeploy or move servers.
