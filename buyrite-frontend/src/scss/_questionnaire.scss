@@ -17,6 +17,7 @@
 
 .questionnaire-intro {
   text-align: left;
+  margin-top: 0.75rem;   /* NEW — gives more breathing room under the header */
 
   h1 {
     font-size: 1.8rem;
@@ -38,26 +39,31 @@
   gap: 1.75rem;
 }
 
-/* Each question block */
+/* =========================================
+   SLIDER QUESTION BLOCKS
+   ========================================= */
 
 .question-block {
-  padding: 1.25rem 1.5rem;
-  border-radius: 12px;
-  background: #f7f8fa;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.4s ease;
 
   .question-header {
     margin-bottom: 0.75rem;
 
     h2 {
-      margin: 0 0 0.25rem 0;
+      margin: 0 0 0.5rem 0;
       font-size: 1.1rem;
+      font-weight: 600;
     }
 
     p {
       margin: 0;
-      font-size: 0.85rem;
-      color: #666;
+      font-size: 0.9rem;
+      color: #555;
     }
   }
 
@@ -68,38 +74,36 @@
   .range-labels {
     display: flex;
     justify-content: space-between;
-    margin-top: 0.4rem;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
     color: #777;
   }
 }
 
-/* Primary action */
+/* =========================================
+   SAVE BUTTON AREA
+   ========================================= */
 
 .questionnaire-actions {
-  margin-top: 0.5rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-top: 2rem;
+
+  /* force the label to be vertically centered */
+  sl-button::part(base) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+  }
 }
 
-/* Responsive tweaks */
-
-@media (max-width: 768px) {
-  .questionnaire-layout {
-    padding: 0 0.5rem;
-  }
-
-  .question-block {
-    padding: 1rem 1.1rem;
-  }
-
-  .questionnaire-intro h1 {
-    font-size: 1.4rem;
-  }
-
-  /* ===========================
+/* =========================================
    QUICK-FIRE QUESTIONNAIRE
-   =========================== */
+   ========================================= */
 
 .questionnaire-quickfire {
   background: #ffffff;
@@ -143,8 +147,19 @@
   .quickfire-actions {
     display: flex;
     gap: 1rem;
+    margin-top: 0.5rem;
+
+    /* let Yes / No fill the row evenly */
+    sl-button {
+      flex: 1;
+    }
 
     sl-button::part(base) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      width: 100%;
       padding: 0.9rem 1.6rem;
       font-size: 1rem;
       border-radius: 12px;
@@ -152,65 +167,56 @@
   }
 }
 
-/* ===========================
-   SLIDER BLOCK
-   =========================== */
+/* =========================================
+   RESPONSIVE TWEAKS
+   ========================================= */
 
-.question-block {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 16px;
-  margin-bottom: 2rem;
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
-  animation: fadeInUp 0.4s ease;
-
-  h2 {
-    margin: 0 0 0.5rem 0;
-    font-weight: 600;
+@media (max-width: 768px) {
+  .questionnaire-layout {
+    padding: 0 0.5rem;
   }
 
-  p {
-    margin: 0 0 1.5rem 0;
-    color: #555;
+  /* MORE TOP PADDING FOR INTRO IN MOBILE */
+  .questionnaire-intro {
+    margin-top: 1.25rem;
   }
 
-  .range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-    color: #777;
+  .questionnaire-intro h1 {
+    font-size: 1.4rem;
+  }
+
+  .questionnaire-quickfire,
+  .question-block {
+    padding: 1.25rem 1.1rem;
+  }
+
+  .quickfire-question-text {
+    font-size: 1.05rem;
   }
 }
 
-/* ===========================
-   SAVE BUTTON AREA
-   =========================== */
-
-.questionnaire-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-
-  sl-button::part(base) {
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    font-size: 1.1rem;
-  }
-}
-
-/* ===========================
+/* =========================================
    SIMPLE ANIMATIONS
-   =========================== */
+   ========================================= */
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -9,7 +9,7 @@
 }
 
 body {
-  padding: 0;  
+  padding: 0;
   margin: 0;
   color: var(--base-txt-color);
   font-family: var(--base-font-family);
@@ -20,10 +20,15 @@ body {
 
 
 // headings ------------
-h1,h2,h3,h5,h6 {
-  margin: 0 0 .5em;
+h1,
+h2,
+h3,
+h5,
+h6 {
+  margin: 0 0 0.5em;
   color: var(--heading-color);
 }
+
 
 // links ---------------
 a {
@@ -34,16 +39,17 @@ a {
 // app splash screen -------
 .app-splash {
   position: fixed;
-  background: #FAFAF8;
-  color: #D9C9A3;
+  background: #fafaf8;
+  color: #d9c9a3;
   display: flex;
   left: 0;
-  top:0;
+  top: 0;
   right: 0;
   bottom: 0;
   align-items: center;
   justify-content: center;
   text-align: center;
+
   .app-logo {
     width: 180px;
     display: block;
@@ -65,14 +71,16 @@ a {
   color: var(--brand-color);
 }
 
+
 // generic-entry ------------
 .generic-entry {
-  box-shadow: 0px 3px 5px rgba(0,0,0,0.07);
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.07);
   border-radius: 5px;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   padding: 1em;
-  background: #FAFAF8;
+  background: #fafaf8;
 }
+
 
 // root ---------------
 #root {
@@ -80,9 +88,10 @@ a {
   top: 0;
   bottom: 0;
   left: 0;
-  right: 0;  
+  right: 0;
   overflow: hidden;
 }
+
 
 // page --------------------
 .page-content {
@@ -92,7 +101,13 @@ a {
   right: 0;
   bottom: 0;
   overflow-y: scroll;
-  padding: 1em;
+
+  /* More breathing room under nav bar */
+  padding: 1.5em 1em 1em;
+
+  /* Soft, slower fade/slide-in when a page renders */
+  animation: pageFadeInDown 1.5s ease-out;
+
   &.no-pad {
     padding: 0;
   }
@@ -104,9 +119,10 @@ a {
   justify-content: center;
 }
 
+
 // sign in + sign up pages ----------
 .signinup-box,
-.signup-box {  
+.signup-box {
   max-width: 320px;
   text-align: center;
 }
@@ -116,22 +132,44 @@ a {
   margin-bottom: 1em;
 }
 
+
 // guide page ---------------
 .guide-step {
   padding: 1em;
   margin: 1.5em auto;
   max-width: 600px;
+
   img {
     width: 100%;
     height: auto;
   }
 }
 
-// RESPONSIVE - MOBILE -------------------
-@media all and (max-width: 768px){ 
+/* ==========================
+   PAGE FADE-IN ANIMATION
+   ========================== */
 
+@keyframes pageFadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+// RESPONSIVE - MOBILE -------------------
+@media all and (max-width: 768px) {
   .signinup-box {
     width: 90%;
     max-width: none;
+  }
+
+  /* Mobile bottom-padding fix using safe-area insets */
+  .page-content {
+    padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 3rem) !important;
   }
 }

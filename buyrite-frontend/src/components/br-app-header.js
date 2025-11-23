@@ -15,7 +15,7 @@ customElements.define(
     static get properties() {
       return {
         title: { type: String },
-        user: { type: Object },
+        user: { type: Object }
       };
     }
 
@@ -32,14 +32,14 @@ customElements.define(
         ".app-top-nav a, .app-side-menu-items a"
       );
       navLinks.forEach((navLink) => {
-        if (navLink.href.slice(-1) == "#") return;
+        if (navLink.href.slice(-1) === "#") return;
         if (navLink.pathname === currentPath) {
           navLink.classList.add("active");
         }
       });
     }
 
-    // open side drawer menu (mobile)
+    // open side drawer menu (mobile + desktop)
     hamburgerClick() {
       const appMenu = this.shadowRoot.querySelector(".app-side-menu");
       if (appMenu) appMenu.show();
@@ -74,11 +74,76 @@ customElements.define(
       appSideMenu.hide();
     }
 
+    // sign out from within the drawer
+    drawerSignOut(e) {
+      if (e) e.preventDefault();
+      const appSideMenu = this.shadowRoot.querySelector(".app-side-menu");
+      if (appSideMenu) {
+        appSideMenu.addEventListener(
+          "sl-after-hide",
+          () => {
+            Auth.signOut();
+          },
+          { once: true }
+        );
+        appSideMenu.hide();
+      } else {
+        Auth.signOut();
+      }
+    }
+
+    // shared logic: where "home" should go
+    getHomeRoute() {
+      const currentUser = Auth.currentUser || null;
+      const isLoggedIn = !!currentUser;
+      const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
+
+      if (isVendor) return "/vendor";
+      if (isLoggedIn) return "/consumer";
+      return "/";
+    }
+
+    // util: retrigger logo bounce animation every time
+    bounceLogo(imgEl) {
+      if (!imgEl) return;
+
+      imgEl.classList.remove("logo-bounce");
+      // force reflow so animation can restart
+      void imgEl.offsetWidth;
+      imgEl.classList.add("logo-bounce");
+    }
+
+    handleHeaderLogoClick(e) {
+      const img = e.currentTarget.querySelector("img");
+      this.bounceLogo(img);
+      gotoRoute(this.getHomeRoute());
+    }
+
+    handleHeaderLogoHover(e) {
+      const img = e.currentTarget.querySelector("img");
+      this.bounceLogo(img);
+    }
+
+    handleSideLogoClick(e) {
+      this.bounceLogo(e.currentTarget);
+      gotoRoute(this.getHomeRoute());
+    }
+
+    handleSideLogoHover(e) {
+      this.bounceLogo(e.currentTarget);
+    }
+
     render() {
       // pick up auth state directly from Auth helper
       const currentUser = Auth.currentUser || null;
       const isLoggedIn = !!currentUser;
       const isVendor = isLoggedIn && Number(currentUser.accessLevel) === 2;
+
+      // decide if we're in "mobile" layout context
+      const isMobile =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(max-width: 768px)").matches;
 
       return html`
         <style>
@@ -110,13 +175,14 @@ customElements.define(
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            pointer-events: none; /* let links behind still be clickable */
+            cursor: pointer;
           }
 
           .app-header-logo img {
             height: 15vh;
             width: auto;
             display: block;
+            transition: transform 0.2s ease-out;
           }
 
           .app-header-main {
@@ -168,6 +234,8 @@ customElements.define(
             position: absolute;
             top: 2em;
             left: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
           }
 
           .page-title {
@@ -181,15 +249,47 @@ customElements.define(
             font-weight: bold;
           }
 
+          /* hide top nav (including avatar dropdown) on mobile,
+             tweak logo size, and hide the header page title to reduce clutter */
           @media all and (max-width: 768px) {
             .app-top-nav {
               display: none;
+            }
+
+            /* 50% larger mobile logo */
+            .app-header-logo img {
+              height: 84px;
+            }
+
+            .page-title {
+              display: none;
+            }
+          }
+
+          /* ==========================
+             LOGO BOUNCE ANIMATION
+             ========================== */
+
+          .logo-bounce {
+            animation: logoBounce 0.6s ease;
+          }
+
+          @keyframes logoBounce {
+            0%,
+            100% {
+              transform: translateY(0);
+            }
+            30% {
+              transform: translateY(-6px);
+            }
+            60% {
+              transform: translateY(3px);
             }
           }
         </style>
 
         <header class="app-header" tabindex="-1">
-          <!-- hamburger for small screens -->
+          <!-- hamburger for small + desktop -->
           <sl-icon-button
             class="hamburger-btn"
             name="list"
@@ -197,8 +297,12 @@ customElements.define(
             style="font-size: 1.5em;"
           ></sl-icon-button>
 
-          <!-- centered logo in the header -->
-          <div class="app-header-logo">
+          <!-- centered logo in the header (clickable "home") -->
+          <div
+            class="app-header-logo"
+            @click="${this.handleHeaderLogoClick}"
+            @mouseenter="${this.handleHeaderLogoHover}"
+          >
             <img src="/images/logo.svg" alt="BuyRight" />
           </div>
 
@@ -207,10 +311,8 @@ customElements.define(
             <slot></slot>
           </div>
 
-          <!-- desktop nav -->
+          <!-- desktop nav (hidden on mobile) -->
           <nav class="app-top-nav">
-            <a href="/" @click="${anchorRoute}">Home</a>
-
             ${!isLoggedIn
               ? html`
                   <a href="/signin" @click="${anchorRoute}">Sign In</a>
@@ -240,11 +342,15 @@ customElements.define(
                       >
                       ${isVendor
                         ? html`
-                            <sl-menu-item @click="${() => gotoRoute("/vendor")}"
+                            <sl-menu-item
+                              @click="${() => gotoRoute("/vendor")}"
                               >Vendor Dashboard</sl-menu-item
                             >
                           `
                         : ""}
+                      <sl-menu-item @click="${() => gotoRoute("/about")}"
+                        >About &amp; Support</sl-menu-item
+                      >
                       <sl-menu-item @click="${() => Auth.signOut()}"
                         >Sign Out</sl-menu-item
                       >
@@ -254,9 +360,16 @@ customElements.define(
           </nav>
         </header>
 
-        <!-- side drawer nav for mobile -->
+        <!-- side drawer nav -->
         <sl-drawer class="app-side-menu" placement="left">
-          <img class="app-side-menu-logo" src="/images/logo.svg" />
+          <!-- sidebar logo now also links home, but only navigates on click -->
+          <img
+            class="app-side-menu-logo"
+            src="/images/logo.svg"
+            alt="BuyRight"
+            @click="${this.handleSideLogoClick}"
+            @mouseenter="${this.handleSideLogoHover}"
+          />
           <nav class="app-side-menu-items">
             ${!isLoggedIn
               ? html`
@@ -265,6 +378,7 @@ customElements.define(
                 `
               : isVendor
               ? html`
+                  <!-- vendor navigation first -->
                   <a href="/vendor" @click="${this.menuClick}">
                     Vendor Dashboard
                   </a>
@@ -274,27 +388,52 @@ customElements.define(
                   <a href="/vendor/previewProducts" @click="${this.menuClick}">
                     Preview Items
                   </a>
-                  <a href="/about" @click="${this.menuClick}">
-                    About & Support
-                  </a>
+
+                  <!-- then profile/options, but ONLY on mobile -->
+                  ${isMobile
+                    ? html`
+                        <a href="/profile" @click="${this.menuClick}">
+                          View Profile
+                        </a>
+                        <a href="/editProfile" @click="${this.menuClick}">
+                          Edit Profile
+                        </a>
+                        <a href="/about" @click="${this.menuClick}">
+                          About &amp; Support
+                        </a>
+                        <a href="#" @click="${this.drawerSignOut}">
+                          Sign Out
+                        </a>
+                      `
+                    : ""}
                 `
               : html`
-                  <a href="/consumer" @click="${this.menuClick}">Home</a>
+                  <!-- consumer navigation: "Consumer interface" label -->
                   <a href="/consumer" @click="${this.menuClick}">
-                    Consumer Interface
+                    Consumer interface
                   </a>
                   <a href="/questionnaire" @click="${this.menuClick}">
                     Questionnaire
                   </a>
-                  <a href="/about" @click="${this.menuClick}">
-                    About & Support
-                  </a>
+
+                  <!-- then profile/options, but ONLY on mobile -->
+                  ${isMobile
+                    ? html`
+                        <a href="/profile" @click="${this.menuClick}">
+                          View Profile
+                        </a>
+                        <a href="/editProfile" @click="${this.menuClick}">
+                          Edit Profile
+                        </a>
+                        <a href="/about" @click="${this.menuClick}">
+                          About &amp; Support
+                        </a>
+                        <a href="#" @click="${this.drawerSignOut}">
+                          Sign Out
+                        </a>
+                      `
+                    : ""}
                 `}
-            ${isLoggedIn
-              ? html`
-                  <a href="#" @click="${() => Auth.signOut()}">Sign Out</a>
-                `
-              : ""}
           </nav>
         </sl-drawer>
       `;
