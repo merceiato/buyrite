@@ -55,7 +55,6 @@ frontend/
     _vendorPreviewItems.scss
 
 
-(The exact folder names might differ a bit on the machine, but that’s the basic idea.)
 
 ---
 
@@ -74,11 +73,10 @@ Create a .env file in the backend root with something like:
 
 env
 PORT=3000
-MONGO_URI=<your mongodb connection string>
+MONGO_URI=<mongodb connection string>
 ACCESS_TOKEN_SECRET=<some-long-random-string>
 
 
-> Note for later: on my EC2 instance I also had to run npm install mongodb in the backend folder because it wasn’t picked up by default when I first deployed.
 
 ### Install dependencies
 
@@ -98,7 +96,6 @@ Static files (uploaded images) are served from:
 
 text
 /public/images
-
 
 and are referenced in the frontend as:
 
@@ -134,13 +131,13 @@ js
 this.apiBase = 'http://ec2-54-253-51-41.ap-southeast-2.compute.amazonaws.com:3000'
 
 
-If that changes, only App.js needs to be updated. fileciteturn5file0
+If that changes, only App.js needs to be updated. 
 
 ---
 
 ## 3. Frontend – Setup & Run
 
-The SPA is bundled with Parcel and rendered into <div id="root"></div> in index.html. Shoelace is pulled in via CDN. fileciteturn5file2turn5file3
+The SPA is bundled with Parcel and rendered into <div id="root"></div> in index.html. Shoelace is pulled in via CDN. 
 
 ### Install dependencies
 
@@ -178,9 +175,8 @@ Basic steps I’m following / will follow:
    npm run build
    
 
-2. Upload the dist/ folder to a static host (e.g. Netlify):
+2. Upload the dist/ folder to a static host:
 
-   - In Netlify, point it at the repo and set build command to npm run build, publish directory dist.
    - Make sure the **API base URL in App.js** points at the live backend.
 
 3. After deployment the frontend URL will look something like:
@@ -203,7 +199,7 @@ Basic steps I’m following / will follow:
   - reference to rootEl (#root in index.html)
 - On init():
   - initialises the Toast system
-  - calls Auth.check() and then boots the router on success fileciteturn5file0
+  - calls Auth.check() and then boots the router on success 
 
 ### Auth.js
 
@@ -212,15 +208,15 @@ Basic steps I’m following / will follow:
   - sign in (POST /auth/signin)
   - token validation (GET /auth/validate)
   - sign out (clears localStorage and redirects to /signin)
-- Stores currentUser with fields from the backend (including accessLevel and newUser), and uses those to decide whether to send a user to /guide, /vendor, or /buyrite after login. fileciteturn5file1
+- Stores currentUser with fields from the backend (including accessLevel and newUser), and uses those to decide whether to send a user to /guide, /vendor, or /buyrite after login. 
 
 ### Router.js
 
 - Very small SPA router:
-  - routes map path → view object
+  - routes map path > view object
   - init() sets up the initial route and popstate listener
   - gotoRoute(pathname) pushes history and calls the view init()
-  - anchorRoute(e) helper so <a> tags can be wired into the router instead of doing full page loads fileciteturn5file5
+  - anchorRoute(e) helper so <a> tags can be wired into the router instead of doing full page loads 
 
 ### ProductAPI.js
 
@@ -230,13 +226,13 @@ Basic steps I’m following / will follow:
   - updateListing(id, formData)
   - deleteListing(id)
   - getPublicProducts() – public consumer list (no auth needed)
-- Applies the bearer token from localStorage.accessToken automatically via authHeader. fileciteturn5file4
+- Applies the bearer token from localStorage.accessToken automatically via authHeader. 
 
 ### UserAPI.js
 
 - Used for profile and edit profile pages:
   - getUser(userId)
-  - updateUser(userId, userData, dataType = "form") – supports both FormData and JSON payloads. fileciteturn5file7
+  - updateUser(userId, userData, dataType = "form") – supports both FormData and JSON payloads.
 
 ### Toast.js and Utils.js
 
@@ -245,7 +241,7 @@ Basic steps I’m following / will follow:
   - Shows a message and animates it in/out with GSAP
 - Utils:
   - Simple isMobile() helper
-  - pageIntroAnim() to animate .page-content on view change fileciteturn5file6turn5file8
+  - pageIntroAnim() to animate .page-content on view change 
 
 ---
 
@@ -253,8 +249,8 @@ Basic steps I’m following / will follow:
 
 The system uses accessLevel to separate roles:
 
-- 1 → consumer
-- 2 → vendor
+- 1 > consumer
+- 2 > vendor
 
 Typical flow:
 

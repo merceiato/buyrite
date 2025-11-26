@@ -12,6 +12,8 @@ import vendorManageListingsView from "./views/pages/vendorManageListings";
 import vendorPreviewListingsView from "./views/pages/vendorPreviewItems";
 import consumerHomeView from "./views/pages/consumerHome";
 import questionnaireView from "./views/pages/questionnaire";
+import aboutView from "./views/pages/about";
+
 
 
 // define routes
@@ -30,6 +32,7 @@ const routes = {
   "/vendor/previewProducts": vendorPreviewListingsView,
   "/consumer": consumerHomeView,
   "/questionnaire": questionnaireView,
+  "/about": aboutView,  
 };
 
 class Router {
